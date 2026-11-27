@@ -2,31 +2,31 @@
 name: amazon
 display: Amazon
 packages: ["com.amazon.mShop.android.shopping"]
-aliases: ["Amazon", "亚马逊", "amazon"]
+aliases: ["Amazon", "amazon"]
 sites: ["amazon.com"]
 open: Amazon
-description: 全球电商购物:商品搜索、比价、购物车与订单跟踪
+description: Online shopping: product search, price comparison, cart and order tracking
 ---
-## 是什么
-Amazon 是全球跨境电商购物 App,包名 `com.amazon.mShop.android.shopping`。网站知识见 `amazon.com`。支持在不同国家站点搜索商品、下单结算与追踪物流。
+## What it is
+Amazon is a global online shopping app, package `com.amazon.mShop.android.shopping`. For the website, see `amazon.com`. You can search for products, check out and track deliveries on different country stores.
 
-## 界面
-底部导航包含四个标签:「首页」「我的账号 (You)」「购物车 (Cart)」「菜单 (三条横线)」。
-- **首页**:顶部为全宽搜索栏,带相机扫描(识别条码或实物)与麦克风图标;搜索栏下方常驻配送地址胶囊「配送至 (Deliver to)...」;主体陈列促销秒杀、基于浏览历史的推荐与分类导购。
-- **搜索结果页**:顶部有筛选(Filters:品牌、Prime 会员专享、价格区间、评分、卖家资质)与排序(Featured, Price low to high, Avg. customer review);商品流中混杂带有「Sponsored (赞助广告)」标记的推广卡片。
-- **商品详情页**:上方为多图轮播,中间为商品全名、星级评价总数、价格与折扣,下方为变体选择区(尺码、颜色、容量)、发货与售卖方(Ships from / Sold by)、黄色「加入购物车 (Add to Cart)」按钮与橙色「立即购买 (Buy Now)」按钮。
-- **我的账号页**:顶部常驻「你的订单 (Your Orders)」「再次购买 (Buy Again)」「你的账户 (Your Account)」「你的心愿单 (Your Lists)」。
+## Screens
+The bottom navigation has four tabs: "Home", "You", "Cart" and "Menu" (three lines).
+- **Home**: a full-width search bar at the top, with a camera scan icon (reads barcodes or real objects) and a microphone icon. Below the search bar there is always a delivery address pill "Deliver to ...". The main area shows deals, recommendations based on browsing history and category shopping.
+- **Search results**: at the top there are Filters (brand, Prime, price range, rating, seller) and sort options (Featured, Price low to high, Avg. customer review). Promoted cards marked "Sponsored" are mixed into the product list.
+- **Product page**: a photo carousel at the top; in the middle the full product name, star rating with review count, price and discount; below that the variant picker (size, colour, capacity), Ships from / Sold by, a yellow "Add to Cart" button and an orange "Buy Now" button.
+- **You page**: at the top there are always "Your Orders", "Buy Again", "Your Account" and "Your Lists".
 
-## 功能
-- **搜索与排除广告干扰**:
-  - 在顶部搜索栏键入商品全称或型号。在结果列表中优先辨识自然排名商品,注意辨别带有小字「Sponsored」的广告位。
-- **加入购物车与安全比价**:
-  - 点击商品后,必须先确认选定正确的颜色或尺码变体,核对库存状态(In Stock / 仅剩 X 件)。
-  - 执行采购比价任务时,优先点击黄色的「加入购物车 (Add to Cart)」;**切勿轻易点击橙色的「立即购买 (Buy Now)」**,后者可能直接触发一键下单并从默认信用卡扣款。
-- **订单追踪**:
-  - 进入底部「我的账号」标签,点击「你的订单 (Your Orders)」即可查看近期订单详情与实时物流派送进度(Track Package)。
+## Features
+- **Search and avoid ads**:
+  - Type the full product name or model number in the top search bar. In the results, prefer the normal (organic) listings and watch for ad slots marked with the small word "Sponsored".
+- **Add to cart and compare prices safely**:
+  - After opening a product, first make sure the right colour or size variant is selected and check the stock status (In Stock / Only X left).
+  - For price comparison tasks, use the yellow "Add to Cart" button. **Do not tap the orange "Buy Now" button casually**: it can place the order at once and charge the default card.
+- **Order tracking**:
+  - Open the "You" tab at the bottom and tap "Your Orders" to see recent orders and live delivery progress (Track Package).
 
-## 已知现象
-- **国家与站点切换影响货架**:Amazon 全球站点独立。若发现货币单位或商品库存异常,需在菜单中检查国家/地区设置(Country & Language),不同国家对应不同收货地址与配送费。
-- **一键购买陷阱**:开启 1-Click 买单后,点击「Buy Now」直接完成付款并生成订单,执行自动化任务时应保持高度谨慎。
-- **会员优惠弹窗**:结账或浏览时经常弹出 Prime 会员包月或免费试用推荐,需点击「不,谢谢 / No, thanks」拒绝。
+## Known behaviour
+- **Country store changes the products shown**: each Amazon country store is separate. If the currency or stock looks wrong, check the country/region setting (Country & Language) in the menu. Each country has its own delivery addresses and delivery charges.
+- **One-click buying trap**: when 1-Click is on, tapping "Buy Now" pays and creates the order straight away. Be very careful during automated tasks.
+- **Prime pop-ups**: offers for a Prime subscription or free trial often pop up while browsing or at checkout. Tap "No, thanks" to decline.

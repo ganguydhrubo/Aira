@@ -183,8 +183,8 @@ fun toolDispatcher(
     notices: com.ganguydhrubo.aira.core.proactive.NoticeSource? = null,
     /** 用户在 UI 发起任务时可访问的设备文件。 */
     deviceFiles: com.ganguydhrubo.aira.core.cap.devicefiles.DeviceFilesPort? = null,
-    /** 把任务结果投递到机主绑定微信的出口;为空(任务没明确要发微信)时不提供 wechat_send_owner。没绑定时出口照样在,发送照实回报不可用。 */
-    wechatOwner: com.ganguydhrubo.aira.core.cap.wechat.WechatOwnerPort? = null,
+    /** 把任务结果投递到机主绑定微信的出口;为空(任务没明确要发微信)时不提供 telegram_send_owner。没绑定时出口照样在,发送照实回报不可用。 */
+    telegramOwner: com.ganguydhrubo.aira.core.cap.telegram.TelegramOwnerPort? = null,
     /** 启用的插件工具(名字已拼成 plugin_<id>_<name>);给了 [pluginScriptRunner] 才放进任务。 */
     pluginTools: List<PluginToolSpec> = emptyList(),
     /** 在 App 进程内跑插件脚本的入口;为空时插件工具不登记。 */
@@ -225,9 +225,9 @@ fun toolDispatcher(
         },
         // 端口为空时整个能力不进装配(任务没明确要发微信)
         object : CapabilityProvider {
-            override val id = com.ganguydhrubo.aira.core.cap.wechat.WechatOwnerCapability.WECHAT_OWNER
+            override val id = com.ganguydhrubo.aira.core.cap.telegram.TelegramOwnerCapability.TELEGRAM_OWNER
             override fun open(spec: RunSpec) =
-                wechatOwner?.let { com.ganguydhrubo.aira.core.cap.wechat.WechatOwnerCapability(it) }
+                telegramOwner?.let { com.ganguydhrubo.aira.core.cap.telegram.TelegramOwnerCapability(it) }
         },
     ) + listOfNotNull(video?.let { port ->
         object : CapabilityProvider {
@@ -317,7 +317,7 @@ fun recordedTools(): ToolIndex = legacyNames().let { legacy -> ToolIndex(allTool
 
 /** Aira 所有可能提供的工具,按发给模型的顺序。 */
 internal fun allTools(): List<AgentTool> =
-    GeneralGroup.tools + PhoneCapability.tools() + WebGroup.tools + SandboxGroup.tools + com.ganguydhrubo.aira.core.cap.audio.AudioGroup.tools + com.ganguydhrubo.aira.core.cap.transcribe.TranscribeGroup.tools + com.ganguydhrubo.aira.core.cap.image.ImageGroup.tools + com.ganguydhrubo.aira.core.cap.video.VideoGroup.tools + RootGroup.tools + com.ganguydhrubo.aira.core.calls.callAgentTools + helperFileTools + com.ganguydhrubo.aira.core.cap.wechat.wechatOwnerAgentTools
+    GeneralGroup.tools + PhoneCapability.tools() + WebGroup.tools + SandboxGroup.tools + com.ganguydhrubo.aira.core.cap.audio.AudioGroup.tools + com.ganguydhrubo.aira.core.cap.transcribe.TranscribeGroup.tools + com.ganguydhrubo.aira.core.cap.image.ImageGroup.tools + com.ganguydhrubo.aira.core.cap.video.VideoGroup.tools + RootGroup.tools + com.ganguydhrubo.aira.core.calls.callAgentTools + helperFileTools + com.ganguydhrubo.aira.core.cap.telegram.telegramOwnerAgentTools
 
 /** Aira 所有可能提供的工具的声明。 */
 fun knownTools(): ToolIndex = ToolIndex(allTools())

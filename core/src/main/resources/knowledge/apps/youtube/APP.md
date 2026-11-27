@@ -2,35 +2,35 @@
 name: youtube
 display: YouTube
 packages: ["com.google.android.youtube"]
-aliases: ["YouTube", "youtube", "油管", "YT"]
+aliases: ["YouTube", "youtube", "YT"]
 sites: ["youtube.com"]
 open: YouTube
-description: 长视频、Shorts 短视频、频道订阅与播放列表
+description: Long videos, Shorts, channel subscriptions and playlists
 ---
-## 是什么
-YouTube 是谷歌的全球视频流媒体平台 App,包名 `com.google.android.youtube`。网站知识见 `youtube.com`。
+## What it is
+YouTube is Google's global video streaming app, package `com.google.android.youtube`. For the website, see `youtube.com`.
 
-## 界面
-底部导航通常包含五个标签:「首页」「Shorts」「+ (创建)」「订阅内容」「你 (个人中心与媒体库)」。
-- **首页**:顶部左侧是 YouTube 图标,右侧包含投屏按钮、通知铃铛、放大镜搜索按钮和头像。主体信息流混合展示长视频卡片、Shorts 轮播架和社区动态。
-- **视频播放页**:上半部为视频播放窗口,下半部依次展示视频标题、展开简介的小箭头、频道头像与名称、「订阅」按钮、点赞/踩、分享、Remix、下载、保存至歌单按钮。再下方为「评论」概览入口(显示总评论数及热门置顶评论)。
-- **Shorts 界面**:全屏单列纵向滑动流,右侧自上而下排列点赞、踩、评论、分享、Remix 和原声旋转黑胶图标。
-- **迷你播放器(Mini-player)**:从长视频播放页下滑或按返回键时,视频缩小为悬浮在底部的条状或小窗,带播放/暂停与关闭按钮。
+## Screens
+The bottom navigation usually has five tabs: "Home", "Shorts", "+" (create), "Subscriptions" and "You" (your profile and library).
+- **Home**: the YouTube logo at top left; at the right the cast button, notifications bell, search magnifier and profile picture. The feed mixes long video cards, Shorts shelves and community posts.
+- **Watch page**: the video player in the top half; below it the video title, a small arrow to expand the description, the channel picture and name, the "Subscribe" button, like/dislike, Share, Remix, Download and Save (to playlist). Further down is the "Comments" preview (total comment count and the top comment).
+- **Shorts**: a full-screen single-column vertical feed, with like, dislike, comment, share, Remix and the spinning sound record on the right, top to bottom.
+- **Mini-player**: when you swipe down on a long video or press back, the video shrinks to a bar or small window floating at the bottom, with play/pause and close buttons.
 
-## 功能
-- **处理残留播放状态**:
-  - 打开 App 时若底部或右下角正停留在上次未看完的迷你播放器,**切勿误认为全屏播放**。若需执行新搜索,直接点击顶部放大镜;若需关闭旧视频,点击迷你栏右侧的「×」关闭。
-- **搜索与精确过滤**:
-  - 点击顶部放大镜进入搜索。输入关键词搜索后,点击右上角漏斗/筛选按钮,可按「上传日期」(最后 1 小时、今天、本周、本年)、「类型」(视频、频道、播放列表、电影)、「时长」(小于 4 分钟、4-20 分钟、大于 20 分钟)过滤。
-- **播放与控制**:
-  - 点击播放窗口显示控制遮罩:暂停/播放、快进 10 秒、快退 10 秒、上一集、下一集。
-  - 右上角齿轮图标可调整「画质」「播放速度」(0.25x 至 2x)、「字幕(CC)」「循环播放」。
-- **互动与收藏**:
-  - 点赞/点踩、收藏至已有或自建「播放列表」。
-  - 点击「评论」区域自底部向上滑出评论抽屉,可在输入框撰写回复或点赞他人评论。
+## Features
+- **Handle a leftover player**:
+  - If the app opens with an unfinished video in the mini-player at the bottom or bottom right, **do not mistake it for full-screen playback**. To search for something new, tap the magnifier at the top; to close the old video, tap the "×" on the right of the mini bar.
+- **Search and filter exactly**:
+  - Tap the magnifier at the top to search. After searching, tap the funnel/filter button at top right to filter by "Upload date" (Last hour, Today, This week, This year), "Type" (Video, Channel, Playlist, Movie) and "Duration" (Under 4 minutes, 4-20 minutes, Over 20 minutes).
+- **Play and control**:
+  - Tap the player to show the controls: pause/play, forward 10 seconds, back 10 seconds, previous and next.
+  - The gear icon at top right adjusts "Quality", "Playback speed" (0.25x to 2x), "Captions" (CC) and "Loop video".
+- **Interact and save**:
+  - Like/dislike, and save to an existing or new "Playlist".
+  - Tap the "Comments" area to open the comments sheet from the bottom, where you can write a reply or like other comments.
 
-## 已知现象
-- **贴片与中插广告**:非 Premium 用户播放开头或中间常插播 5-15 秒广告。若为可跳过广告,播放 5 秒后右下角会出现「跳过广告 (Skip)」按钮,需等待其可点击后再点;不可跳过广告需等其播完。
-- **Premium 全屏弹窗**:首次打开或定期可能弹出「试用 YouTube Premium」促销遮罩,需点击左上角「×」或「不用了」关闭。
-- **进入 Shorts 丢失顶栏**:在 Shorts 模式下不显示常规搜索栏与顶栏,必须点击底部其他标签或按系统返回键退出 Shorts 回到主界面。
-- **系统通知与画中画权限**:首次播放离开可能请求「画中画」或系统通知权限,弹窗属于系统底层。
+## Known behaviour
+- **Pre-roll and mid-roll ads**: users without Premium often get 5-15 second ads at the start or middle of a video. For skippable ads, a "Skip" button appears at bottom right after 5 seconds; wait until it can be tapped, then tap it. Non-skippable ads must play to the end.
+- **Premium full-screen pop-up**: on first launch or from time to time, a "Try YouTube Premium" promotion may cover the screen. Tap "×" at top left or "No thanks" to close it.
+- **Shorts hides the top bar**: in Shorts the normal search bar and top bar are not shown. Tap another bottom tab or press the system back key to leave Shorts and return to the main screen.
+- **System notification and picture-in-picture permissions**: the first time you leave a playing video, it may ask for "Picture-in-picture" or notification permission. These are system-level dialogs.

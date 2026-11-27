@@ -155,7 +155,7 @@ class AppKnowledgeLearningTest {
             RunEvent.ModelReply(82, 10, "", "phone_launch_app", """{"package":"com.unknown.app"}""", null, null, null),
             RunEvent.ToolResult(83, 10, "phone_launch_app", """{"ok":true}""", true, null),
         )
-        assertEquals(listOf("xianyu", "wechat"), AppKnowledgeDrafter.touched(ev, knownTools(), store).map { it.name })
+        assertEquals(listOf("xianyu", "telegram"), AppKnowledgeDrafter.touched(ev, knownTools(), store).map { it.name })
     }
 
     @Test fun lessonsNeedTwoBadTrialsInARow() {

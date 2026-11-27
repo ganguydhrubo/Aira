@@ -123,7 +123,7 @@ class ToolLabels(private val tools: ToolIndex, private val legacy: LegacyNames =
             "点击" to R.string.tool_tap,
             "输入文字" to R.string.tool_type,
             "清空输入框" to R.string.tool_clear,
-            "wechat_send_owner" to R.string.tool_wechat_owner,
+            "telegram_send_owner" to R.string.tool_telegram_owner,
         )
     }
 }

@@ -39,7 +39,7 @@ class NoticeShapesTest {
     }
 
     // 微信:正文「[3条]某人: 那句话」;某人就是标题的是私聊,不是的是群
-    @Test fun wechat() {
+    @Test fun telegram() {
         val private = shaped("com.tencent.mm", "张三", "[3条]张三: 明天来吗")
         assertEquals("张三", private.title)
         assertNull(private.sender)

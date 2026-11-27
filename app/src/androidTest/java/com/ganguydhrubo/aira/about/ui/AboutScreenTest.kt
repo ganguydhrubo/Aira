@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.about.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -37,7 +37,7 @@ import com.ganguydhrubo.aira.ui.awaitOne
 
 @RunWith(AndroidJUnit4::class)
 class AboutScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 
@@ -147,7 +147,7 @@ class AboutScreenTest {
         scrollTo("联系作者")
         compose.onNodeWithText("联系作者").performClick()
         compose.awaitOne(AboutCopy.GROUP_SHEET_SUB).assertIsDisplayed()
-        compose.onNodeWithTag("wechat-qr").assertExists()
+        compose.onNodeWithTag("telegram-qr").assertExists()
         compose.onNodeWithText(AboutCopy.GROUP_HINT).assertExists()
         compose.onNodeWithText(AboutCopy.SAVE_QR).performClick()
         compose.waitForIdle()

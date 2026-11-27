@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ChatFollowUpTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

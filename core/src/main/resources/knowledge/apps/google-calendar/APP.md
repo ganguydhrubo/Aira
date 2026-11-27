@@ -2,31 +2,31 @@
 name: google-calendar
 display: Google Calendar
 packages: ["com.google.android.calendar"]
-aliases: ["Google Calendar", "Google 日历", "谷歌日历", "日历"]
+aliases: ["Google Calendar", "Calendar"]
 sites: ["calendar.google.com"]
 open: Google Calendar
-description: 日程安排与时间管理:事件创建、多视图切换与提醒
+description: Scheduling and time management: create events, switch views and set reminders
 ---
-## 是什么
-Google Calendar 是谷歌官方日程与时间管理 App,包名 `com.google.android.calendar`。网站知识见 `calendar.google.com`。支持在手机上建立日程事件、待办任务与查看日程安排。
+## What it is
+Google Calendar is Google's official calendar app, package `com.google.android.calendar`. For the website, see `calendar.google.com`. Use it to create events and tasks and to view your schedule on the phone.
 
-## 界面
-顶部栏左侧是汉堡侧边栏菜单,中间是当前月份标题(点击展开月历快速跳转日期),右侧包含回到「今天」按钮(带有当日日期的日历图标)、搜索放大镜和账号头像。
-- **侧边抽屉**:可切换主要视图:「日程 (Schedule 连续流)」「日 (Day)」「3天 (3 Days)」「周 (Week)」「月 (Month)」;下方列出各 Google 账号及其名下的子日历(个人事件、工作、任务 Tasks、生日、公共节假日)的多选复选框。
-- **悬浮创建按钮 (+)**:右下角彩色的「+」按钮,点击后弹出「事件 (Event)」「任务 (Task)」选项。
-- **事件详情页**:点击任意日程块滑出全屏页,展示标题、起止时间段、地点、Google Meet 会议链接、参与者列表(含回复状态:已接受/待定/已拒绝)及详细备忘。顶部有铅笔编辑图标和三点删除菜单。
+## Screens
+On the left of the top bar is the menu (sidebar) button; in the middle the current month title (tap to open a month picker and jump to a date); on the right a "Today" button (calendar icon showing today's date), the search magnifier and the profile picture.
+- **Sidebar**: switch the main view: "Schedule" (continuous list), "Day", "3 days", "Week", "Month". Below are your Google accounts with checkboxes for each of their calendars (personal events, work, Tasks, Birthdays, Holidays).
+- **Floating create button (+)**: the coloured "+" button at bottom right. Tapping it offers "Event" and "Task".
+- **Event details page**: tap any event block to open a full-screen page with the title, start and end time, location, Google Meet link, guest list (with reply status: accepted / maybe / declined) and description. At the top there is a pencil edit icon and a three-dot menu with delete.
 
-## 功能
-- **切换视图查看日程**:
-  - 查找某一天的日程安排,建议在侧边栏切至「日」或「日程 (Schedule)」视图,按时间轴纵向滚动阅读事件详情与冲突时段。
-- **创建新事件**:
-  - 点击右下角「+」选「事件」,在顶部输入日程标题。
-  - **时间设定**:默认不是全天事件。若为特定时刻日程,点击开始与结束时间滚轮精确调整;若为全天事务,开启「全天 (All-day)」开关。
-  - **添加地点与通知**:在「添加位置」键入地址,在「添加通知」设定提前 10 分钟或 1 天推送提醒。
-  - 点击右上角「保存 (Save)」完成创建。
-- **删除与修改重复事件**:
-  - 点击事件卡片进入,点右上角三点菜单选「删除」。若为周期性重复日程,系统会弹出确认框:「仅此活动 (This event only)」「此活动及后续所有活动」「所有活动」,需按任务指令准确选定。
+## Features
+- **Switch views to see the schedule**:
+  - To check one day's schedule, switch to the "Day" or "Schedule" view in the sidebar and scroll down the timeline to read event details and clashing times.
+- **Create a new event**:
+  - Tap "+" at bottom right, choose "Event" and type the title at the top.
+  - **Time**: events are not all-day by default. For a specific time, tap the start and end times and adjust them exactly; for an all-day item, turn on the "All-day" switch.
+  - **Location and notification**: type the address in "Add location", and in "Add notification" set a reminder such as 10 minutes or 1 day before.
+  - Tap "Save" at top right to finish.
+- **Delete or change a repeating event**:
+  - Open the event card and choose "Delete" from the three-dot menu at top right. For a repeating event, a dialog asks: "This event", "This and following events" or "All events". Pick exactly what the task asks for.
 
-## 已知现象
-- **多账号与隐藏日历**:若手机登录了多个 Google 账号,事件可能归属于不同的工作或私人日历。若在主视图未看到某个预定日程,先展开侧边抽屉确保目标日历勾选处于激活显示状态。
-- **权限拦截**:首次使用可能申请「日历读取与写入」系统权限。
+## Known behaviour
+- **Several accounts and hidden calendars**: if the phone has several Google accounts, events may belong to different work or personal calendars. If you cannot see an expected event in the main view, open the sidebar first and make sure the target calendar is ticked.
+- **Permission prompt**: on first use it may ask for the system permission to read and write calendars.

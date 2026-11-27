@@ -4,30 +4,30 @@ display: ChatGPT
 packages: ["com.openai.chatgpt"]
 aliases: ["ChatGPT", "chatgpt", "OpenAI"]
 open: ChatGPT
-description: OpenAI 官方对话 AI:文本问答、语音对话与多模态识图
+description: OpenAI's official AI chat: text questions, voice chat and image understanding
 ---
-## 是什么
-ChatGPT 是 OpenAI 官方推出的 AI 助手 App,包名 `com.openai.chatgpt`。提供自然语言对话、文本创作、代码解答、图片识别与实时语音交流。
+## What it is
+ChatGPT is OpenAI's official AI assistant app, package `com.openai.chatgpt`. It offers natural-language chat, writing, coding help, image understanding and live voice conversation.
 
-## 界面
-主界面极为简洁,主要分为三大区域:
-- **顶部顶栏**:左侧为两条横线汉堡菜单(点击展开侧边历史会话列表与设置),中间是当前模型切换胶囊(如「ChatGPT」或特定模型标识),右侧为右上角的新建对话图标(笔形图标)。
-- **侧边抽屉(Sidebar)**:自左侧滑出,顶部有搜索聊天记录框和「新建聊天 (New Chat)」,中间按时间分组陈列历史会话标题,最底部为个人账号信息与设置齿轮。
-- **对话主窗口**:中间为消息问答流(用户提问气泡靠右,ChatGPT 回复在左侧并带复制、重试、朗读和评价图例)。
-- **底部输入底栏**:包含「+」附加按钮(拍照、相册选图、上传文档或搜索)、耳机图标(进入实时高级语音模式 Advanced Voice Mode)、文字输入框「发消息 (Message)」以及右侧的向上发送箭头按钮。
+## Screens
+The main screen is very simple and has these areas:
+- **Top bar**: on the left a two-line menu button (opens the sidebar with past chats and settings), in the middle the current model pill (for example "ChatGPT" or a model name), and at top right the new chat icon (a pen icon).
+- **Sidebar**: slides in from the left. At the top there is a box to search chats and "New chat"; in the middle past chat titles grouped by date; at the very bottom the account details and the settings gear.
+- **Chat window**: the message thread in the middle (your messages as bubbles on the right; ChatGPT's replies on the left with copy, retry, read aloud and rating icons).
+- **Bottom input bar**: a "+" button (camera, photos, upload a file or search), a headphones icon (starts live Advanced Voice Mode), the text box "Message" and an up-arrow send button on the right.
 
-## 功能
-- **发起新对话与切换历史**:
-  - 点击右上角的笔形图标即可清空当前界面开启全新话题。
-  - 打开左侧抽屉,在历史列表中点击目标标题可回到过去的会话继续追问。
-- **输入并提问**:
-  - 在底部输入框键入问题,点击右侧发送箭头。在生成过程中该按钮变为黑色方块(停止生成图标),点击可中断回答。
-- **多模态图片识别**:
-  - 点击输入框左侧的「+」选择「相机 (Camera)」实时拍照,或选择「相册 (Photos)」选取已保存的屏幕截图,再在输入框附带说明后发送。
-- **高级语音模式 (Voice Mode)**:
-  - 点击耳机图标进入全屏语音动画球模式,在此模式下无需打字直接用麦克风与 AI 实时交谈。点击底部圆圈麦克风可静音,点击右下角「×」退出语音模式回到文字聊天。
+## Features
+- **Start a new chat or open an old one**:
+  - Tap the pen icon at top right to clear the screen and start a fresh topic.
+  - Open the left sidebar and tap a title in the list to return to an older chat and continue.
+- **Type and ask**:
+  - Type the question in the bottom box and tap the send arrow on the right. While the answer is being written, the button turns into a black square (stop icon); tap it to stop the answer.
+- **Image understanding**:
+  - Tap "+" to the left of the input box and choose "Camera" to take a photo, or "Photos" to pick a saved screenshot, then add a note in the box and send.
+- **Voice Mode**:
+  - Tap the headphones icon to open the full-screen animated voice orb. In this mode you talk with the AI through the microphone without typing. Tap the round microphone at the bottom to mute; tap the "×" at bottom right to leave voice mode and return to text chat.
 
-## 已知现象
-- **高级语音全屏覆盖**:进入语音模式后文字界面被黑色动画背景遮蔽,必须点击「×」退出后才能恢复文字阅读。
-- **模型额度限制提示**:若频繁使用高级思考模型或未付费账号,界面可能提示「已达到该模型的限制,已为您切换至普通模型」。
-- **登录状态验证**:首次打开或授权过期时弹出「继续使用 Google」「使用 Apple 登录」或输入邮箱,属于常规登录安全验证。
+## Known behaviour
+- **Voice mode covers the whole screen**: in voice mode the text view is hidden behind a black animated background. Tap "×" to leave before you can read text again.
+- **Model limit notice**: with heavy use of advanced reasoning models, or on a free account, the app may say you have reached the limit for that model and have been switched to a standard model.
+- **Sign-in checks**: on first launch or when the session expires, it shows "Continue with Google", "Continue with Apple" or an email field. This is a normal sign-in step.

@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.capsule
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.CompositionLocalProvider
@@ -48,7 +48,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class CapsuleCardContentTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

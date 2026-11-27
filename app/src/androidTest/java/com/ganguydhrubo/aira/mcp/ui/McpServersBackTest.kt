@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.cap.mcp.McpCatalog
 import com.ganguydhrubo.aira.settings.KeyCipher
 import com.ganguydhrubo.aira.settings.McpServerStore
@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 /** MCP 服务器页的返回:页内逐级回上一层,到了服务列表才离开这一页(以前系统返回键直接退出整页)。 */
 @RunWith(AndroidJUnit4::class)
 class McpServersBackTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

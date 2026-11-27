@@ -10,7 +10,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.settings.DeviceAccessSettings
 import com.ganguydhrubo.aira.ui.components.PageScaffold
@@ -24,7 +24,7 @@ import javax.crypto.KeyGenerator
 import com.ganguydhrubo.aira.settings.ui.models.use
 
 class DeviceAccessSectionTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
     private val dir = File(InstrumentationRegistry.getInstrumentation().targetContext.cacheDir, "device-access-ui-test")
     @After fun cleanup() { dir.deleteRecursively() }

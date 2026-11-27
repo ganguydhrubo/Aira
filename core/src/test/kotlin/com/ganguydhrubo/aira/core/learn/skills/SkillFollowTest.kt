@@ -32,18 +32,18 @@ class SkillFollowTest {
     }
 
     @Test fun actionMustMatchDeclaredAppAfterReading() {
-        val wechat = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
-        val inWechat = act(20).copy(resultJson = """{"ok":true,"actionApp":"com.tencent.mm"}""")
-        assertEquals(setOf("s"), followed(listOf(read("s", 10), inWechat), wechat))
-        assertTrue(followed(listOf(read("s", 10), act(20), saw(21, Place.app("com.tencent.mm"))), wechat).isEmpty())
+        val telegram = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
+        val inTelegram = act(20).copy(resultJson = """{"ok":true,"actionApp":"com.tencent.mm"}""")
+        assertEquals(setOf("s"), followed(listOf(read("s", 10), inTelegram), telegram))
+        assertTrue(followed(listOf(read("s", 10), act(20), saw(21, Place.app("com.tencent.mm"))), telegram).isEmpty())
         // 进微信是在读技能之前,读完以后在别处动手
-        assertTrue(followed(listOf(saw(5, Place.app("com.tencent.mm")), read("s", 10), act(20)), wechat).isEmpty())
+        assertTrue(followed(listOf(saw(5, Place.app("com.tencent.mm")), read("s", 10), act(20)), telegram).isEmpty())
     }
 
     @Test fun visitingSkillAppDoesNotAttributeAnActionInAnotherApp() {
-        val wechat = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
+        val telegram = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
         val unrelated = act(20).copy(resultJson = """{"ok":true,"screen":{"currentApp":"com.android.settings"}}""")
-        assertTrue(followed(listOf(read("s", 10), saw(15, Place.app("com.tencent.mm")), unrelated), wechat).isEmpty())
+        assertTrue(followed(listOf(read("s", 10), saw(15, Place.app("com.tencent.mm")), unrelated), telegram).isEmpty())
     }
 
     @Test fun declaredSiteMatchesSubdomainsAndPages() {
@@ -63,20 +63,20 @@ class SkillFollowTest {
 
     // 界面一个字也读不出来时没有读屏记录:调用结果里报的 currentApp / currentSite 照样算进过
     @Test fun currentAppInToolResultsCountsAsVisiting() {
-        val wechat = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
+        val telegram = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
         val result = RunEvent.ToolResult(20, 1, "phone_tap", """{"ok":true,"screen":{"currentApp":"com.tencent.mm","full":false}}""", true, null)
-        assertEquals(setOf("s"), followed(listOf(read("s", 10), result), wechat))
+        assertEquals(setOf("s"), followed(listOf(read("s", 10), result), telegram))
         val bili = mapOf("s" to SkillPlaces(domains = setOf("bilibili.com")))
         val page = RunEvent.ToolResult(20, 1, "web_navigate", """{"ok":true,"currentSite":"m.bilibili.com"}""", true, null)
         assertEquals(setOf("s"), followed(listOf(read("s", 10), page), bili))
         // 读技能之前的结果不算
-        assertTrue(followed(listOf(result.copy(atMs = 5), read("s", 10), act(20)), wechat).isEmpty())
+        assertTrue(followed(listOf(result.copy(atMs = 5), read("s", 10), act(20)), telegram).isEmpty())
     }
 
     // 技能头部写的可能是知识名、别名、显示名(手写的),也可能是包名(自学的):认得出的都换成包名、域名
     @Test fun catalogResolvesKnowledgeNamesAliasesAndKeepsRawPackages() {
         val skills = InMemoryPersonalSkills(
-            personalSkill("by-name", extraMeta = "apps: [\"wechat\"]\nsites: [\"bilibili.com\"]\n"),
+            personalSkill("by-name", extraMeta = "apps: [\"telegram\"]\nsites: [\"bilibili.com\"]\n"),
             personalSkill("by-alias", extraMeta = "apps: [\"微信\", \"WeChat\"]\n"),
             personalSkill("by-package", extraMeta = "apps: [com.example.app]\n"),
             personalSkill("unknown", extraMeta = "apps: [\"一个不存在的 App\", \"wechatt\"]\n"),

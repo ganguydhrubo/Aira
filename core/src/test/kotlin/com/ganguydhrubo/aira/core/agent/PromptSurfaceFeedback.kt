@@ -132,7 +132,7 @@ internal object PromptSurfaceFeedback {
         val withSkills = toolDispatcher(FakeScreen(), skills = com.ganguydhrubo.aira.core.learn.knowledge.GuideCatalog.loadBundled(), utterances = UserUtterances().apply { add("帮我建一个技能") },
             personalSkills = com.ganguydhrubo.aira.core.learn.skills.InMemoryPersonalSkills())
         add("skill save missing section", withSkills, "skill_save",
-            """{"markdown":"---\nname: order-coffee\ndisplay: 点咖啡\ndescription: 点咖啡时用\n---\n## 入口\n打开 App","quote":"帮我建一个技能"}""")
+            """{"markdown":"---\nname: order-coffee\ndisplay: 点咖啡\ndescription: 点咖啡时用\n---\n## Entry\n打开 App","quote":"帮我建一个技能"}""")
 
         val withHistory = toolDispatcher(FakeScreen(), runSpec = com.ganguydhrubo.aira.core.run.RunSpec(com.ganguydhrubo.aira.core.run.RunId("t"), "t", "thread",
             priorTurns = listOf(Turn("之前", "好", "succeeded", runId = "r1"))), runRecords = object : com.ganguydhrubo.aira.core.run.record.RunRecords {

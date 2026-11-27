@@ -55,9 +55,9 @@ class TranslationCliTest(unittest.TestCase):
             '<string name="app_name" translatable="false">Aira</string>'
             '<string name="save">Save</string>',
         )
-        self.write_resources("values-zh", '<string name="save">保存</string>', "strings_ui.xml")
+        self.write_resources("values-es", '<string name="save">Guardar</string>', "strings_ui.xml")
         self.write_resources("values-night", '<string name="night">Night</string>')
-        self.write_resources("values-zh-v31", '<string name="versioned">版本</string>')
+        self.write_resources("values-es-v31", '<string name="versioned">Versión</string>')
         result = self.run_cli("check")
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         self.assertIn("2 UI languages", result.stdout)
@@ -69,15 +69,15 @@ class TranslationCliTest(unittest.TestCase):
             '<string name="greeting">Hello %1$s, %2$d</string>',
         )
         self.write_resources(
-            "values-zh",
-            '<string name="date">%1$d 月 %3$d 日</string>'
-            '<string name="greeting">你好 %1$s</string>',
+            "values-es",
+            '<string name="date">%3$d de %1$d</string>'
+            '<string name="greeting">Hola %1$s</string>',
         )
         result = self.run_cli("check")
         self.assertEqual(1, result.returncode, result.stderr)
         self.assertNotIn("string/date:", result.stdout)
         self.assertIn(
-            "values-zh: placeholder count string/greeting: default=2, translation=1",
+            "values-es: placeholder count string/greeting: default=2, translation=1",
             result.stdout,
         )
 
@@ -182,9 +182,9 @@ class TranslationCliTest(unittest.TestCase):
             '<string name="mixed">Saved %1$d files, 100%% of the batch</string>',
         )
         self.write_resources(
-            "values-zh",
-            '<string name="plain">已保存这批的 100%%</string>'
-            '<string name="mixed">已保存 %1$d 个文件，占这批的 100%%</string>',
+            "values-es",
+            '<string name="plain">Guardado el 100%% del lote</string>'
+            '<string name="mixed">Guardados %1$d archivos, el 100%% del lote</string>',
         )
         result = self.run_cli("check")
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
@@ -194,12 +194,12 @@ class TranslationCliTest(unittest.TestCase):
             "values", '<string name="saved">Saved %1$s, 100%% of the batch</string>'
         )
         self.write_resources(
-            "values-zh", '<string name="saved">已保存这批的 100%%</string>'
+            "values-es", '<string name="saved">Guardado el 100%% del lote</string>'
         )
         result = self.run_cli("check")
         self.assertEqual(1, result.returncode, result.stderr)
         self.assertIn(
-            "values-zh: placeholder count string/saved: default=1, translation=0",
+            "values-es: placeholder count string/saved: default=1, translation=0",
             result.stdout,
         )
 
@@ -213,7 +213,7 @@ class TranslationCliTest(unittest.TestCase):
             '<item quantity="other">Many</item></plurals>'
             '<string-array name="choices"><item>Yes</item><item>No</item></string-array>',
         )
-        self.write_resources("values-zh", '<string name="save">保存</string>')
+        self.write_resources("values-es", '<string name="save">Guardar</string>')
         self.write_resources(
             "values-ar",
             '<string name="save">حفظ</string>'
@@ -227,7 +227,7 @@ class TranslationCliTest(unittest.TestCase):
         with output.open(encoding="utf-8-sig", newline="") as stream:
             reader = csv.DictReader(stream)
             self.assertEqual(
-                ["key", "type", "item", "source", "context", "values", "values-zh", "values-ar"],
+                ["key", "type", "item", "source", "context", "values", "values-ar", "values-es"],
                 reader.fieldnames,
             )
             rows = list(reader)

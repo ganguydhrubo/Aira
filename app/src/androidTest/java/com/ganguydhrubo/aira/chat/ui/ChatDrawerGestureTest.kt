@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.chat.ConversationStore
 import com.ganguydhrubo.aira.chat.ConversationSummary
 import com.ganguydhrubo.aira.core.agent.TaskState
@@ -65,7 +65,7 @@ import com.ganguydhrubo.aira.settings.ui.models.use
 /** 通过真实触摸验证推开聊天页、半程取消、横向滚动优先、窄窗口/RTL 和返回层级。 */
 @RunWith(AndroidJUnit4::class)
 class ChatDrawerGestureTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext

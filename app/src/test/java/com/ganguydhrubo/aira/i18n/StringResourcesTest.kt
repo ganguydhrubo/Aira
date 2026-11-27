@@ -129,19 +129,14 @@ class StringResourcesTest {
 
     @Test
     fun languageFromTag() {
-        // 单测里没有安卓的 ICU:补文字体系这一步换成假的,只认一个私用标签是繁体
+        // Unit tests have no Android ICU, so script lookup is faked.
         val likely = { tag: String -> if (tag == "zh-x-hant") "Hant" else "Hans" }
         fun of(tag: String?) = AppLanguage.fromTag(tag, likely)
         assertEquals(AppLanguage.System, of(null))
         assertEquals(AppLanguage.System, of(""))
-        // 以前选「中文」存下的是 zh-Hans
-        assertEquals(AppLanguage.SimplifiedChinese, of("zh-Hans"))
-        assertEquals(AppLanguage.TraditionalChinese, of("zh-Hant"))
-        assertEquals(AppLanguage.SimplifiedChinese, of("zh"))
-        // 没写文字体系时按补出来的算
-        assertEquals(AppLanguage.TraditionalChinese, of("zh-x-hant"))
-        // 写了文字体系就按写的,不再补
-        assertEquals(AppLanguage.SimplifiedChinese, AppLanguage.fromTag("zh-Hans") { "Hant" })
+        // Languages Aira doesn't offer fall back to English.
+        assertEquals(AppLanguage.English, of("zh-Hans"))
+        assertEquals(AppLanguage.English, of("zh"))
         assertEquals(AppLanguage.English, of("en"))
         assertEquals(AppLanguage.English, of("fr-FR"))
         assertEquals(AppLanguage.Arabic, of("ar"))

@@ -2348,12 +2348,12 @@ class ChatViewModelTest {
     @Test fun suspendedSkillRestoreAndView() = runTest {
         val vm = vmWithHistory()
         val learned = com.ganguydhrubo.aira.core.learn.skills.SkillNote("Aira 学会了一项技能:发微信", draftId = "d1")
-        val suspended = com.ganguydhrubo.aira.core.learn.skills.SkillNote("这项技能最近不灵,先停用了", suspended = "wechat-msg")
+        val suspended = com.ganguydhrubo.aira.core.learn.skills.SkillNote("这项技能最近不灵,先停用了", suspended = "telegram-msg")
         notesFlow.value = mapOf("r1" to com.ganguydhrubo.aira.memory.RunNotes("c1", "r1", skillNotes = listOf(learned, suspended)))
         runCurrent()
         vm.viewSkill(learned)
         vm.restoreSkill("r1", suspended); runCurrent()
-        assertEquals(listOf("view:d1", "restore:wechat-msg"), learnCalls)
+        assertEquals(listOf("view:d1", "restore:telegram-msg"), learnCalls)
         assertEquals(listOf(learned), vm.ui.value.exchanges.single().skillNotes)
     }
 

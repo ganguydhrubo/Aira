@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.calls.CallActionResult
 import com.ganguydhrubo.aira.calls.CallTaskBrief
@@ -28,7 +28,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CallDtmfUiTest {
     private val compose = createAndroidComposeRule<ComponentActivity>()
-    @get:Rule val rules: TestRule = RuleChain.outerRule(ChineseUi()).around(compose)
+    @get:Rule val rules: TestRule = RuleChain.outerRule(EnglishUi()).around(compose)
 
     private val active = CallRuntimeState(
         callId = "synthetic-a", phase = CallPhase.ACTIVE, canSendDtmf = true,

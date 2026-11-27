@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.browser.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -18,7 +18,7 @@ import com.ganguydhrubo.aira.ui.clickInDialog
 /** 设置页「网站登录」:列表、单站退出(带「可能仍在」提示)、全部退出要二次确认。 */
 @RunWith(AndroidJUnit4::class)
 class WebSitesSectionTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

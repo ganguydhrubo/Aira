@@ -62,20 +62,18 @@ internal fun filterLanguages(query: String): List<AppLanguage> {
         val name = l.name.lowercase()
         val tag = l.tag?.lowercase().orEmpty()
         name.contains(q) || tag.contains(q) || when (l) {
-            AppLanguage.System -> "system follow 跟随系统"
-            AppLanguage.SimplifiedChinese -> "chinese 简体中文 中文"
-            AppLanguage.TraditionalChinese -> "chinese 繁體中文 繁体中文 中文"
-            AppLanguage.English -> "english 英文 英语"
-            AppLanguage.Japanese -> "japanese 日本語 日文 日语"
-            AppLanguage.Korean -> "korean 한국어 韩文 韩语"
-            AppLanguage.Spanish -> "spanish español 西班牙语"
-            AppLanguage.Portuguese -> "portuguese português 葡萄牙语"
-            AppLanguage.Russian -> "russian русский 俄语"
-            AppLanguage.Indonesian -> "indonesian bahasa 印尼语"
-            AppLanguage.Arabic -> "arabic العربية 阿拉伯语"
-            AppLanguage.Persian -> "persian فارسی 波斯语"
-            AppLanguage.Turkish -> "turkish türkçe 土耳其语"
-            AppLanguage.Vietnamese -> "vietnamese tiếng việt 越南语"
+            AppLanguage.System -> "system follow device"
+            AppLanguage.English -> "english"
+            AppLanguage.Japanese -> "japanese 日本語"
+            AppLanguage.Korean -> "korean 한국어"
+            AppLanguage.Spanish -> "spanish español"
+            AppLanguage.Portuguese -> "portuguese português"
+            AppLanguage.Russian -> "russian русский"
+            AppLanguage.Indonesian -> "indonesian bahasa"
+            AppLanguage.Arabic -> "arabic العربية"
+            AppLanguage.Persian -> "persian فارسی"
+            AppLanguage.Turkish -> "turkish türkçe"
+            AppLanguage.Vietnamese -> "vietnamese tiếng việt"
         }.lowercase().contains(q)
     }
 }

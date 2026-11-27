@@ -16,7 +16,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.AiraApp
 import com.ganguydhrubo.aira.cap.phone.a11y.DeviceSupport.pollUntil
 import com.ganguydhrubo.aira.core.agent.QuoteMessage
@@ -49,7 +49,7 @@ import com.ganguydhrubo.aira.settings.ui.models.use
 /** 真实对话页与任务服务;脚本模型延迟取消收尾,让消息稳定停在尚未交给模型的阶段。 */
 @RunWith(AndroidJUnit4::class)
 class SteerEditingDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val app get() = context.applicationContext as AiraApp

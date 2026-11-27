@@ -6,7 +6,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VideoSelectionTest {
-    private val ark = Provider("ark", "火山方舟", ProviderConfig.Kind.OpenAiCompat, "https://ark.cn-beijing.volces.com/api/v3")
+    private val ark = Provider("ark", "Volcengine Ark", ProviderConfig.Kind.OpenAiCompat, "https://ark.cn-beijing.volces.com/api/v3")
     private val deepseek = Provider("ds", "DeepSeek", ProviderConfig.Kind.OpenAiCompat, "https://api.deepseek.com")
     private val relay = Provider("relay", "Relay", ProviderConfig.Kind.OpenAiCompat, "https://relay.example.com/api/v3")
     private val arkCodingPlan = Provider("ark-cp", "Ark Coding Plan", ProviderConfig.Kind.OpenAiCompat, "https://ark.cn-beijing.volces.com/api/coding/v3")
@@ -19,7 +19,7 @@ class VideoSelectionTest {
     }
 
     @Test fun theArkPresetIsNamedWhenNoServiceCanGenerate() {
-        assertTrue(VideoProviders.presetLabels().contains("火山方舟"))
+        assertTrue(VideoProviders.presetLabels().contains("Volcengine Ark"))
     }
 
     @Test fun aCompatibleChoiceResolvesWithTheModelsDeclaredCapabilities() {

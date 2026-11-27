@@ -1,20 +1,20 @@
 /*
- * 页面脚本:读元素树、读页、核对输入。
- * 模型写的脚本不在页面里执行:它在 App 的隔离 JS 引擎里对这份快照运行,碰不到页面、网络和存储。
- * App 优先在文档开始时注入(先于页面自己的脚本),不支持时在加载完成后注入。整个文件是一个函数表达式,
- * App 以随机的名字和密钥调用它:页面上只留一个不可改、不可删的桥函数,只有拿着密钥才能取到接口。
- * 所有状态(编号表、异步结果)都在闭包里,不往 DOM 写任何属性,结果一律由 App 主动取回。
- * 坐标一律是顶层视口的 CSS 像素。
+ * Page script: reads the element tree, reads the page and checks inputs.
+ * Scripts written by the model do not run in the page: they run against this snapshot in the App's isolated JS engine, with no access to the page, network or storage.
+ * The App injects it at document start where possible (before the page's own scripts), otherwise after load finishes. The whole file is one function expression;
+ * the App calls it with a random name and secret: the page only keeps one bridge function that cannot be changed or deleted, and only the holder of the secret can get the API.
+ * All state (reference tables, async results) lives in the closure; nothing is written to the DOM as attributes, and the App always pulls results itself.
+ * All coordinates are CSS pixels of the top-level viewport.
  */
 (function (NAME, SECRET) {
   'use strict';
   var W = window;
   var D = document;
   if (Object.prototype.hasOwnProperty.call(W, NAME)) return true;
-  // 只在主文档里装:子框架(含跨源的)不留桥函数
+  // Install only in the main document: child frames (including cross-origin ones) get no bridge function
   if (W.top !== W) return true;
 
-  // 注入时先拿到原始入口(文档开始注入时页面脚本还没跑),之后页面改全局对象也影响不到这些
+  // Grab the original entry points at injection time (at document start the page scripts have not run yet), so later changes to globals by the page do not affect these
   var FP = Function.prototype;
   var uncurry = FP.bind.bind(FP.call);
   var I = {
@@ -65,7 +65,7 @@
   var EVAL_VALUE_CHARS = 20000;
 
   var refs = [];
-  // 每次读屏一张编号表,按快照号存最近几张:端口自己为核实而读的屏不会冲掉模型手里的编号
+  // One reference table per screen read, keeping the latest few by snapshot key: screens the port reads for its own checks do not wipe out the references the model holds
   var MAX_SNAPSHOTS = 6;
   var snaps = {};
   var snapOrder = [];
@@ -82,17 +82,17 @@
     try {
       new I.MutationObserver(function (records) { mutations += records.length; })
         .observe(D, { subtree: true, childList: true, attributes: true, characterData: true });
-    } catch (e) { /* 没有 MutationObserver 时计数恒为 0 */ }
+    } catch (e) { /* without MutationObserver the count stays 0 */ }
     return true;
   }
-  // 文档开始时 documentElement 可能还没建好,等它出现再挂
+  // At document start documentElement may not exist yet; wait for it, then attach
   if (!observeMutations()) {
     new I.MutationObserver(function (r, o) { if (observeMutations()) o.disconnect(); }).observe(D, { childList: true });
   }
 
-  // 出现过 type=password 的输入框都记下:页面事后把它改成 type=text(「显示密码」)也照样当密码框,不读值
+  // Remember every input that was ever type=password: if the page later switches it to type=text ("show password") it is still treated as a password box and its value is not read
   var seenPassword = I.WeakSet ? new I.WeakSet() : null;
-  // autocomplete 标着是密码的也算(有的页面用 type=text 加样式遮字)
+  // An input whose autocomplete says password also counts (some pages use type=text with styling to mask the text)
   var PASSWORD_AUTOCOMPLETE = { 'current-password': 1, 'new-password': 1 };
   function autocompleteTokens(el) {
     var v = el.getAttribute && el.getAttribute('autocomplete');
@@ -114,7 +114,7 @@
     var list = root.nodeType === 9 ? I.docQuerySelectorAll(root, 'input') : I.querySelectorAll(root, 'input');
     for (var i = 0; i < list.length; i++) markPassword(list[i]);
   }
-  // 主文档从文档开始时起监听;同源框架的文档第一次被读到时开始监听
+  // Main document is watched from document start; a same-origin frame's document is watched from the first time it is read
   var watchedDocs = I.WeakSet ? new I.WeakSet() : null;
   function watchDoc(doc) {
     if (!doc || (watchedDocs && I.weakHas(watchedDocs, doc))) return;
@@ -127,7 +127,7 @@
           else for (var j = 0; j < r.addedNodes.length; j++) markPasswords(r.addedNodes[j]);
         }
       }).observe(doc, { subtree: true, childList: true, attributes: true, attributeFilter: ['type', 'autocomplete'] });
-    } catch (e) { /* 没有 MutationObserver 时只靠每次读屏时补记 */ }
+    } catch (e) { /* without MutationObserver, rely only on marking during each screen read */ }
     markPasswords(doc);
   }
   watchDoc(D);
@@ -136,7 +136,7 @@
     ? function (o) { return new I.WeakRef(o); }
     : function (o) { return { deref: function () { return o; } }; };
 
-  // ---------- 通用 ----------
+  // ---------- General ----------
 
   function collapse(s) { return I.strTrim(I.strReplace(I.String(s == null ? '' : s), /[\s​‌‍﻿]+/g, ' ')); }
   function cut(s, n) { return s.length > n ? I.strSlice(s, 0, n) : s; }
@@ -145,7 +145,7 @@
     var v = el.ownerDocument && el.ownerDocument.defaultView;
     return v ? v.getComputedStyle(el) : null;
   }
-  // 跨 shadow 边界的父节点
+  // Parent node, crossing shadow boundaries
   function parentOf(n) {
     if (n.parentNode && n.parentNode.nodeType === 11 && n.parentNode.host) return n.parentNode.host;
     return n.parentElement || (n.parentNode && n.parentNode.host) || null;
@@ -184,19 +184,19 @@
     if (inputType(el) === 'password' || hasToken(el, PASSWORD_AUTOCOMPLETE)) { markPassword(el); return true; }
     return !!(seenPassword && I.weakHas(seenPassword, el));
   }
-  // 读屏只报填了几位、不带值的输入框:密码框,以及标着银行卡号、安全码、有效期、一次性验证码的文字输入框和 textarea
+  // Inputs whose screen read reports only how many characters are filled, never the value: password boxes, and text inputs and textareas marked as card number, security code, expiry date or one-time code
   function hidesValue(el) {
     return isPassword(el) || (isTextField(el) && hasToken(el, SECRET_AUTOCOMPLETE));
   }
-  // input 的值用文档开始时拿到的原始读取器:页面事后改写 value 读取器也骗不到这里
+  // Input values use the original getter taken at document start: a page that later overrides the value getter cannot fool this
   function fieldText(el) { return String((lower(el) === 'input' ? I.inputValue(el) : el.value) || ''); }
   function isTextField(el) {
     var tag = lower(el);
     if (tag === 'textarea') return true;
     return tag === 'input' && !!TEXT_INPUTS[inputType(el)];
   }
-  // 不带值的 textarea 里的文字就是它的值(页面预填的,或页面脚本把打进去的字写回去的),取元素的文字时跳过它。
-  // 元素里没有这种 textarea 时照旧:innerText,取不到用 textContent;plain 为真时直接用 textContent
+  // The text inside a value-hidden textarea is its value (prefilled by the page, or typed text written back by page scripts), so skip it when taking an element's text.
+  // If the element has no such textarea, behave as before: innerText, falling back to textContent; when plain is true use textContent directly
   function secretArea(el) { return lower(el) === 'textarea' && hidesValue(el); }
   function textOf(el, plain) {
     var ts = secretArea(el) ? [el] : I.querySelectorAll(el, 'textarea[autocomplete]'), hit = false;
@@ -231,7 +231,7 @@
     return collapse(s);
   }
 
-  // 角色与三个标志;不是候选元素时为 null
+  // Role and the three flags; null when the element is not a candidate
   function classify(el, st) {
     var tag = lower(el);
     var role = null;
@@ -278,7 +278,7 @@
     });
     return collapse(I.join(out, ' '));
   }
-  // 可访问名字;textbox/combobox 不拿自身文字当名字(那是值)
+  // Accessible name; textbox/combobox do not use their own text as the name (that is the value)
   function labelOf(el, role) {
     var v;
     if ((v = el.getAttribute('aria-labelledby')) && (v = textOfIds(el, v))) return v;
@@ -321,9 +321,9 @@
     try { return new URL(src, D.baseURI).hostname; } catch (e) { return ''; }
   }
 
-  // ---------- 元素树 ----------
+  // ---------- Element tree ----------
 
-  // key 为 null 时只读不登记编号(核实、偷看用)
+  // When key is null, read only and do not register references (for checks and peeking)
   function tree(key) {
     refs = [];
     var els = [];
@@ -368,13 +368,13 @@
     };
     if (el.id) item.id = el.id;
     if (el === state.focused) item.f = 1;
-    // 密码框、验证码和银行卡一类的输入框:往里打字每次都要用户同意
+    // Password, verification code and bank card style inputs: every typing into them needs the user's approval
     if (flags.e && (isPassword(el) || hasToken(el, SECRET_AUTOCOMPLETE))) item.pw = 1;
     var ph = collapse(el.getAttribute && el.getAttribute('placeholder'));
     if (ph) item.ph = cut(ph, PLACEHOLDER_CHARS);
-    // 按元素自己的语义是搜索框:回车是查找,不是发送
+    // A search box by the element's own semantics: Enter means search, not send
     if (flags.e && isSearchField(el)) item.sr = 1;
-    // 页面声明的快捷键:确认关卡按它认出按键会作用在哪个控件上
+    // Shortcut keys declared by the page: the confirmation gate uses them to see which control a key press acts on
     var ks = collapse(el.getAttribute && el.getAttribute('aria-keyshortcuts'));
     var ak = collapse(el.getAttribute && el.getAttribute('accesskey'));
     if (ak && ak.length === 1) ks = ks ? ks + ' Alt+' + ak : 'Alt+' + ak;
@@ -384,7 +384,7 @@
     return true;
   }
 
-  /** type=search、role=searchbox、回车键标成搜索,或在 role=search 的区域里的输入框。 */
+  /** Inputs with type=search, role=searchbox, Enter key marked as search, or inside a role=search region. */
   function isSearchField(el) {
     if (!el.getAttribute) return false;
     if (inputType(el) === 'search') return true;
@@ -400,7 +400,7 @@
 
   function visit(el, ctx, out, state) {
     if (state.trunc) return;
-    // 巨大页面:走过的节点也设上限,读屏不至于卡住页面
+    // Huge pages: also cap the number of visited nodes so a screen read does not freeze the page
     if (++state.visited > MAX_VISITED) { state.trunc = true; return; }
     var tag = lower(el);
     if (SKIP_TAGS[tag]) return;
@@ -426,7 +426,7 @@
         if (rect && !covered(el, ctx, rect)) {
           if (!push(out, state, el, ctx, rect, role, name, flags)) return;
         }
-        // 已经用自身文字当名字的,子孙的纯文字不再重复列出
+        // When an element already uses its own text as its name, do not list its descendants' plain text again
         if (role === 'text' ? onlyInlineChildren(el) : (role !== 'group' && role !== 'list')) named = true;
       }
     }
@@ -456,13 +456,13 @@
       if (doc.body) visitChildren(doc.body, inner, out, state);
       return;
     }
-    // 跨源框架按同源规则读不到内容,只列出它的存在
+    // Cross-origin frames cannot be read under the same-origin rule; only list that they exist
     if (rect && !covered(el, ctx, rect)) {
       push(out, state, el, ctx, rect, 'frame', '内嵌页面:' + hostOf(el.src || el.getAttribute('src') || ''), { c: false, e: false, s: false });
     }
   }
 
-  // ---------- 按编号取元素 ----------
+  // ---------- Get element by reference ----------
 
   function entry(ref, key) {
     var m = /^@e(\d+)$/.exec(String(ref));
@@ -496,8 +496,8 @@
     return { full: { l: r.left + o.dx, t: r.top + o.dy, r: r.right + o.dx, b: r.bottom + o.dy }, o: o };
   }
 
-  // 编号表里的元素本身:只给 App 经 DevTools 换成节点号用(元素对象不经 evaluateJavascript 序列化)。
-  // key 为 null 时是最近一次读屏的表;已不在文档里的为 null
+  // The elements of a reference table themselves: only for the App to turn into node IDs via DevTools (element objects are not serialised by evaluateJavascript).
+  // When key is null, the table from the latest screen read; entries no longer in the document are null
   function refNodes(key) {
     var table = key == null ? refs : snaps[String(key)];
     if (!table) return null;
@@ -536,13 +536,13 @@
       return { k: 'hit', x: Math.round(x), y: Math.round(y) };
     }
     if (!hit) return { k: 'obscured', by: '' };
-    // 说出整个遮挡物(弹窗、横幅),而不是正好落在点上的那个子元素:往上找到不包含目标的最外层
+    // Name the whole covering element (popup, banner), not the child that happens to be at the point: walk up to the outermost ancestor that does not contain the target
     var cover = hit;
     while (parentOf(cover) && !composedContains(parentOf(cover), e.el)) cover = parentOf(cover);
     return { k: 'obscured', by: describe(cover) };
   }
 
-  // ---------- 输入框的值 ----------
+  // ---------- Input values ----------
 
   function deepActive() {
     var a = D.activeElement;
@@ -570,7 +570,7 @@
     return { k: 'none' };
   }
 
-  // 主文档响应的 HTTP 状态(浏览器支持时);拿不到为 null
+  // HTTP status of the main document response (where the browser supports it); null if not available
   function navStatus() {
     try {
       var e = W.performance.getEntriesByType('navigation')[0];
@@ -578,7 +578,7 @@
     } catch (x) { return null; }
   }
 
-  // 当前焦点是不是这个元素(或在它这个可编辑区里):打字前核对,免得字落到别处
+  // Whether focus is on this element (or inside its editable area): checked before typing so text does not land elsewhere
   function isActive(ref, key) {
     var e = entry(ref, key);
     if (!e) return false;
@@ -596,9 +596,9 @@
     return [Math.round(e.el.scrollLeft), Math.round(e.el.scrollTop)];
   }
 
-  // ---------- 障碍判定用的事实 ----------
+  // ---------- Facts for detecting blockers ----------
 
-  // 页面上有没有密码框(含同源框架),以及跨源框架的完整地址(人机验证常在这里)
+  // Whether the page has a password box (including same-origin frames), and the full URLs of cross-origin frames (CAPTCHAs often live there)
   function facts() {
     var password = false, frames = [];
     function scan(doc, depth) {
@@ -611,7 +611,7 @@
         if (inner && inner.documentElement) scan(inner, depth + 1);
         else {
           var src = fs[j].src || fs[j].getAttribute('src') || '';
-          if (src) { try { I.push(frames, new URL(src, doc.baseURI).href); } catch (e) { /* 坏地址跳过 */ } }
+          if (src) { try { I.push(frames, new URL(src, doc.baseURI).href); } catch (e) { /* skip bad URLs */ } }
         }
       }
     }
@@ -619,7 +619,7 @@
     return { password: password, frames: frames };
   }
 
-  // ---------- 读整页 ----------
+  // ---------- Read whole page ----------
 
   var READ_SKIP = { script: 1, style: 1, noscript: 1, template: 1, head: 1, svg: 1, canvas: 1, iframe: 1, frame: 1, object: 1, embed: 1 };
   var CHROME_TAGS = { nav: 1, footer: 1, aside: 1 };
@@ -702,7 +702,7 @@
     try { W.scrollTo({ left: x, top: y, behavior: 'instant' }); } catch (e) { W.scrollTo(x, y); }
   }
 
-  // 先往下滚至多 5 屏触发懒加载(只在读第一页且 scroll 为真时),读完复位;核实用的读页不滚动
+  // First scroll down at most 5 screens to trigger lazy loading (only when reading the first page and scroll is true), then restore; reads made for checks do not scroll
   function startRead(token, maxChars, offset, scroll) {
     var sx = W.scrollX, sy = W.scrollY, n = 0;
     function finish() {
@@ -725,14 +725,14 @@
     return true;
   }
 
-  // ---------- 整页读取(web_read_page):分段、可折叠的列表块、质量迹象 ----------
+  // ---------- Full page read (web_read_page): sections, foldable list blocks, quality signals ----------
   //
-  // 这里只按结构采集:地标角色、链接文字的占比、重复的子结构、密码框、被图片画布盖住的面积、页面声明的时间。
-  // 哪些块折叠、这页算不算登录页或被拦截,由 App 判断。
+  // This only collects by structure: landmark roles, share of link text, repeated child structures, password boxes, area covered by images/canvases, dates declared by the page.
+  // Which blocks fold, and whether the page counts as a sign-in page or blocked, is decided by the App.
 
   var FOLD_TAGS = { nav: 'navigation', footer: 'footer', aside: 'complementary' };
   var FOLD_ROLES = { navigation: 'navigation', contentinfo: 'footer', complementary: 'complementary', menubar: 'navigation' };
-  // 候选块的门槛由 App 在调用时给(和它的判断同一份),这里只是 App 没给时的兜底
+  // The App passes the candidate block thresholds when calling (the same values it judges with); these are only the fallback when the App gives none
   var foldMinLinks = 5;
   var foldLinkShare = 0.5;
   var DIGEST_MAX_CHARS = 400000;
@@ -762,7 +762,7 @@
     return { n: n, c: c };
   }
 
-  // 子元素里重复最多的那种结构(标签 + class)有几个,只算含链接的子元素:卡片、推荐、列表项
+  // How many times the most repeated child structure (tag + class) occurs, counting only children with links: cards, recommendations, list items
   function repeatOf(el) {
     var counts = {}, best = 0, kids = el.children;
     for (var i = 0; i < kids.length; i++) {
@@ -782,7 +782,7 @@
     return cut(l || '', NAME_CHARS);
   }
 
-  // 可能要折叠的块:地标,或链接占了大半文字的列表;最后折不折由 App 定
+  // Blocks that may be folded: landmarks, or lists where links make up most of the text; the App decides whether to fold
   function foldCandidate(el) {
     var kind = FOLD_TAGS[lower(el)] || FOLD_ROLES[collapse(el.getAttribute('role'))];
     var listy = lower(el) === 'ul' || lower(el) === 'ol' || el.children.length >= foldMinLinks;
@@ -821,7 +821,7 @@
     function addLink(a) {
       var url = a.href;
       if (links.length >= DIGEST_MAX_LINKS || !url || I.test(/^javascript:/i, url) || seenMain[url]) return;
-      // 先在列表块里见过、正文里又链到的地址再记一次(块收起时正文里的那个还在)
+      // A URL first seen in a list block and linked again in the main text is recorded again (the main-text one stays when the block is folded)
       if (gi >= 0) { if (seenGroup[url]) return; seenGroup[url] = 1; } else seenMain[url] = 1;
       I.push(links, { text: cut(collapse(a.innerText || a.getAttribute('aria-label') || a.title), NAME_CHARS), url: url, p: gi });
     }
@@ -896,7 +896,7 @@
     };
   }
 
-  // 登录框:从密码框往上走,遇到表单或对话框就停;否则走到再往上就会包住正文为止。只数这一块自己的文字
+  // Sign-in box: walk up from the password box, stop at a form or dialog; otherwise stop just before it would wrap the main content. Count only this block's own text
   function signInBox(input, rootEl) {
     var box = input.parentElement;
     while (box && box !== rootEl && !box.contains(rootEl)) {
@@ -946,7 +946,7 @@
     };
   }
 
-  // 页面开头区域里的图片、画布、视频、内嵌对象:文档坐标的 [x, y, 宽, 高];大小、重叠由 App 算
+  // Images, canvases, videos and embedded objects in the top area of the page: [x, y, width, height] in document coordinates; size and overlap are worked out by the App
   function picturesOf(w, h) {
     var out = [];
     if (!(w > 0 && h > 0)) return out;
@@ -963,7 +963,7 @@
     return out;
   }
 
-  // 页面声明的发布、更新时间:meta、itemprop、JSON-LD(含 @graph 里的)、<time>;只收原值,App 来挑和规整
+  // Publish and update times declared by the page: meta, itemprop, JSON-LD (including inside @graph), <time>; raw values only, the App picks and normalises
   function declaredDates() {
     var out = [];
     function add(k, v) { v = collapse(v); if (v && out.length < MAX_DATES) I.push(out, { k: k, v: cut(v, 60) }); }
@@ -986,13 +986,13 @@
       if (o['@graph']) ld(o['@graph'], depth + 1);
     }
     var ss = I.docQuerySelectorAll(D, 'script[type="application/ld+json"]');
-    for (var s = 0; s < ss.length; s++) { try { ld(I.parse(ss[s].textContent || ''), 0); } catch (err) { /* 坏 JSON 跳过 */ } }
+    for (var s = 0; s < ss.length; s++) { try { ld(I.parse(ss[s].textContent || ''), 0); } catch (err) { /* skip bad JSON */ } }
     var ts = contentRoot().el.querySelectorAll('time[datetime]');
     for (var t = 0; t < ts.length && t < 5; t++) add(ts[t].hasAttribute('pubdate') ? 'time:pubdate' : 'time', ts[t].getAttribute('datetime'));
     return out;
   }
 
-  // 正文的(长度, 摘要):App 隔一会儿取一次,连续几次不变才算正文稳定
+  // (length, hash) of the main text: the App takes it every so often; the text counts as stable only after several unchanged samples
   function contentSample() {
     var el = contentRoot().el;
     var t = I.String(el.innerText || el.textContent || '');
@@ -1001,13 +1001,13 @@
     return [t.length, h];
   }
 
-  // 往下滚至多 LAZY_SCREENS 屏触发懒加载,滚完 results[token] 为滚了几屏;读完由 endLazy 复位
+  // Scroll down at most LAZY_SCREENS screens to trigger lazy loading; when done, results[token] is the number of screens scrolled; endLazy restores after reading
   var lazyOrigins = {};
   function startLazy(token) {
     var o = { x: W.scrollX, y: W.scrollY }, n = 0;
     lazyOrigins[token] = o;
     function step() {
-      // 读页那边已经结束(endLazy 收走了令牌):不再滚
+      // The page read has already finished (endLazy took the token back): stop scrolling
       if (!I.hasOwn(lazyOrigins, token)) return;
       var bottom = (D.scrollingElement || D.documentElement).scrollHeight;
       if (n < LAZY_SCREENS && W.scrollY + W.innerHeight < bottom - 1) {
@@ -1039,16 +1039,16 @@
     return true;
   }
 
-  // ---------- 秘密输入框 ----------
+  // ---------- Secret inputs ----------
   //
-  // 除密码框外,读屏也标成秘密的输入框:标明是银行卡号、安全码、有效期、一次性验证码的
+  // Besides password boxes, inputs the screen read also marks as secret: those marked as card number, security code, expiry date or one-time code
   var SECRET_AUTOCOMPLETE = { 'cc-number': 1, 'cc-csc': 1, 'cc-exp': 1, 'cc-exp-month': 1, 'cc-exp-year': 1, 'one-time-code': 1 };
 
-  // ---------- blob: 下载 ----------
+  // ---------- blob: downloads ----------
   //
-  // blob: 网址只有页面自己读得到:读成 base64 放在闭包里,App 分段取回(每段至多 [BLOB_CHUNK] 字),取完即删。
+  // Only the page itself can read blob: URLs: read as base64 and kept in the closure; the App fetches it in chunks (at most [BLOB_CHUNK] characters each) and it is deleted once taken.
   var BLOB_CHUNK = 1 << 20;
-  // App 没来取(等结果超时、标签被丢下)时,读出来的内容到点自己丢掉
+  // If the App never comes for it (result wait timed out, tab dropped), the read content is discarded when the time is up
   var BLOB_TTL_MS = 120000;
   var blobs = {};
   var blobsDropped = {};
@@ -1058,8 +1058,8 @@
   }
 
   function startBlob(token, url, maxBytes) {
-    // blob: 是页面自己生成的内容;http(s) 是 App 自己连不上时改由页面用浏览器的网络栈去取:
-    // 只取和当前页面同源的地址,不跟随跳转(跳到别处就不取),不带别的站的凭据
+    // blob: is content made by the page itself; http(s) is fetched by the page through the browser's network stack when the App cannot connect by itself:
+    // only URLs on the same origin as the current page, no following redirects (a redirect elsewhere is not fetched), no credentials for other sites
     var u = I.String(url);
     var web = I.test(/^https?:/i, u);
     var origin = I.String(W.location.origin);
@@ -1078,7 +1078,7 @@
       if (b.size > maxBytes) { results[token] = { ok: false, error: 'too_large' }; return; }
       var reader = new I.FileReader();
       reader.onload = function () {
-        // App 已经放弃(超时后调了 blobDone):读完也不留
+        // The App has already given up (called blobDone after a timeout): do not keep it even after reading
         if (blobsDropped[token]) return;
         var s = I.String(reader.result);
         var b64 = s.indexOf(',') >= 0 ? I.strSlice(s, s.indexOf(',') + 1) : '';
@@ -1104,10 +1104,10 @@
     return true;
   }
 
-  // ---------- 下载名 ----------
+  // ---------- Download names ----------
   //
-  // 页面给下载起的名字只在 DOM 里(<a download="…">),下载监听拿不到。点击时(捕获阶段,只读不改)记下网址对应的名字,
-  // 下载开始时 App 来取;没记到的(比如页面用脚本点的)再在文档里找指向这个网址、带 download 的链接。
+  // The name a page gives a download lives only in the DOM (<a download="…">); the download listener cannot see it. On click (capture phase, read only) note the name for the URL,
+  // and the App fetches it when the download starts; if none was noted (for example the page clicked by script), look in the document for a link to this URL with download.
   var MAX_DOWNLOAD_NAMES = 20;
   var MAX_DOWNLOAD_LINKS = 500;
   var downloadNames = {};
@@ -1137,9 +1137,9 @@
           if (a) { noteDownloadName(a); return; }
           if (!path.length) t = t.parentNode;
         }
-      } catch (x) { /* 读不到就不记,下载照样走,用别的名字 */ }
+      } catch (x) { /* if it cannot be read, do not note it; the download still goes ahead with another name */ }
     }, true);
-  } catch (x) { /* 没有事件接口时只靠在文档里找 */ }
+  } catch (x) { /* without the event API, rely only on searching the document */ }
 
   function downloadName(url) {
     url = I.String(url);
@@ -1182,7 +1182,7 @@
     downloadName: downloadName,
     take: take
   });
-  // 页面能看到这个函数,但没有密钥取不到接口;属性不可改、不可删
+  // The page can see this function but cannot get the API without the secret; the property cannot be changed or deleted
   var bridge = I.freeze(function (key) { return key === SECRET ? api : undefined; });
   I.defineProperty(W, NAME, { value: bridge, enumerable: false, configurable: false, writable: false });
   return true;

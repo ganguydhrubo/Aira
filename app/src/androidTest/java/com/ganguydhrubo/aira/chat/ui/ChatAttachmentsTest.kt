@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.cap.sandbox.AttachmentFailure
 import com.ganguydhrubo.aira.cap.sandbox.AttachmentFailureReason
 import androidx.activity.ComponentActivity
@@ -65,7 +65,7 @@ import java.io.File
 /** 对话页的附件:「＋」的回调、相册页、输入框上方待发的那一排、发出去的消息怎么画。 */
 @RunWith(AndroidJUnit4::class)
 class ChatAttachmentsTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

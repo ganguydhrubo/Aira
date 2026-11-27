@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.task.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 /** 「查看过程」顶上的小结一行和开发者选项里的运行统计页(不用真机任务)。 */
 @RunWith(AndroidJUnit4::class)
 class RunMetricsUiTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

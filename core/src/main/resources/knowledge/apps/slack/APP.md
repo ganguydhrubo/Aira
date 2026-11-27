@@ -4,29 +4,29 @@ display: Slack
 packages: ["com.Slack"]
 aliases: ["Slack", "slack"]
 open: Slack
-description: 工作区沟通与协作:工作区、频道、私信与线程回复
+description: Workplace chat and collaboration: workspaces, channels, direct messages and thread replies
 ---
-## 是什么
-Slack 是企业与团队工作区沟通协作 App,包名 `com.Slack`。内容按工作区(Workspace)隔离,内部按公共/私密频道、私信(DM)和话题线程(Thread)组织。
+## What it is
+Slack is a workplace chat and collaboration app for companies and teams, package `com.Slack`. Content is kept separate by workspace; inside a workspace it is organised into public and private channels, direct messages (DMs) and threads.
 
-## 界面
-底部导航通常为四个标签:「主页 (Home)」「私信 (DMs)」「动态/提及 (Activity)」「你 (You)」(部分版本包含 Catch Up 待办)。
-- **主页与频道抽屉**:顶部左侧是当前工作区头像与名称(点击或左滑可唤出工作区切换面板与设置);中间或右侧为搜索栏或放大镜;下方分类陈列:未读消息、话题讨论(Threads)、公共频道(前缀 `#`)、私密频道(前缀小锁 🔒)、外部共享频道与画布(Canvases)。
-- **频道聊天页**:顶部显示频道名称、成员数、搜索与耳机图标(Huddle 随选随聊);中间为消息时间线;底部为消息输入框,支持快捷输入、`@` 成员、表情反应与附加文件「+」。
-- **线程回复页(Thread)**:在频道中点击消息下方的「X 条回复」进入。顶部标有「Thread」及所属频道名,右侧有关注铃铛;底部输入框带有「同时发送到 #频道」复选框。
+## Screens
+The bottom navigation usually has four tabs: "Home", "DMs", "Activity" and "You" (some versions also have Catch Up).
+- **Home and channel list**: at top left the current workspace picture and name (tap or swipe left to open the workspace switcher and settings); a search bar or magnifier in the middle or on the right; below, grouped lists: unreads, Threads, public channels (prefix `#`), private channels (small lock 🔒), external shared channels and Canvases.
+- **Channel chat page**: the top shows the channel name, member count, search and a headphones icon (Huddle, a live voice room); the message timeline is in the middle; the message box at the bottom supports shortcuts, `@` mentions, emoji reactions and "+" to attach files.
+- **Thread page**: open it by tapping "X replies" under a message in a channel. The top says "Thread" with the channel name and has a follow bell on the right; the input box at the bottom has an "Also send to #channel" checkbox.
 
-## 功能
-- **确认当前工作区与频道**:
-  - 用户可能同时加入多个企业或社群工作区。打开 App 时务必先核对左上角工作区头像与当前频道标题。若目标频道在另一工作区,点击左上角头像呼出侧边栏切换目标工作区。
-- **线程回复(Thread)**:
-  - 团队沟通强调在话题线程内回复。长按消息或点击消息卡片下方的回复计数进入 Thread。在输入框键入内容并发送;如无必要,**切勿勾选「同时发送到 #频道 (Also send to #channel)」**,避免在公共频道刷屏。
-- **发送消息与富文本**:
-  - 输入框支持粗体、斜体、删除线、代码块及项目列表格式。通过 `@` 提及特定成员或 `@here`/`@channel` 提示全员。
-- **搜索定位历史**:
-  - 点击全局搜索支持利用语法筛选:`in:#频道名` 限制频道、`from:@成员` 指定发言人、`has:link` 查找链接。
+## Features
+- **Check the current workspace and channel**:
+  - The user may belong to several company or community workspaces. When the app opens, always check the workspace picture at top left and the current channel title first. If the target channel is in another workspace, tap the picture at top left to open the sidebar and switch workspace.
+- **Reply in threads**:
+  - Team etiquette is to reply inside threads. Long-press a message or tap the reply count under it to open the thread. Type in the input box and send. Unless needed, **do not tick "Also send to #channel"**, so you do not flood the public channel.
+- **Send messages with formatting**:
+  - The input box supports bold, italic, strikethrough, code blocks and bulleted lists. Use `@` to mention a member, or `@here`/`@channel` to alert everyone.
+- **Search history**:
+  - The main search supports filters: `in:#channel-name` to limit to a channel, `from:@member` for a sender, `has:link` to find links.
 
-## 已知现象
-- **状态残留与深入线程**:退出重开经常直接停留在某个深层 Thread 或私信聊天中,导致看不到主页频道列表。需点击左上角「←」逐步返回上级。
-- **误触随选随聊 (Huddle)**:频道右上角的耳机开关属于即时语音房间,点击会立即启动麦克风并广播进入提示音,切勿随意开启。
-- **权限与归档限制**:被管理员归档(Archived)的频道底部会显示「该频道已被归档,处于只读状态」,无法输入任何新内容。
-- **双重身份验证与 SSO 拦截**:首次使用或令牌过期时可能唤起浏览器或身份验证器进行 SSO 登录认证。
+## Known behaviour
+- **Leftover state and deep threads**: after reopening, the app often stays inside a thread or DM chat, so the Home channel list is not visible. Tap "←" at top left to go back step by step.
+- **Starting a Huddle by mistake**: the headphones switch at the top right of a channel is a live voice room. Tapping it turns on the microphone at once and plays a join sound to others, so do not turn it on casually.
+- **Permission and archive limits**: a channel archived by an admin shows a notice at the bottom that it is archived and read-only; you cannot type anything new.
+- **Two-factor and SSO prompts**: on first use or when the session expires, the app may open a browser or authenticator app for SSO sign-in.

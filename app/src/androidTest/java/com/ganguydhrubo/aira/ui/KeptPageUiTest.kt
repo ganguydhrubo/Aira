@@ -8,7 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.cap.web.KeptPage
 import com.ganguydhrubo.aira.capsule.CapsuleCard
 import com.ganguydhrubo.aira.capsule.CapsuleContent
@@ -27,7 +27,7 @@ import com.ganguydhrubo.aira.chat.ui.draft
 /** 留在后台运行的那一页在界面上:对话里那一行、胶囊、展开的卡片(实时画面、剩余时间、来源对话、两个按钮)。 */
 @RunWith(AndroidJUnit4::class)
 class KeptPageUiTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

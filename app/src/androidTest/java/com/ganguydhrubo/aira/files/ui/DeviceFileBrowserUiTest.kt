@@ -12,7 +12,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.workspace.DeviceFileEntry
 import com.ganguydhrubo.aira.core.workspace.DeviceFileImport
 import com.ganguydhrubo.aira.core.cap.devicefiles.DeviceFilePage
@@ -29,7 +29,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DeviceFileBrowserUiTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     private class FakeDeviceFiles : DeviceFilesPort {

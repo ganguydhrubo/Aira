@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.chat.ConversationStore
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.settings.Prerequisites
@@ -28,7 +28,7 @@ import java.util.UUID
 /** 空输入框可直接填推荐任务;已有草稿时,误触只会询问,明确确认后才替换。 */
 @RunWith(AndroidJUnit4::class)
 class ChatRecommendationTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

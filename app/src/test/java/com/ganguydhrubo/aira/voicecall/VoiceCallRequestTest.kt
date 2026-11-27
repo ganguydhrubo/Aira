@@ -23,7 +23,7 @@ class VoiceCallRequestTest {
         gate.onUserTranscript("Open WeChat, please")
         assertEquals(
             VoiceCallDecision.Accept("Open WeChat, please"),
-            gate.offer("c1", "open wechat please"),
+            gate.offer("c1", "open telegram please"),
         )
     }
 

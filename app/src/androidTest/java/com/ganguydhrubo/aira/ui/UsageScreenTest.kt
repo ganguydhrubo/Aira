@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -39,7 +39,7 @@ import com.ganguydhrubo.aira.settings.ui.UsagePreset
 
 @RunWith(AndroidJUnit4::class)
 class UsageScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

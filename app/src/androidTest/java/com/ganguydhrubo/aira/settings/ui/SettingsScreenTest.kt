@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings.ui
 
 import com.ganguydhrubo.aira.core.device.shell.HelperRestart
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +43,7 @@ import com.ganguydhrubo.aira.ui.clickInDialog
 
 @RunWith(AndroidJUnit4::class)
 class SettingsScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 
@@ -59,7 +59,7 @@ class SettingsScreenTest {
             SettingsContent(
                 status = status, androidRelease = "14", mainModel = mainModel, onBack = {}, onProblem = onProblem,
                 onOpenModels = { opened += "models" }, onOpenPhoneOps = { opened += "phone" }, onOpenDuringWork = { opened += "work" },
-                onOpenWechat = { opened += "wechat" }, onOpenProactive = { opened += "proactive" },
+                onOpenTelegram = { opened += "telegram" }, onOpenProactive = { opened += "proactive" },
                 capsuleMode = CapsuleMode.DuringTasks, onOpenCapsule = { opened += "capsule" }, onOpenNotifications = { opened += "notifications" },
                 onOpenLanguage = { opened += "language" }, onOpenAppAccess = { opened += "access" },
                 onOpenMemory = { opened += "memory" }, onOpenAdvanced = { opened += "advanced" },
@@ -91,7 +91,7 @@ class SettingsScreenTest {
         compose.setContent {
             SettingsContent(
                 status = ready, androidRelease = "14", mainModel = "DeepSeek", onBack = {}, onProblem = {}, onOpenModels = {},
-                onOpenCalls = {}, onOpenWechat = {}, onOpenProactive = {}, onOpenAppAccess = {}, onOpenSmsLogin = {},
+                onOpenCalls = {}, onOpenTelegram = {}, onOpenProactive = {}, onOpenAppAccess = {}, onOpenSmsLogin = {},
                 onOpenDuringWork = {}, capsuleMode = CapsuleMode.Always, onOpenCapsule = {}, onOpenNotifications = {},
                 onOpenMemory = {}, onOpenBackup = {}, onOpenRecommendations = {}, onOpenPersonas = {}, onOpenAdvanced = {},
                 versionName = "0.1.0", onOpenAbout = {}, onPersonalStart = {}, autoArchiveDays = 7, onOpenAutoArchive = {},
@@ -132,7 +132,7 @@ class SettingsScreenTest {
             scrollTo(t)
             compose.onNodeWithText(t).performClick()
         }
-        assertEquals(listOf("models", "phone", "wechat", "proactive", "work", "capsule", "language", "notifications", "memory", "access", "advanced", "about"), opened)
+        assertEquals(listOf("models", "phone", "telegram", "proactive", "work", "capsule", "language", "notifications", "memory", "access", "advanced", "about"), opened)
     }
 
     /** 高级与其他集中放连接、维护和工程入口,各行仍打开原来的子页。 */

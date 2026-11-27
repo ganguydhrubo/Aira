@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.task.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.DeviceTaskState
 import android.content.Context
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -40,7 +40,7 @@ import com.ganguydhrubo.aira.ui.MainActivity
 @OptIn(ExperimentalTestApi::class)
 @RunWith(AndroidJUnit4::class)
 class RunTimelineDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 

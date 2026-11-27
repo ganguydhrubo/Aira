@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performTextReplacement
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.chat.ConversationStore
 import com.ganguydhrubo.aira.chat.DeleteImpact
 import com.ganguydhrubo.aira.chat.ProjectDeleteImpact
@@ -49,7 +49,7 @@ import com.ganguydhrubo.aira.chat.ui.TaskActions
  */
 @RunWith(AndroidJUnit4::class)
 class ProjectDrawerUiTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

@@ -4,7 +4,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.DeviceTaskState
 import com.ganguydhrubo.aira.cap.phone.a11y.DeviceSupport.pollUntil
 import com.ganguydhrubo.aira.core.agent.TaskState
@@ -24,7 +24,7 @@ import java.util.UUID
 @RunWith(AndroidJUnit4::class)
 @SdkSuppress(minSdkVersion = 30, maxSdkVersion = 30)
 class OlderAndroidTaskDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext

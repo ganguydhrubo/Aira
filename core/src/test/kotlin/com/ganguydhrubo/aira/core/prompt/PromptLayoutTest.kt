@@ -73,7 +73,7 @@ class PromptLayoutTest {
     /** 写出来给用户看的东西(技能、App 知识、记忆)要跟着用户的语言:这几份角色说明是中文,得明说,否则模型照着写中文。 */
     @Test fun learnedTextFollowsTheUsersLanguage() {
         listOf("skill_draft", "teach_skill", "app_knowledge", "memory_extract").forEach {
-            assertTrue("$it 没有写明用用户的语言", Prompts.role(it).contains("所用的语言写"))
+            assertTrue("$it does not say to use the user's language", Prompts.role(it).contains("in the language"))
         }
     }
 

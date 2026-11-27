@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.unit.dp
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.device.shell.BuiltinShellStatus
 import com.ganguydhrubo.aira.settings.AccessibilityState
 import com.ganguydhrubo.aira.settings.SystemStatus
@@ -39,7 +39,7 @@ import org.junit.runner.RunWith
 /** 设置首页的搜索:按界面语言(这里是简体中文)的标题找,点结果去对应的页,能力不在的入口不出现。 */
 @RunWith(AndroidJUnit4::class)
 class SettingsSearchScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
@@ -85,7 +85,7 @@ class SettingsSearchScreenTest {
     }
 
     @Test
-    fun englishKeysDoNotMatchInAChineseUi() {
+    fun englishKeysDoNotMatchInAEnglishUi() {
         home()
         compose.onNodeWithTag("settings-search-input").performTextInput("Scheduled")
         compose.onNodeWithTag("settings-search-empty").assertIsDisplayed()

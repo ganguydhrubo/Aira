@@ -3,7 +3,7 @@ package com.ganguydhrubo.aira.task
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.ganguydhrubo.aira.AiraApp
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.cap.phone.a11y.DeviceSupport
 import com.ganguydhrubo.aira.cap.phone.a11y.DeviceSupport.pollUntil
 import com.ganguydhrubo.aira.core.model.*
@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
 /** Real TaskService and phone tool; only model responses are deterministic. No external message is sent. */
 @RunWith(AndroidJUnit4::class)
 class WorkflowServiceDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @Test fun serviceOpensSettingsThenPassesResultToNextStep() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val app = context.applicationContext as AiraApp

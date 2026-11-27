@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.ui.viewer
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.R
 import android.content.ClipboardManager
 import android.net.Uri
@@ -26,7 +26,7 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class FileViewerScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

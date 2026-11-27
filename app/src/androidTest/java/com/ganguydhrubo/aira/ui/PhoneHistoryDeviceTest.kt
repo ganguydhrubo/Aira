@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import android.graphics.Bitmap
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.AiraApp
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.core.agent.Turn
@@ -28,7 +28,7 @@ import com.ganguydhrubo.aira.settings.ui.models.use
 /** Uses the installed app's settings and computer server with locally created run data. */
 @RunWith(AndroidJUnit4::class)
 class PhoneHistoryDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     @Test fun phonePermissionControlsSavedHistoryAndTraceThroughTheRunningServer() {

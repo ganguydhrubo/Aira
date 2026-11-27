@@ -1,23 +1,23 @@
 ---
 name: android-settings
-display: Android 设置
+display: Android Settings
 packages: ["com.android.settings"]
-aliases: ["系统设置", "手机设置", "Android Settings", "Settings", "设置"]
+aliases: ["Android Settings", "Settings", "Phone settings", "System settings"]
 sites: []
-open: 设置
-description: 安卓系统设置,管理网络、显示、权限、账号和系统信息
+open: Settings
+description: Android system settings for network, display, permissions, accounts and system information
 ---
-## 是什么
-安卓系统自带的设置,包名 `com.android.settings`。
+## What it is
+The built-in Android Settings app, package `com.android.settings`.
 
-## 界面
-首页是分类列表,顶部有搜索框;点进分类后是逐层的子页面和详情页。设置项的名称、分类和层级会随系统版本与手机厂商而不同,有的厂商还会加自己的入口。返回按钮的文字和样子随页面变化,是否回到首页以页面标题和结构判断。
+## Screens
+The home page is a list of categories with a search box at the top. Tapping a category opens sub-pages and detail pages, level by level. The names, categories and levels of settings differ by Android version and phone maker, and some makers add their own entries. The back button's text and look change from page to page; judge whether you are back on the home page from the page title and layout.
 
-## 功能
-- **搜索设置项**:顶部搜索框可直接按名称找到设置项。
-- **开关类设置**:Wi-Fi、蓝牙、飞行模式、定位等。开关的状态有时只靠颜色和位置表示,界面树里不一定有明确的「开/关」文字。
-- **关于手机**:型号、系统版本等,同一页里还可能有序列号、IMEI、设备名称等标识。
-- **权限、开发者选项、账号、安全、系统更新、安装来源、重置**:修改后会真实改变设备状态。
+## Features
+- **Search settings**: the search box at the top finds a setting directly by name.
+- **Toggle settings**: Wi-Fi, Bluetooth, Aeroplane mode, Location and so on. A toggle's state is sometimes shown only by its colour and position; the UI tree may not contain clear "On/Off" text.
+- **About phone**: model, Android version and so on. The same page may also show identifiers such as serial number, IMEI and device name.
+- **Permissions, Developer options, Accounts, Security, System update, Install unknown apps, Reset**: changing these really changes the device's state.
 
-## 已知现象
-点击开关会立即切换状态,所以只想知道当前状态时,要读无障碍属性或看截图,不能靠点击。
+## Known behaviour
+Tapping a toggle switches it at once. If you only want to know the current state, read the accessibility attributes or look at a screenshot; do not tap it.

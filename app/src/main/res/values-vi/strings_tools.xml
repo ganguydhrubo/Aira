@@ -80,5 +80,5 @@
     <string name="tool_aira_login_site">Đăng nhập vào một trang</string>
     <string name="tool_aira_confirm_login">Xác nhận đăng nhập</string>
     <string name="tool_aira_favorites">Các trang thường dùng</string>
-    <string name="tool_wechat_owner">Gửi tới WeChat của tôi</string>
+    <string name="tool_telegram_owner">Gửi tới WeChat của tôi</string>
 </resources>

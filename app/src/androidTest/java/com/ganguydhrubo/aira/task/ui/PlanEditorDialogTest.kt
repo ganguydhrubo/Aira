@@ -24,7 +24,7 @@ import android.util.Log
 import android.view.KeyEvent
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.trigger.TriggerDefinition
 import com.ganguydhrubo.aira.core.trigger.DEEPSEEK_OFF_PEAK_WINDOWS
 import com.ganguydhrubo.aira.core.trigger.ExecutionWindow
@@ -51,7 +51,7 @@ import com.ganguydhrubo.aira.settings.ui.models.use
 
 @RunWith(AndroidJUnit4::class)
 class PlanEditorDialogTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     private fun show(original: TriggerDefinition? = null, saved: MutableList<TriggerDefinition>) {

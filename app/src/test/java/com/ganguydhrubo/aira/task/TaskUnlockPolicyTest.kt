@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.task
 
 import com.ganguydhrubo.aira.core.run.ChannelPeer
 import com.ganguydhrubo.aira.core.run.RunOrigin
-import com.ganguydhrubo.aira.wechat.WechatChannel
+import com.ganguydhrubo.aira.telegram.TelegramChannel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
@@ -10,9 +10,9 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TaskUnlockPolicyTest {
-    private val peer = ChannelPeer(WechatChannel.ID, "owner", "thread")
+    private val peer = ChannelPeer(TelegramChannel.ID, "owner", "thread")
 
-    @Test fun scheduledTasksKeepUnlockWithoutResolvingWechat() {
+    @Test fun scheduledTasksKeepUnlockWithoutResolvingTelegram() {
         val authorized = taskUnlockAuthorization(RunOrigin.Trigger, null) {
             error("A scheduled task must not initialize WeChat")
         }
@@ -20,7 +20,7 @@ class TaskUnlockPolicyTest {
         assertTrue(requireNotNull(authorized).invoke())
     }
 
-    @Test fun otherTaskOriginsCannotUseWechatPermission() {
+    @Test fun otherTaskOriginsCannotUseTelegramPermission() {
         for (origin in listOf(RunOrigin.Ui, RunOrigin.Mcp, RunOrigin.Child)) {
             assertNull(taskUnlockAuthorization(origin, peer) {
                 error("$origin must not read WeChat permission")
@@ -28,7 +28,7 @@ class TaskUnlockPolicyTest {
         }
     }
 
-    @Test fun missingOrOtherChannelPeersNeverResolveWechat() {
+    @Test fun missingOrOtherChannelPeersNeverResolveTelegram() {
         for (candidate in listOf(null, peer.copy(channelId = "local"), peer.copy(channelId = "mcp"))) {
             assertNull(taskUnlockAuthorization(RunOrigin.Channel, candidate) {
                 error("A non-WeChat peer must not read WeChat permission")
@@ -40,14 +40,14 @@ class TaskUnlockPolicyTest {
         var allowed = false
         var checks = 0
         val canUnlock: (ChannelPeer?) -> Boolean = { checks++; allowed }
-        val waitingTask = taskUnlockAuthorization(RunOrigin.Channel, peer, canUnlockWechat = canUnlock)
+        val waitingTask = taskUnlockAuthorization(RunOrigin.Channel, peer, canUnlockTelegram = canUnlock)
         assertNull(waitingTask)
         assertEquals(1, checks)
 
         allowed = true
         assertNull(waitingTask)
         assertEquals(1, checks)
-        val nextTask = taskUnlockAuthorization(RunOrigin.Channel, peer, canUnlockWechat = canUnlock)
+        val nextTask = taskUnlockAuthorization(RunOrigin.Channel, peer, canUnlockTelegram = canUnlock)
         assertTrue(requireNotNull(nextTask).invoke())
     }
 
@@ -78,7 +78,7 @@ class TaskUnlockPolicyTest {
         }
     }
 
-    @Test fun authorizedWechatTaskRechecksItsPeerAfterPermissionIsRevoked() {
+    @Test fun authorizedTelegramTaskRechecksItsPeerAfterPermissionIsRevoked() {
         var allowed = true
         val checkedPeers = mutableListOf<ChannelPeer?>()
         val authorized = requireNotNull(taskUnlockAuthorization(RunOrigin.Channel, peer) {

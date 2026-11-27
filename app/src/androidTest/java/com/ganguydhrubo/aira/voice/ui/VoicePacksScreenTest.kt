@@ -21,7 +21,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.about.DownloadPhase
 import com.ganguydhrubo.aira.download.DownloadProgress
 import com.ganguydhrubo.aira.settings.ProviderStore
@@ -64,7 +64,7 @@ import java.io.File
  */
 @RunWith(AndroidJUnit4::class)
 class VoicePacksScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

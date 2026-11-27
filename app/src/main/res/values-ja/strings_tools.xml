@@ -80,5 +80,5 @@
     <string name="tool_aira_login_site">サイトにログイン</string>
     <string name="tool_aira_confirm_login">ログインを確認</string>
     <string name="tool_aira_favorites">よく使うサイト</string>
-    <string name="tool_wechat_owner">自分の WeChat に送る</string>
+    <string name="tool_telegram_owner">自分の WeChat に送る</string>
 </resources>

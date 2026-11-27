@@ -8,7 +8,7 @@ import android.view.Display
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.AiraApp
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.cap.phone.a11y.DeviceSupport
@@ -30,7 +30,7 @@ import kotlin.math.abs
 /** 真实的两个浮层窗口:收起后无障碍节点消失还不够,系统画布上也不能留下半张卡片。 */
 @RunWith(AndroidJUnit4::class)
 class CapsuleWindowDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val app = instrumentation.targetContext.applicationContext as AiraApp

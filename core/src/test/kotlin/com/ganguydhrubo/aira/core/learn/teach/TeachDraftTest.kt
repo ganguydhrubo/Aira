@@ -87,17 +87,17 @@ class TeachDraftTest {
             aliases: [save a xiaohongshu note]
             source: demonstrated
             ---
-            ## 入口
+            ## Entry
             Open Xiaohongshu directly. The search icon is at the top of the home feed.
-            ## 步骤
+            ## Steps
             1. Open Xiaohongshu.
             2. Search for the requested keyword and open the first note.
             3. Tap the star at the bottom right to save it.
-            ## 容易出错的地方
+            ## Common mistakes
             The star is the third icon in the bottom bar, not the heart.
-            ## 怎样算办成(核实证据)
+            ## Done when (proof)
             The star turns yellow and a "Saved" toast appears.
-            ## 什么时候停下交给用户
+            ## When to stop and hand over
             Stop if a login wall appears.
         """.trimIndent()
         val skill = drafted(reply)
@@ -125,15 +125,15 @@ class TeachDraftTest {
             aliases: []
             source: demonstrated
             ---
-            ## 入口
+            ## Entry
             直接打开小红书。
-            ## 步骤
+            ## Steps
             1. 点搜索，输入关键词。
-            ## 容易出错的地方
+            ## Common mistakes
             收藏在右下角，不是小心心。
-            ## 怎样算办成(核实证据)
+            ## Done when (proof)
             已经试跑成功，底部显示已收藏。
-            ## 什么时候停下交给用户
+            ## When to stop and hand over
             遇到登录页就停。
         """.trimIndent()
         val skill = drafted(reply)

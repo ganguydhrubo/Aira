@@ -26,7 +26,7 @@ class InMemoryPersonalSkills(vararg skills: PersonalSkill) : PersonalSkills {
 
 fun personalSkill(
     name: String,
-    body: String = "## 入口\n打开 App\n## 步骤\n1. 做事",
+    body: String = "## Entry\n打开 App\n## Steps\n1. 做事",
     display: String = name,
     description: String = "描述$name",
     status: SkillStatus = SkillStatus.active,

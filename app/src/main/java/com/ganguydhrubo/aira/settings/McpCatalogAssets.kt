@@ -12,7 +12,7 @@ object McpCatalogAssets {
     const val ASSET_PATH = "mcp/catalog.json"
 
     /** 目录文案必须覆盖的 UI 语言;服务专有名称不翻译。 */
-    val REQUIRED_LOCALES: List<String> = listOf("en", "zh", "zh-Hant", "ar", "fa", "ja", "ko", "es", "pt", "ru", "id", "tr")
+    val REQUIRED_LOCALES: List<String> = listOf("en", "ar", "fa", "ja", "ko", "es", "pt", "ru", "id", "tr")
 
     fun load(context: Context): McpCatalog = parse(
         context.assets.open(ASSET_PATH).use { it.readBytes().toString(Charsets.UTF_8) },

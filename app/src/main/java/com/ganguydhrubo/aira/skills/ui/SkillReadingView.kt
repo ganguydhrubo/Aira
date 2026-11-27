@@ -51,13 +51,13 @@ internal fun SkillReadingView(markdown: String) {
             Spacer(Modifier.fillMaxWidth().height(1.dp).background(c.hair))
             for ((title, contents) in remember(blocks) { readingSections(blocks) }) {
                 val label = title?.text?.text.orEmpty()
-                val caution = label.startsWith("容易出错的地方")
+                val caution = label.startsWith("Common mistakes")
                 val icon = when {
-                    label.startsWith("入口") -> AiraIcons.Pin
-                    label.startsWith("步骤") -> AiraIcons.Route
+                    label.startsWith("Entry") -> AiraIcons.Pin
+                    label.startsWith("Steps") -> AiraIcons.Route
                     caution -> AiraIcons.Info
-                    label.startsWith("怎样算办成") -> AiraIcons.Check
-                    label.startsWith("什么时候停下交给用户") -> AiraIcons.Hand
+                    label.startsWith("Done when") -> AiraIcons.Check
+                    label.startsWith("When to stop and hand over") -> AiraIcons.Hand
                     else -> null
                 }
                 val panel = if (caution) Modifier.background(c.warnSoft, AiraShapes.Tile).padding(12.dp) else Modifier
@@ -68,7 +68,7 @@ internal fun SkillReadingView(markdown: String) {
                         Text(title.text, Modifier.semantics { heading() }, style = AiraType.BodyStrong, color = c.ink)
                     }
                     for (block in contents) {
-                        if (block is MdBlock.ListBlock && block.start != null && label.startsWith("步骤")) {
+                        if (block is MdBlock.ListBlock && block.start != null && label.startsWith("Steps")) {
                             StepList(block, block.start, body)
                         } else {
                             MarkdownBlocks(listOf(block), body)

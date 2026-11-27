@@ -1,4 +1,4 @@
-<!-- 人格选项对应的固定句子。每条以「## 键」开头,键是「选项.取值」,下面一行是原文。只写怎么说话:语气、长短、格式、进度说明的写法;不写能做什么、要不要确认。 -->
+<!-- Fixed sentences for the persona options. Each entry starts with "## key", where the key is "option.value", and the line below it is the original. Write only how to speak: tone, length, format, how progress notes are written; not what can be done or whether to confirm. -->
 
 ## base.crisp
 Be crisp: lead with the result, keep sentences short, and leave out pleasantries and filler.

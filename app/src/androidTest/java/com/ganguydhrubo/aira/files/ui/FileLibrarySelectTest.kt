@@ -14,7 +14,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.chat.ConversationStore
 import com.ganguydhrubo.aira.core.agent.AttachmentLines
 import com.ganguydhrubo.aira.core.agent.TaskState
@@ -36,7 +36,7 @@ import com.ganguydhrubo.aira.chat.ui.TaskActions
 /** 文件库多选:勾两行、底部计数、全选/取消、加入待发栏。复制用假实现,不碰真实工作区。 */
 @RunWith(AndroidJUnit4::class)
 class FileLibrarySelectTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     private val context = InstrumentationRegistry.getInstrumentation().targetContext

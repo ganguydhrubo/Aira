@@ -1,32 +1,32 @@
 ---
 name: configure-aira
-display: 改 Aira 自己的设置
-description: 用户让 Aira 改自己的设置时用它看和改;模型、Key 与删数据不在其中
-aliases: ["设置你自己", "改你的设置", "调快一点", "别静音", "换个外观"]
-terms: ["设置", "配置", "快一点", "慢一点", "静音", "外观", "深色", "浅色", "胶囊"]
+display: Change Aira's own settings
+description: Use this to view and change Aira's own settings when the user asks; models, API keys and deleting data are not covered
+aliases: ["change your settings", "adjust your settings", "be a bit faster", "don't mute", "change the look"]
+terms: ["settings", "configuration", "faster", "slower", "mute", "appearance", "dark", "light", "capsule"]
 ---
-## 先看能改什么
+## First see what can be changed
 
-先调 `settings_list`。它会列出此刻能改的每一项:键、给人看的名字、现在的值,以及(如果能选的只有几个)全部可选值。
+Call `settings_list` first. It lists every item that can be changed right now: the key, the name shown to people, the current value and (when there are only a few choices) all allowed values.
 
-**只用列表里给出的键和值**,不要自己猜一个词。用户说的和你看到的对不上时(比如用户说「别静音」,列表里叫「mute_apps」),按名字挑出那一项,把 `label` 念给用户听确认是这个。
+**Use only the keys and values given in the list**; do not guess a word yourself. When what the user says does not match what you see (for example the user says "don't mute" and the list calls it "mute_apps"), pick the item by its name and read its `label` back to the user to confirm it is the right one.
 
-## 改之前先说一句
+## Say one line before changing
 
-用户明确说了要改什么,就用 `settings_set` 直接改,改完告诉用户现在的值。用户的话含糊时(「让它快一点」)先说清你打算改哪一项、改成什么,再改:
+When the user has clearly said what to change, change it directly with `settings_set` and then tell the user the new value. When the user is vague ("make it a bit faster"), first say which item you plan to change and to what value, then change it:
 
-> 我把操作节奏改成「快」了,下个任务开始生效。
+> I have set the working pace to "Fast". It will apply from the next task.
 
-**不要改用户没提到的东西**。一次改几项时逐项说。
+**Do not change anything the user did not mention.** When changing several items at once, report them one by one.
 
-## 改不了的东西
+## Things you cannot change
 
-- **模型、API Key、登录**:不在列表里。用户要这些时,告诉他去「设置 › 模型」,你说不了这一步。
-- **删数据**(清工作区、重置运行环境、删对话):也不在列表里,同样请他自己做。
-- **容器的联网与代理**:不在列表里。这两项会让数据离开手机,要用户自己去「设置 › 文件与计算环境」里开或填,你不要替他改。
+- **Model, API key, sign-in**: not in the list. When the user wants these, tell them to go to "Settings › Models"; you cannot do this step.
+- **Deleting data** (clearing the workspace, resetting the runtime environment, deleting conversations): also not in the list; ask the user to do it themselves.
+- **Container internet access and proxy**: not in the list. These two let data leave the phone, so the user must switch them on or fill them in themselves under "Settings › Files & computing environment". Do not change them for the user.
 
-这几类是故意的:第一类等于让模型换掉自己的脑子、动用户的钱;第二类不可逆;联网那道线得用户自己划。
+These limits are deliberate: the first group would let the model swap out its own brain and spend the user's money; the second group cannot be undone; and the internet line must be drawn by the user.
 
-## 生效时间
+## When changes take effect
 
-大多数改动下一个任务开始生效;外观(深浅色)当场就换。改完顺带说一句,免得用户以为没生效。
+Most changes take effect from the next task; appearance (dark or light) changes at once. Mention this after the change so the user does not think it failed.

@@ -8,7 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.selfcheck.Advice
 import com.ganguydhrubo.aira.core.selfcheck.CheckResult
 import com.ganguydhrubo.aira.core.selfcheck.CheckStatus
@@ -25,7 +25,7 @@ import com.ganguydhrubo.aira.selfcheck.ui.SelfCheckCopy
 /** 设置 › 恢复与修复 › 兼容性自检:不带真实自检的页面,看各状态下显示什么、按钮交给谁。 */
 @RunWith(AndroidJUnit4::class)
 class SelfCheckScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

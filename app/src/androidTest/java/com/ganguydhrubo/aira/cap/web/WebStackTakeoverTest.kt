@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.cap.web
 
 import org.junit.Rule
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import android.view.Display
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +43,7 @@ import kotlin.coroutines.resume
  */
 @RunWith(AndroidJUnit4::class)
 class WebStackTakeoverTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     private val instr = InstrumentationRegistry.getInstrumentation()
     private val ctx = instr.targetContext

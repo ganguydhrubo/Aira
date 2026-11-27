@@ -107,7 +107,7 @@ class ToolRiskTest {
                 "list_device_files", "copy_device_file", "search_device_files", "list_device_directory_hints", "update_device_directory_description",
                 "audio_generate", "audio_save", "audio_transcribe", "speak",
                 "image_generate", "image_edit", "image_save",
-                "video_frames", "video_info", "video_save", "video_generate", "wechat_send_owner")
+                "video_frames", "video_info", "video_save", "video_generate", "telegram_send_owner")
         assertEquals(refused, allTools().filter { !it.readOnly }.map { it.name }.toSet())
         // root 命令、通话工具都只在给了端口时登记:各给一个,所有工具都在
         val d = toolDispatcher(FakeScreen(), audio = NoAudioPort, audioSaveEnabled = true, audioSpeakTool = true, transcribe = NoTranscribePort,
@@ -123,8 +123,8 @@ class ToolRiskTest {
             override suspend fun answer(callId: String) = JsonObject(emptyMap())
             override suspend fun hangup(callId: String) = JsonObject(emptyMap())
             override suspend fun takeover() = JsonObject(emptyMap())
-        }, wechatOwner = com.ganguydhrubo.aira.core.cap.wechat.WechatOwnerPort {
-            com.ganguydhrubo.aira.core.cap.wechat.WechatOwnerResult(com.ganguydhrubo.aira.core.cap.wechat.WechatOwnerResult.Status.Unavailable)
+        }, telegramOwner = com.ganguydhrubo.aira.core.cap.telegram.TelegramOwnerPort {
+            com.ganguydhrubo.aira.core.cap.telegram.TelegramOwnerResult(com.ganguydhrubo.aira.core.cap.telegram.TelegramOwnerResult.Status.Unavailable)
         })
         for (name in names) {
             val r = d.executeRead(Part.ToolCall("c", name, "{}")).content

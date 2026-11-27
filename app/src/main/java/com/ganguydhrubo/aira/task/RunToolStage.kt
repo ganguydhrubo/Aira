@@ -19,8 +19,8 @@ import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.core.run.RunOrigin
 import com.ganguydhrubo.aira.core.run.Attendance
 import com.ganguydhrubo.aira.core.cap.sandbox.FolderFileImporter
-import com.ganguydhrubo.aira.core.cap.wechat.explicitWechatOwnerRequest
-import com.ganguydhrubo.aira.wechat.AndroidWechatOwnerPort
+import com.ganguydhrubo.aira.core.cap.telegram.explicitTelegramOwnerRequest
+import com.ganguydhrubo.aira.telegram.AndroidTelegramOwnerPort
 import com.ganguydhrubo.aira.core.run.ChildAgentRunner
 import com.ganguydhrubo.aira.core.screen.vision.VisionService
 import com.ganguydhrubo.aira.record.RunStore
@@ -202,8 +202,8 @@ internal suspend fun TaskRun.assembleTools(a: RunAssembly, m: RunModels, ph: Run
             (service.application as AiraApp).proactive.noticeSource()
         } else null,
         // 机主结果推送:只给用户明说「发我微信」的手机 UI 主任务;绑定快照、复查与同文幂等都在发送器一侧
-        wechatOwner = if (provenance.origin == RunOrigin.Ui && !conditionCheck && explicitWechatOwnerRequest(goal)) {
-            AndroidWechatOwnerPort(service.application as AiraApp, key)
+        telegramOwner = if (provenance.origin == RunOrigin.Ui && !conditionCheck && explicitTelegramOwnerRequest(goal)) {
+            AndroidTelegramOwnerPort(service.application as AiraApp, key)
         } else null,
         mcpServers = mcpEndpoints(),
         // 仅用户明确配置并启用时提供通用搜索;否则继续用浏览器搜索。

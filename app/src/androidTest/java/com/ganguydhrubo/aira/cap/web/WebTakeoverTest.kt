@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.cap.web
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import android.os.SystemClock
 import android.view.Display
 import android.view.MotionEvent
@@ -33,7 +33,7 @@ import kotlin.coroutines.resume
 /** 真机测试:网页接管把同一个 WebView 拿到主屏、再放回后台宿主,页面状态不丢。 */
 @RunWith(AndroidJUnit4::class)
 class WebTakeoverTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val tmp = TemporaryFolder()
     private val instr = InstrumentationRegistry.getInstrumentation()

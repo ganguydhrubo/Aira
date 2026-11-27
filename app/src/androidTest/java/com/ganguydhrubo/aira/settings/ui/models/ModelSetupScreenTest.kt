@@ -25,7 +25,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.core.model.Capabilities
 import com.ganguydhrubo.aira.core.model.ListedModel
@@ -62,7 +62,7 @@ import com.ganguydhrubo.aira.voice.ui.VoiceModelContent
 /** 欢迎页、配置模型一页(上手和设置共用)、选用途页、服务商详情、全部模型和「用作」面板(只用假数据,不联网)。 */
 @RunWith(AndroidJUnit4::class)
 class ModelSetupScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
     @get:Rule val tmp = TemporaryFolder()
@@ -79,7 +79,7 @@ class ModelSetupScreenTest {
     private val form = AddForm.of(ProviderPresets.all.first()).copy(apiKey = "sk")
     private val deepseek = Provider("p1", "DeepSeek", ProviderConfig.Kind.OpenAiCompat, "https://api.deepseek.com",
         listOf(ListedModel("deepseek-chat"), ListedModel("deepseek-coder", toolCalls = false)))
-    private val qwen = Provider("p2", "通义千问", ProviderConfig.Kind.OpenAiCompat, "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    private val qwen = Provider("p2", "Qwen (Alibaba Cloud)", ProviderConfig.Kind.OpenAiCompat, "https://dashscope.aliyuncs.com/compatible-mode/v1",
         listOf("qwen-max", "qwen-plus", "qwen-turbo", "qwen-vl-max", "qwen-long").map { ListedModel(it) })
     private val main = ProviderConfig("c1", deepseek.kind, deepseek.baseUrl, "deepseek-chat", caps, deepseek.name, deepseek.id)
     private val vision = ProviderConfig("c2", qwen.kind, qwen.baseUrl, "qwen-vl-max", caps, qwen.name, qwen.id)
@@ -528,7 +528,7 @@ class ModelSetupScreenTest {
                 )
             }
         }
-        compose.onNodeWithText(ModelsCopy.allModelsTitle("通义千问")).assertIsDisplayed()
+        compose.onNodeWithText(ModelsCopy.allModelsTitle("Qwen (Alibaba Cloud)")).assertIsDisplayed()
         compose.onNodeWithTag("model-qwen-long").assertIsDisplayed()
         compose.onNodeWithTag("all-models-filter").performTextInput("plus")
         compose.onNodeWithTag("model-qwen-plus").assertIsDisplayed()

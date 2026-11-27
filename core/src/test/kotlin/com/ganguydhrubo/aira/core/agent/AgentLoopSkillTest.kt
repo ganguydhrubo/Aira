@@ -82,7 +82,7 @@ class AgentLoopSkillTest {
 
     // 开头只给索引,个人技能的全文要模型自己用 skill_read 读
     @Test fun noPersonalFullTextAtStart() {
-        val mine = personalSkill("lao-ma-msg", body = "## 入口\n打开微信找老妈", display = "给老妈发消息")
+        val mine = personalSkill("lao-ma-msg", body = "## Entry\n打开微信找老妈", display = "给老妈发消息")
         val r = run("给老妈发消息说晚点到", mine)
         val first = r.requests.first()
         assertTrue(first.userTexts().none { "打开微信找老妈" in it })
@@ -93,7 +93,7 @@ class AgentLoopSkillTest {
     @Test fun skillReadOfPersonalRecordsSkillUsed() {
         val r = run("知乎上我一共建了几个收藏夹？", zhihu, personalSkill("my-trip", display = "我的出行"), script = listOf(
             reply(call("skill_read", """{"name":"zhihu-collections"}""")),
-            reply(call("knowledge_read", """{"name":"app:wechat"}""")), // 内置的不记
+            reply(call("knowledge_read", """{"name":"app:telegram"}""")), // 内置的不记
             finish,
         ))
         // 全文由 skill_read 的结果给出

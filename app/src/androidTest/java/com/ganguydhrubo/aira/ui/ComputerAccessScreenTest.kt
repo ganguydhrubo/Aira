@@ -11,7 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.remote.RemoteActivity
 import com.ganguydhrubo.aira.core.remote.RelayState
 import com.ganguydhrubo.aira.mcp.McpServerState
@@ -28,7 +28,7 @@ import com.ganguydhrubo.aira.mcp.ui.ComputerAccessUi
 
 @RunWith(AndroidJUnit4::class)
 class ComputerAccessScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     private val example = ComputerAccessUi(

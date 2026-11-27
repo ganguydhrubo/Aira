@@ -130,13 +130,8 @@ def load_catalogs(res_dir: Path) -> Dict[str, Catalog]:
         and LANGUAGE_DIRECTORY.fullmatch(path.name)
         and any(path.glob("strings*.xml"))
     ]
-    # Keep the two Chinese references next to English; order the remaining folders by name.
-    directories.sort(
-        key=lambda path: (
-            0 if path.name == "values-zh" else 1 if path.name == "values-b+zh+Hant" else 2,
-            path.name,
-        )
-    )
+    # Order the translation folders by name.
+    directories.sort(key=lambda path: path.name)
     catalogs = {"values": base}
     for directory in directories:
         catalogs[directory.name] = read_directory(directory)

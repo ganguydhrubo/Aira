@@ -15,16 +15,16 @@ class GuideCatalogMergeTest {
     private fun merged(vararg s: PersonalSkill) = GuideCatalog.withPersonal(bundled, InMemoryPersonalSkills(*s))
 
     @Test fun personalOverridesBundled() {
-        val c = merged(personalSkill("xianyu", body = "## 入口\n我的闲鱼做法", display = "我的闲鱼"))
+        val c = merged(personalSkill("xianyu", body = "## Entry\n我的闲鱼做法", display = "我的闲鱼"))
         val xianyus = c.items.filter { it.name == "xianyu" }
         assertEquals(listOf(PERSONAL_KIND), xianyus.map { it.kind })
         val v = c.view("xianyu") as GuideView.Found
         assertEquals(PERSONAL_KIND, v.info.kind)
-        assertEquals("## 入口\n我的闲鱼做法", v.content)
+        assertEquals("## Entry\n我的闲鱼做法", v.content)
         assertTrue(c.view("personal:xianyu") is GuideView.Found)
         assertEquals("skill_not_found", (c.view("app:xianyu") as GuideView.Failed).error)
         // 不影响别的内置技能
-        assertTrue(c.view("app:wechat") is GuideView.Found)
+        assertTrue(c.view("app:telegram") is GuideView.Found)
         assertEquals(bundled.items.size, c.items.size)
     }
 

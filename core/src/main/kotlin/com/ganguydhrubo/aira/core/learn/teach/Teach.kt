@@ -340,29 +340,29 @@ object TeachDraft {
         val apps = route.apps.map { it.packageName }.distinct().take(8).joinToString(", ") { "\"$it\"" }
         val explained = session.steps.mapNotNull { it.explanation }
         val body = buildString {
-            appendLine("## 入口")
+            appendLine("## Entry")
             appendLine("适用：${plain(session.goal)}")
             val first = route.apps.firstOrNull()
             if (first != null) appendLine("Aira 直接打开 ${first.label}（${first.packageName}）。只把这次真正出现过的界面当前置条件。")
             else appendLine("这次没有留下可用的 App 入口。只把这次真正出现过的界面当前置条件。")
             explained.forEach { appendLine("[你说明的] $it") }
             appendLine("来源只分三种：观察到的、你说明的、以及标明为推测的。这份由本机按示范路线整理，没有另作推测。")
-            appendLine("## 步骤")
+            appendLine("## Steps")
             if (route.steps.isEmpty()) appendLine("（没有留下可看的步骤）")
             route.steps.forEachIndexed { i, step -> appendLine("${i + 1}. ${step.text}") }
             appendLine("这些是入口线索和操作策略，不是坐标宏。")
             appendLine(TeachSkill.NOT_ABSENT)
-            appendLine("## 容易出错的地方")
+            appendLine("## Common mistakes")
             val thin = session.steps.filter { it.insufficient }
             if (thin.isEmpty()) appendLine("这次留下的步骤都有界面名字或窗口。")
             else appendLine("有 ${thin.size} 步信息不足，不能改写成点击某个坐标。")
             if (session.truncated) appendLine("后面的操作没有逐条留下。")
             appendLine(TeachSkill.NOT_ABSENT)
-            appendLine("## 怎样算办成(核实证据)")
+            appendLine("## Done when (proof)")
             val last = session.steps.lastOrNull()
             if (last != null) appendLine("[观察到] 示范结束时停在 ${last.packageName.orEmpty()} ${last.window.orEmpty()}。")
             appendLine(TeachSkill.NOT_TRIAL_RUN)
-            appendLine("## 什么时候停下交给用户")
+            appendLine("## When to stop and hand over")
             appendLine(TeachSkill.STOP_IF_UNMATCHED)
             appendLine("涉及付款、发送或下单时停下来交给用户。")
         }
@@ -384,8 +384,8 @@ object TeachDraft {
     /** 模型稿也补上这三句，并强制出处，避免把没走到的入口写成不存在或声称试跑成功。 */
     fun ensureCaveats(md: String): String {
         var text = md
-        if (TeachSkill.NOT_ABSENT !in text) text = insertBefore(text, "怎样算办成", TeachSkill.NOT_ABSENT)
-        if (TeachSkill.NOT_TRIAL_RUN !in text) text = insertBefore(text, "什么时候停下交给用户", TeachSkill.NOT_TRIAL_RUN)
+        if (TeachSkill.NOT_ABSENT !in text) text = insertBefore(text, "Done when", TeachSkill.NOT_ABSENT)
+        if (TeachSkill.NOT_TRIAL_RUN !in text) text = insertBefore(text, "When to stop and hand over", TeachSkill.NOT_TRIAL_RUN)
         if (TeachSkill.STOP_IF_UNMATCHED !in text) text = text.trimEnd() + "\n" + TeachSkill.STOP_IF_UNMATCHED
         return text
     }

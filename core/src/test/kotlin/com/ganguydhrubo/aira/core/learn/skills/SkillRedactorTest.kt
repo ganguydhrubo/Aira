@@ -36,14 +36,14 @@ class SkillRedactorTest {
 }
 
 class SkillValidateTest {
-    private val ok = "---\nname: a-b\ndescription: d\n---\n## 入口\nx\n## 步骤\n用 `phone_tap`\n## 容易出错的地方\nx\n## 怎样算办成\nx\n## 什么时候停下交给用户\nx"
+    private val ok = "---\nname: a-b\ndescription: d\n---\n## Entry\nx\n## Steps\n用 `phone_tap`\n## Common mistakes\nx\n## Done when\nx\n## When to stop and hand over\nx"
 
     @Test fun sharedValidation() {
         assertEquals(null, SkillDrafter.validate(ok, setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
         assertEquals("unknown_tool", SkillDrafter.validate(ok, emptySet(), TOOLS.nameOf(Verb.RunBundledScript)))
         assertEquals("invalid_name", SkillDrafter.validate(ok.replace("a-b", "A B"), setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
         assertEquals("missing_description", SkillDrafter.validate(ok.replace("description: d", "description:"), setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
-        assertEquals("missing_section", SkillDrafter.validate(ok.replace("## 入口", "## 开头"), setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
+        assertEquals("missing_section", SkillDrafter.validate(ok.replace("## Entry", "## 开头"), setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
         assertEquals("sensitive", SkillDrafter.validate(ok.replace("用 `phone_tap`", "支付密码是123456"), setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
         assertEquals("too_long", SkillDrafter.validate(ok + "很".repeat(4000), setOf("phone_tap"), TOOLS.nameOf(Verb.RunBundledScript)))
     }

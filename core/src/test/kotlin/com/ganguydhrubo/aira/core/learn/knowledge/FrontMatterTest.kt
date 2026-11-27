@@ -6,8 +6,8 @@ import org.junit.Test
 
 class FrontMatterTest {
     @Test fun parsesListsAndQuotes() {
-        val (m, body) = FrontMatter.parse("---\nname: wechat\nupdated: \"2026-10-08\"\naliases: [WeChat, 'we, chat', \"x\"]\n---\n正文\n第二行\n")
-        assertEquals("wechat", m["name"])
+        val (m, body) = FrontMatter.parse("---\nname: telegram\nupdated: \"2026-10-08\"\naliases: [WeChat, 'we, chat', \"x\"]\n---\n正文\n第二行\n")
+        assertEquals("telegram", m["name"])
         assertEquals("2026-10-08", m["updated"])
         assertEquals(listOf("WeChat", "we, chat", "x"), m["aliases"])
         assertEquals("正文\n第二行", body)

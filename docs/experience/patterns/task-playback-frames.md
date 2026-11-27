@@ -1,7 +1,7 @@
-# 任务回放：从点击到返回，中间详情页仍须可见
+# Task playback: from tap to back, the detail page in between must stay visible
 
-信号：列表上的点击接着是返回，回放却连续显示两次列表；或者点击圈出现在返回后的页面。仅按轮次选择一张图会同时丢失结果画面和标记的来源，批量动作还可能共享轮次。
+Signal: a tap on a list is followed by back, but playback shows the list twice in a row; or the tap circle appears on the page after going back. Picking one image per round loses both the result frame and the source of the marker, and batch actions may also share a round.
 
-处理：按实际调用编号关联原图、结果图和错误。两张都有就按顺序展示；标记只属于原图。报告证据通过观测和调用编号定位结果截图。元素中心是位置示意，语义滚动只能表示方向。旧记录只有截图时不推断触点。未采集和引用文件已丢失分别处理。
+Fix: link the original image, the result image and errors by the actual call ID. When both images exist, show them in order; the marker belongs only to the original image. Report evidence finds the result screenshot through the observation and call ID. The element centre is only a position hint, and a semantic scroll can only show direction. When an old record has only screenshots, do not guess the touch point. Handle "not captured" and "referenced file lost" separately.
 
-验证范围：原 [PR #348](https://github.com/ganguydhrubo/Aira/pull/348) 在一台手机上复现并验证过详情页、红圈和滑动。拆分后由 `PlaybackTest`、`TaskReportViewModelTest` 和 `TaskPlaybackActionsTest` 检查事件与画面关联；单元测试不能证明某个设备的元素估算位置与真实触点相同。
+Scope of verification: the original [PR #348](https://github.com/ganguydhrubo/Aira/pull/348) reproduced and verified the detail page, red circle and swipe on one phone. After the split, `PlaybackTest`, `TaskReportViewModelTest` and `TaskPlaybackActionsTest` check how events are linked to frames; unit tests cannot prove that a device's estimated element position matches the real touch point.

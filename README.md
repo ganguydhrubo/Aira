@@ -18,7 +18,7 @@ It works on a hidden background screen, so you can keep using your phone.
 
 <br/>
 
-English · [简体中文](docs/readme/README.zh-CN.md) · [繁體中文](docs/readme/README.zh-Hant.md) · [日本語](docs/readme/README.ja.md) · [한국어](docs/readme/README.ko.md) · [Español](docs/readme/README.es.md) · [Türkçe](docs/readme/README.tr.md) · [Tiếng Việt](docs/readme/README.vi.md)
+English · [日本語](docs/readme/README.ja.md) · [한국어](docs/readme/README.ko.md) · [Español](docs/readme/README.es.md) · [Türkçe](docs/readme/README.tr.md) · [Tiếng Việt](docs/readme/README.vi.md)
 
 <br/>
 
@@ -38,13 +38,13 @@ English · [简体中文](docs/readme/README.zh-CN.md) · [繁體中文](docs/re
 ## Get started in three steps
 
 1. **Install**: download the APK from [Releases](https://github.com/ganguydhrubo/Aira/releases/latest).
-2. **Connect a model**: in Settings › Model, pick a provider and enter an API key, or just sign in with an account ([models and sign-in](docs/models.en.md)).
-3. **To operate phone apps**: follow the "Set up phone control" wizard in Settings and pair wireless debugging on the phone once ([setup guide](docs/setup-guide.en.md)). Skip this if you only want chat, web and files.
+2. **Connect a model**: in Settings › Model, pick a provider and enter an API key, or just sign in with an account ([models and sign-in](docs/models.md)).
+3. **To operate phone apps**: follow the "Set up phone control" wizard in Settings and pair wireless debugging on the phone once ([setup guide](docs/setup-guide.md)). Skip this if you only want chat, web and files.
 
 Then try saying: "Set alarms for 9:40 and 10:00 tomorrow morning" or "Check the weather at 8 every morning and tell me only if it will rain".
 
 > 💡 Have a computer handy? Send this to the AI agent on it and it will set everything up for you:<br/>
-> `Follow https://github.com/ganguydhrubo/Aira/blob/main/docs/install-with-agent.en.md to install Aira on the Android phone connected over USB.`
+> `Follow https://github.com/ganguydhrubo/Aira/blob/main/docs/install-with-agent.md to install Aira on the Android phone connected over USB.`
 
 ## What it can do
 
@@ -57,11 +57,11 @@ Then try saying: "Set alarms for 9:40 and 10:00 tomorrow morning" or "Check the 
 | **Jump in or stop anytime** | Keep talking while a task runs to add or correct things (long-press to withdraw or edit one Aira hasn't picked up yet); after a stop it reports where it got to, and "continue" picks up from there |
 | **Hold to talk** | Hold the chat input to speak and edit the words before sending; long-press the floating capsule to speak and release to send. Uses the phone’s built-in speech recognition, or a provider’s speech model if it has none |
 | **Files and computing** | A Linux sandbox per conversation runs Python, Node and shell on the files you send (arm64) |
-| **From your computer** | AI tools on your computer can hand Aira tasks through CLI + Skill or MCP ([use Aira from a computer](docs/computer.en.md)) |
+| **From your computer** | AI tools on your computer can hand Aira tasks through CLI + Skill or MCP ([use Aira from a computer](docs/computer.md)) |
 
-By default Aira runs in **Ask mode**: it checks with you only before spending money (placing orders, paying) and just does everything else. You can switch to **Autonomous mode** instead. See [Ask and Autonomous](docs/modes.en.md).
+By default Aira runs in **Ask mode**: it checks with you only before spending money (placing orders, paying) and just does everything else. You can switch to **Autonomous mode** instead. See [Ask and Autonomous](docs/modes.md).
 
-For how each of these works and the finer details, see [features in detail](docs/features.en.md).
+For how each of these works and the finer details, see [features in detail](docs/features.md).
 
 <details>
 <summary>Apps and websites with built-in usage knowledge (anything not listed still works)</summary>
@@ -87,7 +87,7 @@ The names are shown as they appear in the knowledge files.
 Presets for DeepSeek, 通义千问, Kimi, 智谱, 智谱 Coding Plan, 硅基流动, 火山方舟, MiniMax, 阶跃星辰, 腾讯混元, 百度千帆, OpenRouter, OpenDesign Go, OpenCode Go, Anthropic, Gemini, OpenAI, xAI, Mistral, Groq, Cloudflare Workers AI, Ollama, LM Studio and more; for any other provider pick Custom (自定义), which takes any OpenAI-compatible, Anthropic, Gemini or OpenAI Responses endpoint.
 <!-- generated:providers:end -->
 
-You can also skip the key and sign in with a ChatGPT (Plus / Pro), xAI / Grok or OpenRouter account. Steps for adding a model, and what to know about each sign-in, are in [models and sign-in](docs/models.en.md).
+You can also skip the key and sign in with a ChatGPT (Plus / Pro), xAI / Grok or OpenRouter account. Steps for adding a model, and what to know about each sign-in, are in [models and sign-in](docs/models.md).
 
 </details>
 
@@ -105,14 +105,14 @@ Not sure your phone is up to it? Run Settings › Recovery & repair › **Compat
 
 - **There is no Aira server**: what you say and what's on your screen go only to the model provider you set up.
 - API keys and memories are stored encrypted on the phone; conversations and run records stay on the device; update checks only contact GitHub.
-- Operating third-party apps and websites automatically may break their terms of service, so use your own judgment. For anything important, use Ask mode and check the results. See the [disclaimer](docs/disclaimer.en.md).
+- Operating third-party apps and websites automatically may break their terms of service, so use your own judgment. For anything important, use Ask mode and check the results. See the [disclaimer](docs/disclaimer.md).
 
 <details>
 <summary><b>FAQ</b></summary>
 
 **Wireless debugging turned itself off?** Android turns it off when you change Wi-Fi or restart. With your permission, Aira turns it back on by itself; if it still can't connect, go back to "Set up phone control" and pair again.
 
-**Can't find wireless debugging on my phone?** Some phone systems leave it out. You can start the phone helper from a computer over USB instead; see the [setup guide](docs/setup-guide.en.md).
+**Can't find wireless debugging on my phone?** Some phone systems leave it out. You can start the phone helper from a computer over USB instead; see the [setup guide](docs/setup-guide.md).
 
 **Some screens can't be read or captured?** Pages like payments and password entry block screenshots, so Aira asks you to take over there.
 
@@ -122,13 +122,13 @@ Not sure your phone is up to it? Run Settings › Recovery & repair › **Compat
 
 **Where do updates come from?** Only from this repository's [Releases](https://github.com/ganguydhrubo/Aira/releases); you can also upgrade in the app from About › Check for updates.
 
-More answers are in the [FAQ](docs/faq.en.md).
+More answers are in the [FAQ](docs/faq.md).
 
 </details>
 
 ## Community & contributing
 
-- **Docs**: all docs and a suggested reading order are in the [docs index](docs/README.en.md)
+- **Docs**: all docs and a suggested reading order are in the [docs index](docs/README.md)
 - **Report a problem**: [open an issue](https://github.com/ganguydhrubo/Aira/issues/new/choose); About › Send feedback in the app can attach diagnostics
 - **Contribute**: add usage knowledge for an app or website (plain text, no code needed), or contribute code; see the [contributing guide](.github/CONTRIBUTING.md)
 

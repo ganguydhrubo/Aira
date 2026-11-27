@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.task
 
 import org.junit.Rule
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.DeviceTaskState
 import android.app.Notification
 import android.app.NotificationManager
@@ -50,7 +50,7 @@ import kotlinx.coroutines.runBlocking
  */
 @RunWith(AndroidJUnit4::class)
 class TaskServiceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     private val context: Context = InstrumentationRegistry.getInstrumentation().targetContext
     private lateinit var shell: IAiraShell

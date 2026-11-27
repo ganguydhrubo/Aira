@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.settings.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -21,7 +21,7 @@ import org.junit.runner.RunWith
 /** 设置 › 恢复与修复:几项默认显示打开,拨动直接执行,不弹确认框。 */
 @RunWith(AndroidJUnit4::class)
 class RecoverySectionTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

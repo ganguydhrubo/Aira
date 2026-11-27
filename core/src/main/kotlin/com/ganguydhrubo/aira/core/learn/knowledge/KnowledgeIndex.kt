@@ -38,8 +38,8 @@ data class IndexEntry(
  */
 object KnowledgeIndex {
     const val RESOURCE = "knowledge/index.json"
-    const val BODY_LIMIT = 2500
-    const val DESCRIPTION_LIMIT = 60
+    const val BODY_LIMIT = 6000
+    const val DESCRIPTION_LIMIT = 160
     const val APP = "app"
     const val SITE = "site"
     const val SKILL = "skill"
@@ -114,10 +114,10 @@ object KnowledgeIndex {
             if (!DOMAIN.matches(name)) e("站点目录名必须是它的主域名(小写)")
         } else if (!PersonalSkills.NAME.matches(name)) e("名字只能用小写字母、数字和连字符")
         val description = one("description") ?: run { e("缺少 description"); "" }
-        if (description.codePointCount(0, description.length) > DESCRIPTION_LIMIT) e("description 超过 $DESCRIPTION_LIMIT 字")
+        if (description.codePointCount(0, description.length) > DESCRIPTION_LIMIT) e("description is longer than $DESCRIPTION_LIMIT characters")
         if (one("display") == null) e("缺少 display")
         if (body.isBlank()) e("正文为空")
-        if (kind != SKILL && body.length > BODY_LIMIT) e("正文 ${body.length} 字,超过 $BODY_LIMIT;大段资料放附件")
+        if (kind != SKILL && body.length > BODY_LIMIT) e("body is ${body.length} characters, over $BODY_LIMIT; move long material to an attachment")
         val packages = many("packages")
         val domains = many("domains").map { it.lowercase().removePrefix("www.") }
         when (kind) {

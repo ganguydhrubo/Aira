@@ -19,7 +19,7 @@
 
 <br/>
 
-[English](../../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) · Türkçe · [Tiếng Việt](README.vi.md)
+[English](../../README.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) · Türkçe · [Tiếng Việt](README.vi.md)
 
 <br/>
 
@@ -39,13 +39,13 @@
 ## Üç adımda başla
 
 1. **Kur**: APK'yı [Releases](https://github.com/ganguydhrubo/Aira/releases/latest) sayfasından indir.
-2. **Bir model bağla**: Settings › Model (Ayarlar › Model) bölümünde bir sağlayıcı seçip API anahtarını gir ya da bir hesapla giriş yap ([modeller ve giriş](../models.en.md)).
-3. **Telefon uygulamalarını kullandırmak için**: Ayarlar'daki "Set up phone control" (Telefon kontrolünü kur) sihirbazını izle ve telefonda kablosuz hata ayıklamayı (wireless debugging) bir kez eşleştir ([kurulum rehberi](../setup-guide.en.md)). Yalnızca sohbet, web ve dosyalar istiyorsan bu adımı atla.
+2. **Bir model bağla**: Settings › Model (Ayarlar › Model) bölümünde bir sağlayıcı seçip API anahtarını gir ya da bir hesapla giriş yap ([modeller ve giriş](../models.md)).
+3. **Telefon uygulamalarını kullandırmak için**: Ayarlar'daki "Set up phone control" (Telefon kontrolünü kur) sihirbazını izle ve telefonda kablosuz hata ayıklamayı (wireless debugging) bir kez eşleştir ([kurulum rehberi](../setup-guide.md)). Yalnızca sohbet, web ve dosyalar istiyorsan bu adımı atla.
 
 Sonra şunu söylemeyi dene: "Yarın sabah 9:40 ve 10:00 için alarm kur" ya da "Her sabah 8'de hava durumuna bak, sadece yağmur yağacaksa bana söyle".
 
 > 💡 Yanında bir bilgisayar mı var? Bunu bilgisayardaki AI ajanına gönder, her şeyi senin için kursun:<br/>
-> `Follow https://github.com/ganguydhrubo/Aira/blob/main/docs/install-with-agent.en.md to install Aira on the Android phone connected over USB.`
+> `Follow https://github.com/ganguydhrubo/Aira/blob/main/docs/install-with-agent.md to install Aira on the Android phone connected over USB.`
 
 ## Neler yapabilir
 
@@ -58,11 +58,11 @@ Sonra şunu söylemeyi dene: "Yarın sabah 9:40 ve 10:00 için alarm kur" ya da 
 | **İstediğin an araya gir ya da durdur** | Görev sürerken konuşmaya devam ederek ekleme ya da düzeltme yap (Aira'nın henüz almadığı bir mesajı geri çekmek veya düzenlemek için uzun bas); durdurduktan sonra nerede kaldığını bildirir, "devam et" dersen oradan sürdürür |
 | **Basılı tutup konuş** | Konuşmak için sohbet giriş alanını basılı tut ve göndermeden önce metni düzenle; yüzen kapsüle uzun basıp konuş, bırakınca gönderilir. Telefonun yerleşik konuşma tanımasını kullanır, telefonda yoksa sağlayıcının konuşma modelini |
 | **Dosyalar ve hesaplama** | Her sohbet için bir Linux sandbox, gönderdiğin dosyalar üzerinde Python, Node ve shell çalıştırır (arm64) |
-| **Bilgisayarından** | Bilgisayarındaki AI araçları, CLI + Skill ya da MCP üzerinden Aira'ya görev verebilir ([Aira'yı bilgisayardan kullanmak](../computer.en.md)) |
+| **Bilgisayarından** | Bilgisayarındaki AI araçları, CLI + Skill ya da MCP üzerinden Aira'ya görev verebilir ([Aira'yı bilgisayardan kullanmak](../computer.md)) |
 
-Aira varsayılan olarak **Sorma modunda (Ask mode)** çalışır: yalnızca para harcamadan önce (sipariş verme, ödeme) sana sorar, diğer her şeyi doğrudan yapar. İstersen **Otonom moda (Autonomous mode)** geçebilirsin. Bkz. [Sorma ve Otonom modlar](../modes.en.md).
+Aira varsayılan olarak **Sorma modunda (Ask mode)** çalışır: yalnızca para harcamadan önce (sipariş verme, ödeme) sana sorar, diğer her şeyi doğrudan yapar. İstersen **Otonom moda (Autonomous mode)** geçebilirsin. Bkz. [Sorma ve Otonom modlar](../modes.md).
 
-Bunların her birinin nasıl çalıştığı ve ayrıntıları için [ayrıntılı özelliklere](../features.en.md) bak.
+Bunların her birinin nasıl çalıştığı ve ayrıntıları için [ayrıntılı özelliklere](../features.md) bak.
 
 <details>
 <summary>Yerleşik kullanım bilgisi olan uygulamalar ve web siteleri (listede olmayanlar da çalışır)</summary>
@@ -76,7 +76,7 @@ Liste, İngilizce README'deki [What it can do](../../README.md#what-it-can-do) b
 
 Yerleşik sağlayıcı ön ayarlarının ve "Custom" (Özel) ile bağlanabilen API türlerinin listesi İngilizce README'deki [What it can do](../../README.md#what-it-can-do) bölümünde ve kodla birlikte otomatik olarak güncelleniyor.
 
-Anahtar kullanmadan bir ChatGPT (Plus / Pro), xAI / Grok veya OpenRouter hesabıyla da giriş yapabilirsin. Model ekleme adımları ve her girişle ilgili bilinmesi gerekenler [modeller ve giriş](../models.en.md) sayfasında.
+Anahtar kullanmadan bir ChatGPT (Plus / Pro), xAI / Grok veya OpenRouter hesabıyla da giriş yapabilirsin. Model ekleme adımları ve her girişle ilgili bilinmesi gerekenler [modeller ve giriş](../models.md) sayfasında.
 
 </details>
 
@@ -94,14 +94,14 @@ Telefonunun yeterli olup olmadığından emin değil misin? Settings › Recover
 
 - **Aira sunucusu yok**: söylediklerin ve ekranındakiler yalnızca kurduğun model sağlayıcısına gider.
 - API anahtarları ve anılar telefonda şifreli saklanır; sohbetler ve çalışma kayıtları cihazda kalır; güncelleme kontrolleri yalnızca GitHub'a bağlanır.
-- Üçüncü taraf uygulamaları ve web sitelerini otomatik olarak kullanmak onların kullanım koşullarına aykırı olabilir, bu yüzden kendi muhakemeni kullan. Önemli işler için Sorma modunu kullan ve sonuçları kontrol et. Bkz. [sorumluluk reddi](../disclaimer.en.md).
+- Üçüncü taraf uygulamaları ve web sitelerini otomatik olarak kullanmak onların kullanım koşullarına aykırı olabilir, bu yüzden kendi muhakemeni kullan. Önemli işler için Sorma modunu kullan ve sonuçları kontrol et. Bkz. [sorumluluk reddi](../disclaimer.md).
 
 <details>
 <summary><b>SSS</b></summary>
 
 **Kablosuz hata ayıklama kendiliğinden mi kapandı?** Android, Wi-Fi değiştirdiğinde ya da telefonu yeniden başlattığında onu kapatır. İzin verirsen Aira onu kendisi yeniden açar; yine de bağlanamazsa "Set up phone control" bölümüne dönüp tekrar eşleştir.
 
-**Telefonumda kablosuz hata ayıklamayı bulamıyorum?** Bazı telefon sistemlerinde bu özellik yoktur. Telefon yardımcısını bunun yerine USB ile bir bilgisayardan başlatabilirsin; bkz. [kurulum rehberi](../setup-guide.en.md).
+**Telefonumda kablosuz hata ayıklamayı bulamıyorum?** Bazı telefon sistemlerinde bu özellik yoktur. Telefon yardımcısını bunun yerine USB ile bir bilgisayardan başlatabilirsin; bkz. [kurulum rehberi](../setup-guide.md).
 
 **Bazı ekranlar okunamıyor ya da görüntüsü alınamıyor mu?** Ödeme ve şifre girişi gibi sayfalar ekran görüntüsünü engeller, bu yüzden Aira orada işi sana bırakır.
 
@@ -111,13 +111,13 @@ Telefonunun yeterli olup olmadığından emin değil misin? Settings › Recover
 
 **Güncellemeler nereden geliyor?** Yalnızca bu reponun [Releases](https://github.com/ganguydhrubo/Aira/releases) sayfasından; uygulama içinde About › Check for updates (Hakkında › Güncellemeleri kontrol et) bölümünden de yükseltebilirsin.
 
-Daha fazla cevap [SSS](../faq.en.md) sayfasında.
+Daha fazla cevap [SSS](../faq.md) sayfasında.
 
 </details>
 
 ## Topluluk ve katkı
 
-- **Belgeler**: tüm belgeler ve önerilen okuma sırası [belge dizininde](../README.en.md)
+- **Belgeler**: tüm belgeler ve önerilen okuma sırası [belge dizininde](../README.md)
 - **Sorun bildir**: [bir issue aç](https://github.com/ganguydhrubo/Aira/issues/new/choose); uygulamadaki About › Send feedback (Hakkında › Geri bildirim gönder) tanılama bilgisi ekleyebilir
 - **Katkıda bulun**: bir uygulama ya da web sitesi için kullanım bilgisi ekle (düz metin, kod gerekmez) ya da kod katkısı yap; bkz. [katkı rehberi](../../.github/CONTRIBUTING.md)
 

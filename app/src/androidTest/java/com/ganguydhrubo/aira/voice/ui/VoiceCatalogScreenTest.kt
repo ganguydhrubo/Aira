@@ -8,7 +8,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.settings.ProviderStore
 import com.ganguydhrubo.aira.voice.model.VoiceAccountResolver
 import com.ganguydhrubo.aira.voice.model.VoiceAdapterRegistry
@@ -25,7 +25,7 @@ import com.ganguydhrubo.aira.settings.ui.models.edit
 /** 语音模型目录页:系统模型和能力徽章可见,添加/编辑/删除自己的模型可用。 */
 @RunWith(AndroidJUnit4::class)
 class VoiceCatalogScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

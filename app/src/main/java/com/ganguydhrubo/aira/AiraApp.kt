@@ -137,10 +137,10 @@ class AiraApp : Application(), WebOwner, SandboxOwner, TaskEnvironment.Owner, Ph
     }
 
     /** 微信渠道：凭证、监听和渠道适配器整个进程一份；任务仍由 TaskService 执行。 */
-    val wechat by lazy {
-        com.ganguydhrubo.aira.wechat.WechatRuntime(this,
-            com.ganguydhrubo.aira.wechat.WechatStore(java.io.File(filesDir, "wechat"),
-                com.ganguydhrubo.aira.settings.KeystoreKeyCipher("aira-wechat-account")))
+    val telegram by lazy {
+        com.ganguydhrubo.aira.telegram.TelegramRuntime(this,
+            com.ganguydhrubo.aira.telegram.TelegramStore(java.io.File(filesDir, "telegram"),
+                com.ganguydhrubo.aira.settings.KeystoreKeyCipher("aira-telegram-account")))
     }
 
     /** 本机授权的主屏唤醒/解锁；电脑连接和无人值守定时任务共用同一条确定性流程。 */
@@ -265,7 +265,7 @@ class AiraApp : Application(), WebOwner, SandboxOwner, TaskEnvironment.Owner, Ph
         }
         val local = localChannel(scheduled = false)
         val labels = com.ganguydhrubo.aira.ui.ToolLabels(com.ganguydhrubo.aira.core.assembly.knownTools())
-        RunRecovery(runStore, outbox, { id -> if (id == LocalChannel.ID) local else wechat.channelFor(id) }, object : TriggerOutcomes {
+        RunRecovery(runStore, outbox, { id -> if (id == LocalChannel.ID) local else telegram.channelFor(id) }, object : TriggerOutcomes {
             override fun interrupted(key: String, reason: String) = TriggerRuntime.interrupted(app, key, reason)
             override fun delivered(key: String) = TriggerRuntime.delivered(app, key)
             override fun actionFailed(key: String, reason: String) = TriggerRuntime.actionFailed(app, key, reason)
@@ -748,7 +748,7 @@ class AiraApp : Application(), WebOwner, SandboxOwner, TaskEnvironment.Owner, Ph
         // 上次进程被杀时没结束的运行:现在就标为中断并告知,不等任务服务起来
         if (!quit) runRecovery.recover().let { if (it.isNotEmpty()) Log.w("AiraTask", "${it.size} runs interrupted by process restart") }
         // 用户已绑定并打开微信渠道时恢复监听；完全退出期间由各运行入口统一拒绝补起
-        wechat.ensureRunning()
+        telegram.ensureRunning()
         if (flags.proactive()) proactive.start(paused = quit)
         // 先对一下设备时区;退出期间不排闹钟,重新打开时再补排
         if (!quit) scope.launch(Dispatchers.IO) { runCatching { TriggerRuntime.syncTimeZone(this@AiraApp); TriggerRuntime.rearm(this@AiraApp) } }
@@ -825,7 +825,7 @@ class AiraApp : Application(), WebOwner, SandboxOwner, TaskEnvironment.Owner, Ph
         RuntimePreparer.ensure(this)
         autoArchiveNow()
         mcp.ensureRunning()
-        wechat.ensureRunning()
+        telegram.ensureRunning()
         if (FeatureFlags.get(this).proactive()) proactive.start(paused = false)
         scope.launch(Dispatchers.IO) {
             runCatching {

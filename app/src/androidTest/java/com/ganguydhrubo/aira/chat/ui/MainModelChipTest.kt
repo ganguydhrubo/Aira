@@ -7,7 +7,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.settings.ModelChoice
 import com.ganguydhrubo.aira.ui.theme.AiraTheme
 import org.junit.Assert.assertEquals
@@ -20,7 +20,7 @@ import org.junit.runner.RunWith
 /** 输入框上方的主模型 chip：选择、回退和「下一件事生效」。 */
 @RunWith(AndroidJUnit4::class)
 class MainModelChipTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     private val model = ModelChoice.Model("cfg-1")

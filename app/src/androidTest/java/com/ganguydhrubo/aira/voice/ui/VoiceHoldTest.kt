@@ -19,7 +19,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.ui.theme.AiraTheme
 import com.ganguydhrubo.aira.voice.SpeechEngineSpec
 import com.ganguydhrubo.aira.voice.SpeechEvent
@@ -41,7 +41,7 @@ import com.ganguydhrubo.aira.chat.ui.ComposerMode
 /** 对话输入栏按住说话:长按输入框浮起「在听」卡片,松开后字接在输入框里;上滑取消时什么都不填。用假的语音来源,不用麦克风。 */
 @RunWith(AndroidJUnit4::class)
 class VoiceHoldTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

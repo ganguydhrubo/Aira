@@ -11,7 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.teach.TeachNotice
 import com.ganguydhrubo.aira.ui.theme.AiraTheme
@@ -27,7 +27,7 @@ import com.ganguydhrubo.aira.teach.ui.TeachSummaryView
 
 @RunWith(AndroidJUnit4::class)
 class TeachScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
@@ -41,15 +41,15 @@ class TeachScreenTest {
         display = "小红书搜装修并收藏",
         description = "当你说「帮我找装修案例并收藏第一条」时用",
         body = """
-            ## 入口
+            ## Entry
             直接启动小红书。
-            ## 步骤
+            ## Steps
             1. 启动小红书
-            ## 容易出错的地方
+            ## Common mistakes
             收藏在笔记右下角。
-            ## 怎样算办成(核实证据)
+            ## Done when (proof)
             底部出现已收藏。
-            ## 什么时候停下交给用户
+            ## When to stop and hand over
             进入登录页时停。
         """.trimIndent(),
         folded = folded,
@@ -58,8 +58,8 @@ class TeachScreenTest {
 
     @Test fun summaryShowsTheSkillSectionsAndFoldedNote() {
         compose.setContent { AiraTheme { TeachSummaryPage(view(), {}, {}, {}) } }
-        compose.onNodeWithText("入口").assertIsDisplayed()
-        compose.onNodeWithText("怎样算办成", substring = true).performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Entry").assertIsDisplayed()
+        compose.onNodeWithText("Done when", substring = true).performScrollTo().assertIsDisplayed()
         compose.onNodeWithText(str(R.string.teach_folded_n, 2)).assertIsDisplayed()
         compose.onNodeWithTag("teach-accept").assertHasClickAction()
     }

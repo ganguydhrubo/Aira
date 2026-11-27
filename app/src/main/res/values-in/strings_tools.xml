@@ -80,5 +80,5 @@
     <string name="tool_aira_login_site">Masuk ke situs</string>
     <string name="tool_aira_confirm_login">Konfirmasi login</string>
     <string name="tool_aira_favorites">Situs sering dipakai</string>
-    <string name="tool_wechat_owner">Kirim ke WeChat saya</string>
+    <string name="tool_telegram_owner">Kirim ke WeChat saya</string>
 </resources>

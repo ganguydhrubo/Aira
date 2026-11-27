@@ -19,12 +19,12 @@ import org.junit.Test
 
 class ResultDeliveryTest {
     @get:Rule val texts = ChineseTexts()
-    private val peer = ChannelPeer("wechat", "owner", "thread")
+    private val peer = ChannelPeer("telegram", "owner", "thread")
     private val result = Delivery.Result("result:run", "thread", "完成")
     private fun file(name: String, id: Int) = SharedFile(name, 12L, "Download/Aira/$name", "content://downloads/$id", "a".repeat(64))
 
     private class RecordingChannel(override val supportsImages: Boolean = true, val outcome: (Delivery) -> SendOutcome = { SendOutcome.Delivered }) : Channel {
-        override val id = "wechat"
+        override val id = "telegram"
         override val confirms = false
         val sent = mutableListOf<Delivery>()
         override fun start(sink: ChannelInputSink) = AutoCloseable {}

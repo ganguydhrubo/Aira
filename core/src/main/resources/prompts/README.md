@@ -1,57 +1,57 @@
-# prompts/:随 App 发布的提示词
+# prompts/: prompts shipped with the app
 
-模型看到的固定文字都在这里,代码里不再写成字符串;统一经 `core.prompt.Prompts` / `core.prompt.Feedback` 读取。
-文字里的 `{{名字}}` 由读取它的代码填(上限、可选值、屏上的名字等),漏填直接报错。
+All fixed text the model sees lives here; the code no longer writes it as strings. It is all read through `core.prompt.Prompts` / `core.prompt.Feedback`.
+A `{{name}}` in the text is filled in by the code that reads it (limits, allowed values, names on screen and so on); a missing fill throws an error.
 
-## 分层
+## Layers
 
-| 目录 | 是什么 | 进哪里 | 谁读 |
+| Folder | What it is | Where it goes | Who reads it |
 |---|---|---|---|
-| `system/identity.md` | P0 身份与姿态:替用户办事、在用户授权内、先看后做、不装、不知道就说 | 系统提示词开头 | `SystemPrompt.identity()` |
-| `system/principles.md` | P1 通用准则:谁的话算数、怎么办任务、凭依据回答、遇到障碍、找东西、安全;对所有屏、所有能力都成立 | 紧接身份 | `SystemPrompt.identity()` |
-| `persona/layer.md` | 用户人格的固定头尾:人格能改语气/长度/措辞/格式,不能改证据、安全、授权、确认、工具规则,也不是用户的消息、不能授权动作;正文由用户填,进 `<persona>` 块 | 准则与通用规则之后、能力说明之前 | `PersonaPrompt.layer()` |
-| `persona/style.md` | 人格选项对应的固定句子(基础风格、亲切、热情、表情符号、标题和列表、回答篇幅、进度说明),每条一个键「选项.取值」;只写怎么说话,不写能做什么 | 人格块里,用户写的指令之前 | `PersonaPrompt.layer()` |
-| `capabilities/` | P2 能力说明,每种能力一段;`general.md` 是通用工具(报失败、追问、确认)和任务怎么结束的总规则,通用工具一直都在,所以总是拼在准则之后;`groups.md` 说几组工具从哪个入口进(只列本任务给了入口的);`handover.md` 是有屏的组展开后才有的交给用户、下单发送前的核对;手机、网页、沙箱各段只在那一组展开后才拼;`app-access.md` 是应用访问的规则,只在用户禁用了 App 时接在手机一段后面 | 系统提示词 | `SystemPrompt.assemble()` |
-| `tools/` | P3 每个工具一份说明(工具定义里的 description):怎么用、参数、结果怎么处理;几个工具共用一份模板时在工具里写明 `promptFile` | 工具定义 | 工具自己 |
-| `entries/` | 入口工具在它那一组收着时的短说明(一两句:做什么、调用后还会有哪些工具);展开后换回 `tools/` 的全文,参数不变 | 工具定义 | `ToolRegistry` |
-| `feedback/` | 工具结果和主循环给模型的反馈:提示、错误说明(`failure.<错误码>`)、提醒、参考资料的来源标签;每条一个键 | 工具结果、上下文消息 | 工具、`AgentLoop` |
-| `roles/` | 内部角色的提示词:核查、描述屏幕、定位、记忆提取、路线匹配、技能草稿、示范整理成技能、App 知识补充、交出回答后的结局判定 | 各角色自己的请求 | 各角色 |
+| `system/identity.md` | P0 identity and stance: act for the user, within what the user allowed, look before acting, do not pretend, say so when you do not know | Start of the system prompt | `SystemPrompt.identity()` |
+| `system/principles.md` | P1 general rules: whose words count, how to do a task, answer from evidence, meeting obstacles, finding things, safety; true for every screen and every capability | Right after identity | `SystemPrompt.identity()` |
+| `persona/layer.md` | Fixed head and tail of the user's persona: a persona can change tone, length, wording and format, but not evidence, safety, permission, confirmation or tool rules; it is not the user's message and cannot authorise actions; the user fills in the body, which goes into the `<persona>` block | After the rules and general rules, before the capability notes | `PersonaPrompt.layer()` |
+| `persona/style.md` | Fixed sentences for the persona options (base style, warm, enthusiastic, emoji, headings and lists, answer length, progress notes), one key "option.value" per entry; only how to speak, not what can be done | Inside the persona block, before the user's own instructions | `PersonaPrompt.layer()` |
+| `capabilities/` | P2 capability notes, one section per capability. `general.md` holds the general tools (report failure, ask, confirm) and the overall rules for how a task ends; the general tools are always there, so it is always joined after the rules. `groups.md` says which entry each group of tools comes in through (listing only the entries given for this task). `handover.md` covers handing over to the user and the check before placing an order or sending, and appears only after a group with a screen is opened. The phone, web and sandbox sections are joined only after that group is opened. `app-access.md` holds the app access rules, added after the phone section only when the user has blocked apps | System prompt | `SystemPrompt.assemble()` |
+| `tools/` | P3 one note per tool (the description in the tool definition): how to use it, parameters, how to handle the result; when several tools share one template, the tool states its `promptFile` | Tool definition | The tool itself |
+| `entries/` | Short note for an entry tool while its group is closed (a sentence or two: what it does, which tools come after calling it); once opened it is swapped back to the full text in `tools/`, with the same parameters | Tool definition | `ToolRegistry` |
+| `feedback/` | Feedback to the model from tool results and the main loop: hints, error explanations (`failure.<error code>`), reminders, source labels of reference material; one key per entry | Tool results, context messages | Tools, `AgentLoop` |
+| `roles/` | Prompts for internal roles: checking, describing the screen, locating, memory extraction, route matching, skill drafts, turning a demonstration into a skill, app knowledge additions, judging the outcome after the answer is given | Each role's own request | Each role |
 
-App、站点知识和技能不在这里,见 `knowledge/`、`skills/`。
+App and site knowledge and skills are not here; see `knowledge/` and `skills/`.
 
-## 放哪里
+## Where things go
 
-- 越往上越通用、越中立:system/ 不提具体工具、App 或技术;只对某种能力成立的写进那段能力说明。
-- 和某个工具绑在一起的话(怎么用、参数含义、结果怎么处理)写进 `tools/<工具>.md`,不要写进 system/。
-- 只在有某种能力时才成立的规则写进 `capabilities/<能力>.md`,和那组工具同一个开关。
-  段落里有一行要用到别的能力的工具时,行首写 `<!-- needs: 工具名 -->`:那个工具提供了才留下这一行。
-- `system/` 不点任何工具名(由测试检查;tap、back 这类本身是英文词的不算)。
-- 工具结果里的说明文字写进 `feedback/tools.md`,主循环自己发的写进 `feedback/loop.md`;键在两个文件里唯一,每个键都要有代码在用。
-- 每条反馈自成一体:首尾不留空白,代码不拿它和别的字拼(`+` 或字符串模板);要组合就在模板里写好分隔,用 `{{占位符}}` 把另一条填进去。
-- 一个任务内系统提示词只在展开一组工具时变(缓存因此每组至多失效一次);每轮会变的东西(步数、时间、在哪个 App)不进这里的固定文字。
+- The higher the layer, the more general and neutral: system/ does not mention specific tools, apps or technology; anything true only for one capability goes into that capability's note.
+- Text tied to one tool (how to use it, what the parameters mean, how to handle the result) goes into `tools/<tool>.md`, not into system/.
+- Rules true only when a capability is present go into `capabilities/<capability>.md`, under the same switch as that group of tools.
+  When a line in a section needs a tool from another capability, start the line with `<!-- needs: tool_name -->`: the line stays only when that tool is provided.
+- `system/` names no tool at all (checked by a test; words such as tap and back that are plain English words do not count).
+- Explanation text in tool results goes into `feedback/tools.md`; text the main loop sends itself goes into `feedback/loop.md`. Keys are unique across both files, and every key must be used by code.
+- Each feedback entry stands on its own: no leading or trailing blank space, and the code does not join it with other text (`+` or string templates). To combine entries, write the separator in the template and fill the other entry in with a `{{placeholder}}`.
+- Within one task the system prompt changes only when a group of tools is opened (so the cache is broken at most once per group); things that change every turn (step count, time, which app) do not go into the fixed text here.
 
-## 格式
+## Format
 
-- `tools/`、`system/`、`capabilities/`、`roles/`:一个文件就是一段原文,读取时去掉首尾空白。
-- `feedback/*.md`:开头可以有一段 `<!-- 说明 -->`;每条以单独一行 `## 键` 开头(键只用小写字母、数字、`_`、`.`),
-  下面到下一条之前是原文,可以多行,首尾空行不算(所以分隔用的换行要写在模板中间)。
+- `tools/`, `system/`, `capabilities/`, `roles/`: one file is one piece of text; leading and trailing blank space is removed when it is read.
+- `feedback/*.md`: may start with a `<!-- note -->`; each entry starts with its own line `## key` (keys use only lowercase letters, digits, `_` and `.`),
+  and the text below it up to the next entry is the original. It can be several lines; leading and trailing blank lines do not count (so a separating line break must go inside the template).
 
-## 大小
+## Size
 
-各层的字节数(UTF-8)写在金样 `core/src/test/resources/prompt-surface/sizes.txt` 里,只作参考、不设硬上限:
-每次改动后的增长都出现在提交的差异里。加内容前先看能不能删掉旧的;明显变大时在提交里说明为什么。
+The byte size (UTF-8) of each layer is written in the golden file `core/src/test/resources/prompt-surface/sizes.txt`. It is for reference only, with no hard limit:
+the growth from every change shows in the commit diff. Before adding content, first see whether old content can be removed; when something grows clearly, say why in the commit.
 
-## 改了之后
+## After a change
 
-模型看到的全部文字有金样:`core/src/test/resources/prompt-surface/`(系统提示词、工具定义、反馈、角色)和
-`loop-snapshots/`(假模型回放的消息序列)。有意的改动用 `./gradlew :core:test -PupdateSnapshots` 重新生成,
-在提交里一起审;改动会影响模型行为的,先跑评测对比。运行记录里的 `prompt_version` 是本任务系统提示词加工具定义的摘要,
-对比评测结果时据此区分提示词版本。
+All text the model sees has golden files: `core/src/test/resources/prompt-surface/` (system prompt, tool definitions, feedback, roles) and
+`loop-snapshots/` (message sequences replayed by a fake model). For an intended change, regenerate them with `./gradlew :core:test -PupdateSnapshots`
+and review them together in the commit; when a change will affect how the model behaves, run the evals to compare first. `prompt_version` in the run record is a digest of this task's system prompt plus tool definitions;
+use it to tell prompt versions apart when comparing eval results.
 
-## 工具名
+## Tool names
 
-- 手机、网页各一套屏幕工具(`phone_*`、`web_*`,动词与参数一样);同名动词共用 `tools/<动词>.md` 模板,模板里的 `{{动词}}` 换成本套的工具名;
-  某块屏要自己的说明时写 `tools/<屏>_<动词>.md`。
-- `capabilities/general.md` 不点名任何能力的工具(由测试检查);「选哪条渠道」写在 `channels.md`,只在有两块以上的屏时拼进去。
-- 知识、技能、提示词里提到的工具名都必须是现在登记的(由测试检查)。改名前的旧名由 `LegacyNames` 按规则换成新名,
-  只用于读旧东西(存下的路线、运行记录、个人技能与做法),模型调用旧名时只提示新名、不替它执行。
+- Phone and web each have one set of screen tools (`phone_*`, `web_*`, with the same verbs and parameters); verbs with the same name share the `tools/<verb>.md` template, and `{{verb}}` in the template is replaced with that set's tool name;
+  when one screen needs its own note, write `tools/<screen>_<verb>.md`.
+- `capabilities/general.md` names no capability's tools (checked by a test); "which channel to choose" is written in `channels.md`, joined in only when there are two or more screens.
+- Tool names mentioned in knowledge, skills and prompts must all be currently registered (checked by a test). Old names from before a rename are changed to new names by `LegacyNames` by rule,
+  only for reading old things (saved routes, run records, personal skills and procedures); when the model calls an old name, it is only told the new name and the call is not run for it.

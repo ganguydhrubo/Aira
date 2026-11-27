@@ -8,13 +8,6 @@ import java.util.Locale
 import kotlin.random.Random
 
 class IdeaLibraryTest {
-    @Test fun chineseUiUsesTheDomesticSetInItsScript() {
-        assertEquals("zh" to "zh-Hans", IdeaLibrary.setFor(Locale.forLanguageTag("zh-Hans")))
-        assertEquals("zh" to "zh-Hans", IdeaLibrary.setFor(Locale.forLanguageTag("zh-CN")))
-        assertEquals("zh" to "zh-Hant", IdeaLibrary.setFor(Locale.forLanguageTag("zh-Hant")))
-        assertEquals("zh" to "zh-Hant", IdeaLibrary.setFor(Locale.forLanguageTag("zh-TW")))
-    }
-
     @Test fun otherLanguagesUseTheOverseasSetInTheirOwnLanguage() {
         assertEquals("intl" to "en", IdeaLibrary.setFor(Locale.forLanguageTag("en-US")))
         assertEquals("intl" to "ja", IdeaLibrary.setFor(Locale.JAPAN))

@@ -23,7 +23,7 @@ class TaskMemoryIndexTest {
     }
 
     @Test fun appFilterMatchesPackage() {
-        val items = listOf(task("a", apps = listOf("com.taobao")), task("b", apps = listOf("com.wechat")))
+        val items = listOf(task("a", apps = listOf("com.taobao")), task("b", apps = listOf("com.telegram")))
         assertEquals(listOf("a"), TaskMemoryIndex(items).search("", "com.taobao", null, 10).map { it.id })
         assertEquals(emptyList<String>(), TaskMemoryIndex(items).search("", "com.none", null, 10).map { it.id })
     }

@@ -46,11 +46,11 @@ class OnDeviceAutoTest {
 
     @Test fun autoFallsBackToAnyPack() {
         // 推荐的(sense)没装:用清单里第一个装了的
-        assertEquals("whisper", OnDeviceAuto.pick("zh-CN", AppLanguage.SimplifiedChinese, catalog, installed("dolphin", "whisper"))?.id)
+        assertEquals("whisper", OnDeviceAuto.pick("en-US", AppLanguage.English, catalog, installed("dolphin", "whisper"))?.id)
     }
 
     @Test fun nothingInstalledPicksNothing() {
-        assertNull(OnDeviceAuto.pick("zh-CN", AppLanguage.SimplifiedChinese, catalog, installed()))
+        assertNull(OnDeviceAuto.pick("en-US", AppLanguage.English, catalog, installed()))
     }
 
     @Test fun installedPackNeedsFilesSupportedDeviceAndRegistration() {

@@ -4,7 +4,7 @@ import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.AiraApp
 import com.ganguydhrubo.aira.core.model.ChatModel
 import com.ganguydhrubo.aira.core.model.Message
@@ -34,7 +34,7 @@ import com.ganguydhrubo.aira.ui.clickInDialog
 /** Exercise the installed app's settings, TaskRun, recording and timeline with a local Responses endpoint. */
 @RunWith(AndroidJUnit4::class)
 class RunTraceDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 
     @Test fun releaseIgnoresAPreviouslyEnabledRecordingPreference() {

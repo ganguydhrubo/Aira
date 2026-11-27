@@ -702,9 +702,9 @@ class ModelSetupViewModelTest {
         val main = store.roles.value.main
         vm.openForm()
         assertTrue(vm.state.value.showForm)
-        vm.selectPreset("通义千问")
+        vm.selectPreset("Qwen (Alibaba Cloud)")
         vm.setApiKey("qk"); vm.testAndSave(); runCurrent()
-        assertEquals(listOf("DeepSeek", "通义千问"), vm.state.value.providers.map { it.name })
+        assertEquals(listOf("DeepSeek", "Qwen (Alibaba Cloud)"), vm.state.value.providers.map { it.name })
         assertEquals(listOf("sk", "qk"), store.providers.value.map { store.providerKey(it.id) })
         assertEquals("第二家不改主模型", main, store.roles.value.main)
         assertEquals(1, store.list().size)
@@ -718,8 +718,8 @@ class ModelSetupViewModelTest {
         val vm = vm(store)
         vm.setApiKey("sk"); vm.testAndSave(); runCurrent()
         vm.pick(ModelRole.Main, store.providers.value.single().id, "deepseek-chat"); runCurrent()
-        vm.openForm(); vm.selectPreset("通义千问"); vm.setApiKey("qk"); vm.testAndSave(); runCurrent()
-        val qwen = vm.state.value.providers.first { it.name == "通义千问" }
+        vm.openForm(); vm.selectPreset("Qwen (Alibaba Cloud)"); vm.setApiKey("qk"); vm.testAndSave(); runCurrent()
+        val qwen = vm.state.value.providers.first { it.name == "Qwen (Alibaba Cloud)" }
         // 选择页列出所有服务商的全部模型,不按能力过滤
         assertEquals(listOf(3, 2), vm.state.value.providers.map { vm.state.value.options(it).size })
         vm.pick(ModelRole.Vision, qwen.id, "qwen-plain"); runCurrent()
@@ -761,7 +761,7 @@ class ModelSetupViewModelTest {
     @Test fun nextNeedsAMainModel() = runTest {
         val store = store()
         val vm = vm(store)
-        vm.selectPreset("自定义")
+        vm.selectPreset("Custom")
         vm.setBaseUrl("http://192.168.1.5:8000/v1")
         assertTrue("自定义的 OpenAI 兼容接口可以不填 Key", vm.state.value.form.canTest)
         listing["http://192.168.1.5:8000/v1"] = ModelListResult.Failed(ListFailure.NotSupported)

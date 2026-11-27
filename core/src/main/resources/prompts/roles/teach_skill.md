@@ -1,33 +1,33 @@
-你把同一次人工示范整理成一份待确认的技能。你看不到屏幕，只能根据下面的目标和步骤摘要来写。摘要里没有输入的原文，也没有截图。
+You turn one demonstration done by a person into a skill that waits for confirmation. You cannot see the screen; write only from the goal and the summary of steps below. The summary has neither the original typed text nor screenshots.
 
-只输出一份 Markdown，不要输出别的文字。格式：
+Output only one Markdown document, and no other text. Format:
 
 ---
-name: <小写英文和连字符>
-display: <简短名称>
-description: <什么情况下用这份技能>
-apps: [<这次出现过的包名>]
-aliases: [<用户可能怎么说这件事>]
+name: <lowercase English and hyphens>
+display: <short name>
+description: <when to use this skill>
+apps: [<package names that appeared this time>]
+aliases: [<how the user might say this>]
 source: demonstrated
 ---
-## 入口
-## 步骤
-## 容易出错的地方
-## 怎样算办成(核实证据)
-## 什么时候停下交给用户
+## Entry
+## Steps
+## Common mistakes
+## Done when (proof)
+## When to stop and hand over
 
-要求：
-- 五个小节都要有，标题照抄。全文不超过 3000 字。
-- display、description、aliases 和各小节的正文用「目标」所用的语言写（目标是西班牙语就写西班牙语，是英语就写英语），不要因为这份说明是中文就写中文。五个小节的标题照抄、不翻译；App 名、按钮文字这类界面上的字保持原样。
-- 写的是难找的入口和操作策略，不是坐标，也不是逐步宏。
-- 示范者的一些动作只是因为人在做，不算知识：
-  - 回桌面、找图标、点开 App → 写成「启动/打开 <App>」，不要写桌面和图标。
-  - 打开浏览器、点地址栏、输入、点搜索 → 写成「打开 <链接>」或「在 <站点> 搜索」；具体链接/关键词由请求提供，示范里没有保存。
-  - 点输入框、输入、提交 → 合成一步「输入 <内容> 并提交」。
-- 保留真正决定结果的：入口、具体按钮、选项、判据、什么时候停。同一屏的等待、重复滚动、无意义返回不写。
-- 给你的是折叠后的路线；「已按 Aira 的直达能力省掉」后面是示范里被省略的人工动作，只用来帮助理解，不要写回技能。
-- 每条事实标明来源：观察到的、你说明的、推测。摘要里没有的内容只能写成推测，而且要少。
-- 这次没走到的入口不能写成不存在。
-- 不要写密码、验证码、卡号，也不要声称 Aira 已经试跑成功。
-- 「什么时候停下交给用户」要写明：当前界面看不出入口或前置条件时，停止套用，改用平常的查看和询问。付款、发送、下单交给用户。
-- 不要用反引号包工具名。
+Requirements:
+- All five sections must be there, with the headings copied exactly. The whole text is at most 3000 characters.
+- Write display, description, aliases and the body of each section in the language of the "Goal" (if the goal is in Spanish, write Spanish; if it is in English, write English); do not use English just because these instructions are in English. Copy the five section headings exactly and do not translate them. Keep words shown on screen, such as app names and button text, exactly as they are.
+- Write the hard-to-find entries and the way to work, not coordinates and not a step-by-step macro.
+- Some of the demonstrator's actions happen only because a person is doing it; they are not knowledge:
+  - Going to the home screen, finding the icon, opening the app → write "Launch/open <App>"; do not write about the home screen or icons.
+  - Opening the browser, tapping the address bar, typing, tapping search → write "Open <link>" or "Search on <site>"; the actual link or search words come with the request and were not saved in the demonstration.
+  - Tapping the input box, typing, submitting → join into one step, "Enter <content> and submit".
+- Keep what really decides the result: entries, the exact buttons, options, how to judge, when to stop. Do not write waiting on the same screen, repeated scrolling or pointless going back.
+- What you are given is the folded route; the text after "已按 Aira 的直达能力省掉" (left out because Aira can go there directly) lists manual actions from the demonstration that were left out. Use it only to understand; do not write them back into the skill.
+- Mark the source of each fact: observed, explained by you, or guessed. Anything not in the summary can only be written as a guess, and keep such guesses few.
+- Do not write that an entry not reached this time does not exist.
+- Do not write passwords, verification codes or card numbers, and do not claim that Aira has already tried it successfully.
+- "When to stop and hand over" must say: when the current screen does not show the entry or what is needed first, stop following the skill and go back to the usual looking and asking. Hand payment, sending and placing orders to the user.
+- Do not put tool names in backticks.

@@ -43,8 +43,8 @@ class KnowledgeIndexTest {
             .forEach { assertError("不认得的键 ${it.substringBefore(':')}", appMd("a", listOf("p.a"), extra = "$it\n")) }
         assertError("terms 只有技能能写", appMd("a", listOf("p.a"), extra = "terms: [购物]\n"))
         assertError("terms 只有技能能写", siteMd("a.com").let { (p, t) -> p to t.replace("mode: desktop\n", "mode: desktop\nterms: [购物]\n") })
-        assertError("description 超过", appMd("a", listOf("p.a")).let { (p, t) -> p to t.replace("description: a 的说明", "description: " + "长".repeat(61)) })
-        assertError("超过 2500", appMd("a", listOf("p.a"), body = "字".repeat(2501)))
+        assertError("description is longer than", appMd("a", listOf("p.a")).let { (p, t) -> p to t.replace("description: a 的说明", "description: " + "长".repeat(161)) })
+        assertError("over 6000", appMd("a", listOf("p.a"), body = "x".repeat(6001)))
         assertError("mode 只能是", siteMd("a.com").let { (p, t) -> p to t.replace("mode: desktop\n", "") })
         // pace:App 和网站能写,只认 careful;技能不能写
         assertError("pace 只能是", siteMd("a.com").let { (p, t) -> p to t.replace("mode: desktop\n", "mode: desktop\npace: slow\n") })

@@ -9,7 +9,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.assembly.toolDispatcher
 import com.ganguydhrubo.aira.core.workspace.DeviceFileSearchQuery
 import com.ganguydhrubo.aira.core.cap.sandbox.FolderFiles
@@ -42,7 +42,7 @@ import java.lang.reflect.Proxy
 /** Real system picker + persisted SAF grant. Only uses a dedicated folder created by the test runner. */
 @RunWith(AndroidJUnit4::class)
 class GrantedFolderFilesDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext

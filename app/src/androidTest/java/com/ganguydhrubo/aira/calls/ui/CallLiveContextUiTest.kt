@@ -15,7 +15,7 @@ import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.unit.dp
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.calls.*
 import com.ganguydhrubo.aira.ui.theme.AiraTheme
@@ -30,7 +30,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class CallLiveContextUiTest {
     private val compose = createAndroidComposeRule<ComponentActivity>()
-    @get:Rule val rules: TestRule = RuleChain.outerRule(ChineseUi()).around(compose)
+    @get:Rule val rules: TestRule = RuleChain.outerRule(EnglishUi()).around(compose)
     private val active = CallRuntimeState(callId = "synthetic-call", phase = CallPhase.ACTIVE,
         aiActive = true, canHangUp = true, canTakeOver = true)
 

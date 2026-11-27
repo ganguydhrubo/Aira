@@ -75,7 +75,7 @@ class LegacyNamesTest {
     }
 
     @Test fun personalSkillsAndProceduresAreRewrittenWhenLoaded() {
-        val md = "---\nname: notes\ndescription: d\n---\n## 步骤\n1. 用 `launch_app` 打开,`tap` 新建"
+        val md = "---\nname: notes\ndescription: d\n---\n## Steps\n1. 用 `launch_app` 打开,`tap` 新建"
         val catalog = GuideCatalog.withPersonal(GuideCatalog.loadBundled(), InMemoryPersonalSkills(PersonalSkill("notes", md, SkillStatus.active, null, null, 0, emptyList())), legacyNames()::rewrite)
         val text = catalog.fullText(catalog.items.first { it.name == "notes" })!!
         assertTrue(text, "`phone_launch_app`" in text && "`phone_tap` / `web_tap`" in text)

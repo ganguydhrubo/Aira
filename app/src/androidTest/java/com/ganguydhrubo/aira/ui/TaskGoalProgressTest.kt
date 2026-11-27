@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.agent.GoalChecklist
 import com.ganguydhrubo.aira.core.agent.RunProgress
 import com.ganguydhrubo.aira.core.agent.TaskState
@@ -22,7 +22,7 @@ import com.ganguydhrubo.aira.chat.ui.WorkBlock
 
 @RunWith(AndroidJUnit4::class)
 class TaskGoalProgressTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Test fun cardKeepsActionAndExpandsTheLastConfirmedGoals() {

@@ -27,13 +27,13 @@ class ScreenshotExportTest {
         try {
             val png = JvmTestImageOps.encode(8, 8) { _, _ -> 128 }
             val screen = FakeScreen().apply { this.png = png }
-            val tools = toolDispatcher(screen, visionEnabled = false, sandbox = sb, workspace = { "wechat-thread" })
+            val tools = toolDispatcher(screen, visionEnabled = false, sandbox = sb, workspace = { "telegram-thread" })
             assertTrue(tools.definitions().any { it.name == "phone_screenshot" })
             assertFalse(tools.offeredNow().any { it.name == "share_file" })
             val result = tools.execute(call("phone_screenshot", """{"savePath":"/workspace/screens/result.png"}"""))
             assertEquals("true", result.content.s("ok"))
             assertTrue(result.images.isEmpty())
-            assertArrayEquals(png, sb.workspaceDir("wechat-thread").resolve("screens/result.png").readBytes())
+            assertArrayEquals(png, sb.workspaceDir("telegram-thread").resolve("screens/result.png").readBytes())
             assertTrue(tools.offeredNow().any { it.name == "share_file" })
             val shared = tools.execute(call("share_file", """{"path":"/workspace/screens/result.png"}"""))
             assertEquals("true", shared.content.s("ok"))

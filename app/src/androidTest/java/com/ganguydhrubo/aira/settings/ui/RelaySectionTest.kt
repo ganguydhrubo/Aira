@@ -11,7 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.remote.RelayState
 import com.ganguydhrubo.aira.settings.RelayConfig
 import com.ganguydhrubo.aira.ui.components.PageScaffold
@@ -21,7 +21,7 @@ import org.junit.Rule
 import org.junit.Test
 
 class RelaySectionTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
     private val config = mutableStateOf(RelayConfig())
     private val state = mutableStateOf(RelayState.Off)

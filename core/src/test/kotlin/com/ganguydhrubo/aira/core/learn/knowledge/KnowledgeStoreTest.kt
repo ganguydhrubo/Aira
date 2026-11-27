@@ -15,14 +15,14 @@ private fun entry(
 class KnowledgeStoreTest {
     private val bundled by lazy { KnowledgeStore.loadBundled() }
 
-    @Test fun byPackageFindsWechat() {
+    @Test fun byPackageFindsTelegram() {
         val e = KnowledgeStore(bundled).byPackage("com.tencent.mm")
         assertNotNull(e); assertEquals("微信", e!!.display)
         assertTrue(e.body!!.contains("联系人"))
     }
 
     @Test fun userNotesAppendedAndLabelled() {
-        val store = KnowledgeStore(bundled, mapOf("wechat" to "我的补充", "zhihu.com" to "网页补充"))
+        val store = KnowledgeStore(bundled, mapOf("telegram" to "我的补充", "zhihu.com" to "网页补充"))
         val body = store.byPackage("com.tencent.mm")!!.body!!
         assertTrue(body.startsWith("## 是什么"))
         assertTrue(body.endsWith("${KnowledgeStore.NOTES_HEADER}\n我的补充"))
@@ -46,17 +46,17 @@ class KnowledgeStoreTest {
 
     @Test fun loadNotesReadsAppsAndSites() {
         val dir = Files.createTempDirectory("personal").toFile()
-        java.io.File(dir, "apps/wechat").mkdirs(); java.io.File(dir, "apps/wechat/NOTES.md").writeText("  群聊先看置顶 \n")
+        java.io.File(dir, "apps/telegram").mkdirs(); java.io.File(dir, "apps/telegram/NOTES.md").writeText("  群聊先看置顶 \n")
         java.io.File(dir, "sites/zhihu.com").mkdirs(); java.io.File(dir, "sites/zhihu.com/NOTES.md").writeText("登录用扫码")
         java.io.File(dir, "apps/empty").mkdirs(); java.io.File(dir, "apps/empty/NOTES.md").writeText(" ")
         java.io.File(dir, "apps/none").mkdirs()
-        assertEquals(mapOf("wechat" to "群聊先看置顶", "zhihu.com" to "登录用扫码"), KnowledgeStore.loadNotes(dir))
+        assertEquals(mapOf("telegram" to "群聊先看置顶", "zhihu.com" to "登录用扫码"), KnowledgeStore.loadNotes(dir))
         assertTrue(KnowledgeStore.loadNotes(java.io.File(dir, "missing")).isEmpty())
     }
 
     @Test fun matchTaskByAlias() {
         val hit = KnowledgeStore(bundled).matchTask("帮我在 weixin 上给小王发消息")
-        assertEquals("wechat", hit.first().name)
+        assertEquals("telegram", hit.first().name)
     }
 
     @Test fun matchTaskUsesWordBoundariesForAscii() {

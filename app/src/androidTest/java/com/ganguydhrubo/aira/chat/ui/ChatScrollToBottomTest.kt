@@ -13,7 +13,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.chat.ConversationStore
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.core.agent.Turn
@@ -38,7 +38,7 @@ import java.util.UUID
  */
 @RunWith(AndroidJUnit4::class)
 class ChatScrollToBottomTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

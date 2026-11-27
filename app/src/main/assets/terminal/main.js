@@ -27,11 +27,11 @@
   term.loadAddon(fit);
   term.open(document.getElementById('terminal'));
 
-  // 不让页面改系统剪贴板、也不让 OSC 8 变成可点的链接。
+  // Do not let the page change the system clipboard, and do not let OSC 8 become clickable links.
   try {
     term.parser.registerOscHandler(52, () => true);
     term.parser.registerOscHandler(8, () => true);
-  } catch (e) { /* 旧版本没有 parser API 就算了 */ }
+  } catch (e) { /* older versions have no parser API; just skip it */ }
 
   const enc = new TextEncoder();
   function toB64(bytes) {

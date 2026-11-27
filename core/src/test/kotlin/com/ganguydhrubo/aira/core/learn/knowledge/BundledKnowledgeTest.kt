@@ -35,7 +35,7 @@ class BundledKnowledgeTest {
 
     // App 的 pace 按包名查 App 知识:限制浏览快慢的那几个内置 App 是 careful,别的没有说法
     @Test fun appPaceFollowsTheAppKnowledgeByPackage() {
-        val careful = listOf("xiaohongshu", "wechat", "douyin", "kuaishou", "weibo", "boss-zhipin", "xianyu", "xiaoheihe", "instagram", "tiktok")
+        val careful = listOf("xiaohongshu", "telegram", "douyin", "kuaishou", "weibo", "boss-zhipin", "xianyu", "xiaoheihe", "instagram", "tiktok")
         val apps = catalog.rows.filter { it.kind == KnowledgeIndex.APP }
         for (name in careful) {
             val row = apps.single { it.name == name }
@@ -49,23 +49,23 @@ class BundledKnowledgeTest {
     }
 
     @Test fun everyEntryHasABody() {
-        assertEquals(78, bundled.size)
+        assertEquals(37, bundled.size)
         assertTrue(bundled.all { !it.body.isNullOrBlank() && it.body!!.length <= KnowledgeIndex.BODY_LIMIT })
-        assertTrue(bundled.map { it.name }.containsAll(listOf("wechat", "xianyu", "android-settings", "github.com", "zhihu.com", "weixin.sogou.com")))
+        assertTrue(bundled.map { it.name }.containsAll(listOf("telegram", "whatsapp", "android-settings", "github.com", "youtube.com", "mail.google.com")))
     }
 
     @Test fun onlyDocumentsAndManifestListedScripts() {
         val roots = listOf("knowledge/apps", "knowledge/sites", "skills").map { File(resources, it) }
         val others = roots.flatMap { r -> r.walkTopDown().filter { it.isFile && it.extension !in setOf("md", "json") }.toList() }
         assertTrue(others.toString(), others.all { it.parentFile.name == "scripts" && File(it.parentFile, "manifest.json").isFile })
-        // 英文副本不再随 App 打包
+        // No separate .en.md copies are bundled.
         assertTrue(roots.none { r -> r.walkTopDown().any { it.name.endsWith(".en.md") } })
     }
 
     @Test fun aliasMapsToItsOwnPackage() {
         val store = KnowledgeStore(bundled)
-        assertEquals("com.taobao.idlefish", store.packageFor("闲鱼"))
-        assertEquals("com.tencent.mm", store.packageFor("微信"))
+        assertEquals("org.telegram.messenger", store.packageFor("TG"))
+        assertEquals("com.whatsapp", store.packageFor("WhatsApp"))
     }
 
     @Test fun longBodyTruncatedWithHint() {
@@ -78,26 +78,26 @@ class BundledKnowledgeTest {
     }
 
     @Test fun findSkillsMatchesTaskSkill() {
-        val hits = catalog.find("发消息")
+        val hits = catalog.find("send a message")
         assertTrue(hits.size <= 10)
         assertTrue(hits.any { it.kind == "skill" && it.name == "messaging" })
-        assertTrue(catalog.find("微信", kind = "app").all { it.kind == "app" })
-        assertTrue("wechat" in catalog.items.single { it.kind == "skill" && it.name == "messaging" }.apps)
-        assertTrue("zhihu.com" in catalog.items.single { it.kind == "skill" && it.name == "info-research" }.sites)
+        assertTrue(catalog.find("Telegram", kind = "app").all { it.kind == "app" })
+        assertTrue("telegram" in catalog.items.single { it.kind == "skill" && it.name == "messaging" }.apps)
+        assertTrue("youtube.com" in catalog.items.single { it.kind == "skill" && it.name == "info-research" }.sites)
     }
 
     @Test fun skillViewReturnsAttachment() {
-        val v = catalog.view("site:weixin.sogou.com", "references/article-links.md") as GuideView.Found
-        assertEquals("references/article-links.md", v.file)
+        val v = catalog.view("site:mail.google.com", "references/gmail-search-syntax.md") as GuideView.Found
+        assertEquals("references/gmail-search-syntax.md", v.file)
         assertTrue(v.content.isNotBlank() && !v.truncated)
-        val app = catalog.view("wechat") as GuideView.Found
+        val app = catalog.view("telegram") as GuideView.Found
         assertEquals("APP.md", app.file)
-        assertTrue(app.content.contains("微信"))
+        assertTrue(app.content.contains("Telegram"))
         assertTrue(app.content.startsWith(UNAVAILABLE_TOOLS_NOTE + "\n"))
         assertFalse(app.content.contains("\n---\n"))
-        val site = catalog.view("site:weixin.sogou.com") as GuideView.Found
-        assertTrue("references/article-links.md" in site.info.files)
-        assertTrue((catalog.view("weixin.sogou.com", "references/article-links.md") as GuideView.Found).content.isNotBlank())
+        val site = catalog.view("site:mail.google.com") as GuideView.Found
+        assertTrue("references/gmail-search-syntax.md" in site.info.files)
+        assertTrue((catalog.view("mail.google.com", "references/gmail-search-syntax.md") as GuideView.Found).content.isNotBlank())
         assertEquals("SKILL.md", (catalog.view("skill:messaging") as GuideView.Found).file)
     }
 
@@ -115,12 +115,12 @@ class BundledKnowledgeTest {
 
     @Test fun skillViewUnknownIsError() {
         assertEquals("skill_not_found", (catalog.view("nope-nothing") as GuideView.Failed).error)
-        assertEquals("skill_not_found", (catalog.view("site:wechat") as GuideView.Failed).error)
-        assertEquals("file_not_found", (catalog.view("app:wechat", "../x.md") as GuideView.Failed).error)
+        assertEquals("skill_not_found", (catalog.view("site:telegram") as GuideView.Failed).error)
+        assertEquals("file_not_found", (catalog.view("app:telegram", "../x.md") as GuideView.Failed).error)
     }
 
     @Test fun skillsAreNeverInjectedByTaskMatch() {
-        val hit = KnowledgeStore(bundled).matchTask("帮我发微信", 10)
+        val hit = KnowledgeStore(bundled).matchTask("send a Telegram message for me", 10)
         assertTrue(hit.all { e -> catalog.items.any { it.kind in setOf("app", "site") && it.name == e.name } })
     }
 
@@ -128,8 +128,8 @@ class BundledKnowledgeTest {
     @Test fun singleAsciiLetterDoesNotMatchEveryName() {
         assertTrue(catalog.find("a").isEmpty())
         assertTrue(catalog.find("z").isEmpty())
-        assertTrue(catalog.find("微信", kind = "app").any { it.name == "wechat" })
-        assertTrue(catalog.find("微").any { it.name == "wechat" })
+        assertTrue(catalog.find("Telegram", kind = "app").any { it.name == "telegram" })
+        assertTrue(catalog.find("微").any { it.name == "telegram" })
     }
 }
 

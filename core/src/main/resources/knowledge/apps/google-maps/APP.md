@@ -2,36 +2,36 @@
 name: google-maps
 display: Google Maps
 packages: ["com.google.android.apps.maps"]
-aliases: ["Google Maps", "Google 地图", "谷歌地图", "maps", "Maps"]
+aliases: ["Google Maps", "maps", "Maps"]
 sites: ["maps.google.com"]
 open: Google Maps
-description: 地图导航、路线规划、地点搜索与周边探索
+description: Maps and navigation, route planning, place search and exploring nearby
 ---
-## 是什么
-Google Maps 是谷歌的地图与导航 App,包名 `com.google.android.apps.maps`。网站知识见 `maps.google.com`。提供全球地图浏览、地点检索、多方式路线规划与实时语音导航。
+## What it is
+Google Maps is Google's maps and navigation app, package `com.google.android.apps.maps`. For the website, see `maps.google.com`. It offers world maps, place search, route planning for different travel modes and live voice navigation.
 
-## 界面
-顶部为全局搜索框「在此处搜索 (Search here)」,右侧带有麦克风与个人账号头像。搜索框下方为分类快捷胶囊(餐饮、加油、便利店、咖啡、酒店等)。
-- **底图主控**:地图右上角有图层切换按钮(默认、卫星、地形、公交、实时路况),右侧中下部有指南针和「定位到当前位置」瞄准镜图标。
-- **底部导航**:包含「探索 (Explore)」「出行 (Go)」「已保存 (Saved)」「贡献 (Contribute)」「最新 (Updates)」。
-- **地点信息抽屉**:点击地图上的地标图钉或搜索选定地点后,从底部滑出半屏详情卡片,展示地点名称、综合评分与评价总数、营业状态、类别、路线(Directions)、开始导航(Start)、呼叫、保存与分享。向上拖动展开详细营业时间表、官网网址、菜单、用户实拍照片及人流热度图表。
-- **路线规划面板**:顶部有两个输入框(起点默认为「你的位置」,终点为目标地点),下方为交通方式切换图标(驾车、公交/地铁、步行、网约车、骑行)。每种方式列出推荐路线、预估用时、里程与路况颜色(绿色畅通、黄色缓行、红色拥堵)。
-- **实时导航界面 (Turn-by-turn Navigation)**:点击绿色「开始 (Start)」进入全屏深色 HUD 导航,顶部展示下一路口转向箭头与距离,底部显示剩余时间、预计到达时间和里程,右侧有静音扬声器、路况搜索与红色「退出 (X)」按钮。
+## Screens
+At the top is the main search box "Search here", with a microphone and the profile picture on the right. Below the search box are category shortcut pills (restaurants, petrol, groceries, coffee, hotels and so on).
+- **Map controls**: at the top right of the map is the layers button (default, satellite, terrain, transit, traffic); lower down on the right are the compass and the "show your location" target icon.
+- **Bottom navigation**: "Explore", "Go", "Saved", "Contribute" and "Updates".
+- **Place info sheet**: after tapping a pin on the map or choosing a place from search, a half-screen card slides up from the bottom with the place name, rating and review count, open/closed status, category, Directions, Start, Call, Save and Share. Drag it up to see opening hours, website, menu, visitor photos and the popular times chart.
+- **Directions panel**: two input boxes at the top (start defaults to "Your location", end is the destination), with travel mode icons below (car, transit, walk, ride services, bike). Each mode lists suggested routes, estimated time, distance and traffic colours (green clear, yellow slow, red heavy).
+- **Turn-by-turn navigation**: tap the green "Start" button to open full-screen dark navigation. The top shows the next turn arrow and distance; the bottom shows time left, arrival time and distance; on the right are mute, search along route and a red exit "X" button.
 
-## 功能
-- **防停留残留与关闭遮罩**:
-  - 启动时若正停留在上次查询的地点大卡片或某条路线面板中,底图被大面积覆盖。需点击左上角返回「←」或点击半屏卡片顶部的横条向下拉动收起,即可恢复全局搜索。
-- **地点检索与详情阅读**:
-  - 在搜索栏键入商户、建筑或完整地址,在下拉匹配列表中直接点击目标。
-  - 查看营业时间与电话时,需向上滑动展开地点详情页并点击「营业时间」下拉箭头,方可查看周一至周日的具体开放时段。
-- **多模式路线比对**:
-  - 点击蓝色的「路线 (Directions)」按钮进入规划页,按任务需求点击公交、步行或驾车图标。
-  - 公交模式下点击具体方案可展开详细的换乘站点、班次时刻、步行指引与票价信息。
-- **启停导航**:
-  - 点击「开始 (Start)」进入实时模拟或真机引导;若仅需查看路线说明而不进入导航,点击「步骤与更多 (Steps)」查看全文字节点。
-  - **退出导航**:在 HUD 界面必须点击左下角或右下角的叉号「X」并确认「退出导航」,切勿直接在导航流中执行其他无关任务。
+## Features
+- **Clear leftover screens and covers**:
+  - On launch the app may still show the last searched place card or a route panel, covering most of the map. Tap "←" at top left, or drag the bar at the top of the half-screen card down to close it, to get back to the main search.
+- **Search a place and read details**:
+  - Type a business, building or full address in the search bar and tap the right match in the drop-down list.
+  - To see opening hours and phone number, swipe up to expand the place page and tap the drop-down arrow next to "Hours" to see times for Monday to Sunday.
+- **Compare travel modes**:
+  - Tap the blue "Directions" button to open route planning, then tap the transit, walking or driving icon as the task needs.
+  - In transit mode, tap a route option to see transfer stops, departure times, walking directions and fares.
+- **Start and stop navigation**:
+  - Tap "Start" to begin live guidance. If you only need the route description without navigating, tap "Steps" (Steps & more) to see every step as text.
+  - **Exit navigation**: in the navigation screen, tap the "X" at the bottom left or right and confirm exit. Do not carry out other unrelated tasks while navigation is running.
 
-## 已知现象
-- **位置权限与 GPS 开启弹窗**:未授权精确定位或系统 GPS 关闭时,经常弹出「要继续,请开启设备位置信息」底层系统对话框,需点击「确定」或「使用应用时允许」。
-- **地图图钉重合与多目标**:密集商业区搜索会出现多个红色圆点图钉,点击底部卡片左右滑动可逐个切换查看不同结果。
-- **离线地图提醒**:在网络波动或首次长途路线规划时可能提示「下载离线地图」,点击「稍后」跳过。
+## Known behaviour
+- **Location permission and GPS prompts**: if precise location is not allowed or GPS is off, a system dialog often asks you to turn on device location to continue. Tap "OK" or "While using the app".
+- **Overlapping pins and multiple results**: searches in busy areas show many red dot pins. Swipe the card at the bottom left or right to go through the results one by one.
+- **Offline map prompt**: on a weak network, or when planning a long route for the first time, it may suggest downloading an offline map. Tap "Later" to skip.

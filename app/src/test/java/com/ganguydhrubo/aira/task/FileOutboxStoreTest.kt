@@ -18,7 +18,7 @@ class FileOutboxStoreTest {
         val dir = Files.createTempDirectory("aira-outbox-failure").toFile()
         try {
             val file = dir.resolve("outbox.json")
-            val peer = ChannelPeer("wechat", "owner", "thread")
+            val peer = ChannelPeer("telegram", "owner", "thread")
             val previous = DeliveryRecord(peer, Delivery.Notice("earlier", "thread", "hello"), DeliveryState.Delivered)
             val store = FileOutboxStore(file)
             store.save(previous)
@@ -46,7 +46,7 @@ class FileOutboxStoreTest {
         val dir = Files.createTempDirectory("aira-image-outbox").toFile()
         try {
             val file = dir.resolve("outbox.json")
-            val peer = ChannelPeer("wechat", "owner", "thread")
+            val peer = ChannelPeer("telegram", "owner", "thread")
             val records = listOf(
                 DeliveryRecord(peer, Delivery.Result("result:1", "thread", "截图"), DeliveryState.Delivered),
                 DeliveryRecord(peer, Delivery.Image("result:1:image:0", "thread", "content://downloads/1", "screen.png", 12L, "a".repeat(64)), DeliveryState.Attempting),

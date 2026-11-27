@@ -81,7 +81,7 @@ import com.ganguydhrubo.aira.ui.components.TileTone
 import com.ganguydhrubo.aira.ui.components.focusHighlightTarget
 import com.ganguydhrubo.aira.ui.theme.AiraIcons
 import com.ganguydhrubo.aira.ui.theme.AiraTheme
-import com.ganguydhrubo.aira.wechat.WechatConnectionState
+import com.ganguydhrubo.aira.telegram.TelegramConnectionState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -104,8 +104,8 @@ import com.ganguydhrubo.aira.task.ui.RecommendedTasksScreen
 import com.ganguydhrubo.aira.task.ui.RunStatsScreen
 import com.ganguydhrubo.aira.task.ui.SavedChecklistsScreen
 import com.ganguydhrubo.aira.ui.openInBrowser
-import com.ganguydhrubo.aira.wechat.ui.WechatEntryStatus
-import com.ganguydhrubo.aira.wechat.ui.WechatSettingsScreen
+import com.ganguydhrubo.aira.telegram.ui.TelegramEntryStatus
+import com.ganguydhrubo.aira.telegram.ui.TelegramSettingsScreen
 import com.ganguydhrubo.aira.workflow.ui.WorkflowsScreen
 
 private const val SHIZUKU_SETUP_GUIDE_URL = "https://shizuku.rikka.app/guide/setup/"
@@ -199,8 +199,8 @@ fun SettingsScreen(
     val root = remember { shellManager.root }
     val rootState by root.state.collectAsState()
     LaunchedEffect(Unit) { root.refresh() }
-    val wechat = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).wechat }
-    val wechatState by wechat.state.collectAsState()
+    val telegram = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).telegram }
+    val telegramState by telegram.state.collectAsState()
     val airaPaused by com.ganguydhrubo.aira.settings.AiraPause.get(context).state.collectAsState()
     val flags = remember { FeatureFlags.get(context) }
     var personalStart by remember { mutableStateOf(flags.personalStart()) }
@@ -325,8 +325,8 @@ fun SettingsScreen(
             onBack = onBack, onProblem = onProblem, onOpenModels = onOpenModels,
             onOpenPhoneOps = { page = SettingsPage.PhoneOps },
             onOpenCalls = { page = SettingsPage.Calls },
-            wechatState = wechatState, wechatBound = wechat.store.account() != null,
-            onOpenWechat = { page = SettingsPage.Wechat },
+            telegramState = telegramState, telegramBound = telegram.store.account() != null,
+            onOpenTelegram = { page = SettingsPage.Telegram },
             onOpenProactive = { page = SettingsPage.Proactive },
             onOpenAppAccess = { page = SettingsPage.AppAccess },
             onOpenSmsLogin = { page = SettingsPage.SmsLogin },
@@ -371,7 +371,7 @@ fun SettingsScreen(
         )
         SettingsPage.AppAccess -> AppAccessScreen(onBack = back)
         SettingsPage.SmsLogin -> SmsLoginSettingsScreen(onBack = back)
-        SettingsPage.Wechat -> WechatSettingsScreen(wechat, onBack = back)
+        SettingsPage.Telegram -> TelegramSettingsScreen(telegram, onBack = back)
         SettingsPage.PhoneOps -> PhoneOpsScreen(
             status, androidRelease, onProblem,
             onRepair = { onFix(Fix.RepairPhoneHelper) }, onUnpair = { onFix(Fix.UnpairPhoneHelper) }, onBack = back,
@@ -549,9 +549,9 @@ internal fun SettingsContent(
     onOpenModels: () -> Unit,
     onOpenPhoneOps: () -> Unit = {},
     onOpenCalls: () -> Unit = {},
-    wechatState: WechatConnectionState = WechatConnectionState.NeedsBinding,
-    wechatBound: Boolean = false,
-    onOpenWechat: () -> Unit = {},
+    telegramState: TelegramConnectionState = TelegramConnectionState.NeedsBinding,
+    telegramBound: Boolean = false,
+    onOpenTelegram: () -> Unit = {},
     /** 「主动能力」的入口,在「微信」和「任务运行」之间。 */
     onOpenProactive: () -> Unit = {},
     onOpenAppAccess: () -> Unit = {},
@@ -634,8 +634,8 @@ internal fun SettingsContent(
             }
             ListRow(AiraIcons.Clock, stringResource(R.string.drawer_plans), onClick = onOpenPlans) { RowChevron() }
             ListRow(AiraIcons.Paperclip, stringResource(R.string.file_library_title), onClick = onOpenFiles) { RowChevron() }
-            ListRow(AiraIcons.Chats, stringResource(R.string.wechat_title), onClick = onOpenWechat) {
-                WechatEntryStatus(wechatState, wechatBound)
+            ListRow(AiraIcons.Chats, stringResource(R.string.telegram_title), onClick = onOpenTelegram) {
+                TelegramEntryStatus(telegramState, telegramBound)
                 RowChevron()
             }
             ListRow(AiraIcons.Ripple, stringResource(R.string.proactive_title), onClick = onOpenProactive) { RowChevron() }

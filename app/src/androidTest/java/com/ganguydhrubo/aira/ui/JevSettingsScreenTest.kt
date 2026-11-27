@@ -9,7 +9,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextReplacement
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.model.decision.DecisionConfig
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.settings.DecisionSettings
@@ -24,7 +24,7 @@ import com.ganguydhrubo.aira.settings.ui.JevSettingsScreen
 
 @RunWith(AndroidJUnit4::class)
 class JevSettingsScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
     @get:Rule val tmp = TemporaryFolder()
     private val aes = KeyGenerator.getInstance("AES").apply { init(256) }.generateKey()

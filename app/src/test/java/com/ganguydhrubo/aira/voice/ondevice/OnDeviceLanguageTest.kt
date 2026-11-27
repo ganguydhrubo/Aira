@@ -54,10 +54,4 @@ class OnDeviceLanguageTest {
         }
     }
 
-    @Test
-    fun chineseScriptFromRegion() {
-        assertEquals(AppLanguage.TraditionalChinese, OnDeviceLanguage.appLanguageFor(Locale("zh", "HK")))
-        assertEquals(AppLanguage.SimplifiedChinese, OnDeviceLanguage.appLanguageFor(Locale("zh", "CN")))
-        assertEquals(AppLanguage.SimplifiedChinese, OnDeviceLanguage.appLanguageFor(Locale.forLanguageTag("zh-Hans-TW")))
-    }
 }

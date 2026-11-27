@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.DeviceTaskState
 import android.app.UiAutomation
 import kotlinx.coroutines.runBlocking
@@ -76,7 +76,7 @@ import com.ganguydhrubo.aira.ui.typeAndSend
  */
 @RunWith(AndroidJUnit4::class)
 class ChatScreenDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<MainActivity>()
 

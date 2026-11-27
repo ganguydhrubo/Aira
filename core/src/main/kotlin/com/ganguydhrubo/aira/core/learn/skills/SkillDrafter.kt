@@ -297,7 +297,7 @@ class SkillDrafter(private val model: ChatModel) {
             if (SensitiveFilter.hit(md) != null) return "sensitive"
             return null
         }
-        val SECTIONS = listOf("入口", "步骤", "容易出错的地方", "怎样算办成", "什么时候停下交给用户")
+        val SECTIONS = listOf("Entry", "Steps", "Common mistakes", "Done when", "When to stop and hand over")
         /** 反引号里形如工具名的标识符。 */
         private val TOOL_MENTION = Regex("`([a-z][a-z0-9_]*)`")
         /** 文中的技能脚本路径,如 `scripts/extract_pdf.py` 或 `skills/documents/scripts/extract_pdf.py`。 */

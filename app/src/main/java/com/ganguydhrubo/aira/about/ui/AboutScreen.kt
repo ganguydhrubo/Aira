@@ -360,7 +360,7 @@ internal fun GroupSheet(onSave: () -> Unit, onDismiss: () -> Unit) {
                 .height(qrHeight).aspectRatio(qr.intrinsicSize.width / qr.intrinsicSize.height)
                 .clip(AiraShapes.Chip)
                 .pointerInput(Unit) { detectTapGestures(onLongPress = { onSave() }) }
-                .testTag("wechat-qr"),
+                .testTag("telegram-qr"),
         )
         Text(AboutCopy.GROUP_HINT, Modifier.fillMaxWidth(), style = AiraType.Hint, color = c.ink3, textAlign = TextAlign.Center)
         AiraButton(AboutCopy.SAVE_QR, onSave, Modifier.fillMaxWidth().padding(top = 14.dp), kind = ButtonKind.Tonal)

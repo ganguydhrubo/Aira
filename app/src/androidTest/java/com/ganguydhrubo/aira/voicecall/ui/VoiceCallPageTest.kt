@@ -17,7 +17,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.calls.CallRealtimeSession
 import com.ganguydhrubo.aira.calls.VolcRealtimeEvent
 import com.ganguydhrubo.aira.calls.VolcRealtimeException
@@ -76,7 +76,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class VoiceCallPageTest {
 
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

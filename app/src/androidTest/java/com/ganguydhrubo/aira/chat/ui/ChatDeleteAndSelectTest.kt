@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertCountEquals
@@ -55,7 +55,7 @@ import java.util.UUID
  */
 @RunWith(AndroidJUnit4::class)
 class ChatDeleteAndSelectTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

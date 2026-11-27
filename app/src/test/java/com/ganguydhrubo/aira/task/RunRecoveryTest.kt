@@ -38,7 +38,7 @@ class RunRecoveryTest {
         val sent = mutableListOf<Delivery>()
         val peers = mutableListOf<ChannelPeer>()
         override val confirms = true
-        override val supportsImages get() = id == "wechat"
+        override val supportsImages get() = id == "telegram"
         override fun start(sink: ChannelInputSink) = AutoCloseable { }
         override suspend fun send(peer: ChannelPeer, delivery: Delivery): SendOutcome { peers += peer; sent += delivery; return SendOutcome.Delivered }
     }
@@ -61,8 +61,8 @@ class RunRecoveryTest {
     private fun run(id: String, phase: RunPhase = RunPhase.Running) = StoredRun(RunId(id), "thread-$id", "目标 $id", phase)
 
     @Test fun pendingImageSurvivesAnAlreadyDeliveredTextResult() = runTest(UnconfinedTestDispatcher()) {
-        val rig = Rig(this, "wechat")
-        val peer = ChannelPeer("wechat", "owner", "thread-a")
+        val rig = Rig(this, "telegram")
+        val peer = ChannelPeer("telegram", "owner", "thread-a")
         val result = Delivery.Result("result:a", peer.threadId, "截图")
         rig.store.save(run("a", RunPhase.Finishing).copy(reply = result.text, deliveryId = result.id, channelPeer = peer))
         ResultDelivery.prepare(rig.outbox, rig.channel, peer, result,
@@ -75,8 +75,8 @@ class RunRecoveryTest {
     }
 
     @Test fun interruptedImageAttemptIsNotSentAgainOrReportedAsFullyDelivered() = runTest(UnconfinedTestDispatcher()) {
-        val rig = Rig(this, "wechat")
-        val peer = ChannelPeer("wechat", "owner", "thread-a")
+        val rig = Rig(this, "telegram")
+        val peer = ChannelPeer("telegram", "owner", "thread-a")
         val result = Delivery.Result("result:a", peer.threadId, "截图")
         rig.store.save(run("a", RunPhase.Finishing).copy(reply = result.text, deliveryId = result.id, channelPeer = peer))
         val image = Delivery.Image("result:a:image:0", peer.threadId, "content://downloads/1", "screen.png", 3L)
@@ -90,8 +90,8 @@ class RunRecoveryTest {
     }
 
     @Test fun preparedBatchRecoversEvenIfProcessStoppedBeforeMarkResult() = runTest(UnconfinedTestDispatcher()) {
-        val rig = Rig(this, "wechat")
-        val peer = ChannelPeer("wechat", "owner", "thread-a")
+        val rig = Rig(this, "telegram")
+        val peer = ChannelPeer("telegram", "owner", "thread-a")
         rig.store.save(run("a").copy(channelPeer = peer))
         val result = Delivery.Result("result:a", peer.threadId, "截图")
         ResultDelivery.prepare(rig.outbox, rig.channel, peer, result,
@@ -174,8 +174,8 @@ class RunRecoveryTest {
     }
 
     @Test fun interruptedChannelRunRecoversToItsOriginalPeer() = runTest(UnconfinedTestDispatcher()) {
-        val rig = Rig(this, "wechat")
-        val peer = ChannelPeer("wechat", "owner", "thread-a")
+        val rig = Rig(this, "telegram")
+        val peer = ChannelPeer("telegram", "owner", "thread-a")
         rig.store.save(run("a", RunPhase.Finishing).copy(reply = "微信结果", deliveryId = "d1", channelPeer = peer))
 
         rig.recovery.recover()

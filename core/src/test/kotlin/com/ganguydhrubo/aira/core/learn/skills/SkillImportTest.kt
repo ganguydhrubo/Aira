@@ -19,15 +19,15 @@ class SkillImportTest {
         |display: 会议纪要整理
         |description: 把会议记录整理成决定和待办
         |$extra---
-        |## 入口
+        |## Entry
         |打开一份会议记录。
-        |## 步骤
+        |## Steps
         |$steps
-        |## 容易出错的地方
+        |## Common mistakes
         |决定和待办要分开整理。
-        |## 怎样算办成
+        |## Done when
         |纪要里有明确的决定、负责人和待办。
-        |## 什么时候停下交给用户
+        |## When to stop and hand over
         |内容不清楚时交给用户确认。
         |""".trimMargin()
 
@@ -61,7 +61,7 @@ class SkillImportTest {
     }
 
     @Test fun sameChecksAsLearnedDrafts() {
-        assertEquals(SkillImport.Result.Rejected("missing_section"), prepare(md().substringBefore("## 容易出错的地方")))
+        assertEquals(SkillImport.Result.Rejected("missing_section"), prepare(md().substringBefore("## Common mistakes")))
         assertEquals(SkillImport.Result.Rejected("invalid_name"), prepare(md(name = "Meeting Notes")))
         assertEquals(SkillImport.Result.Rejected("unknown_tool"), prepare(md(steps = "1. 调用 `missing_tool` 整理记录")))
         assertEquals(SkillImport.Result.Rejected("too_long"), prepare(md(steps = "1. " + "很长".repeat(SkillDrafter.MAX_CHARS))))
@@ -97,7 +97,7 @@ class SkillImportTest {
         assertNull(meta["source"])
         assertNull(meta["learned_from"])
         assertEquals("meeting-notes", meta["name"])
-        assertTrue(shared, "## 步骤" in shared)
+        assertTrue(shared, "## Steps" in shared)
         assertFalse(shared, "\r" in shared)
     }
 

@@ -10,7 +10,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.espresso.Espresso
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.device.shell.BuiltinShellStatus
 import com.ganguydhrubo.aira.settings.AccessibilityState
 import com.ganguydhrubo.aira.settings.KeyCipher
@@ -24,7 +24,7 @@ import org.junit.runner.RunWith
 /** 设置子页的返回:回到进入时的那一层,而不是直接跳回设置首页。 */
 @RunWith(AndroidJUnit4::class)
 class SettingsBackTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 

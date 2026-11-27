@@ -33,7 +33,7 @@ class SkillOutcomesTest {
         cur = SkillOutcomes.record(cur, SkillResult.failed, followed = false)
         assertEquals(SkillStatus.suspended, cur.status)
     }
-    private val s = personalSkill("wechat-msg")
+    private val s = personalSkill("telegram-msg")
 
     @Test fun keepsLast5() {
         var cur = s

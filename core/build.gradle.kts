@@ -61,7 +61,7 @@ sourceSets.main { resources.srcDir(knowledgeIndex) }
 // README 里会变的清单(内置知识、服务商预设)从源头重新生成,见 testFixtures 里的 ReadmeSections;ReadmeSectionsTest 守着两边一致
 val updateReadme by tasks.registering(JavaExec::class) {
     group = "documentation"
-    description = "重新生成 README.md、docs/readme/README.zh-CN.md 里 generated 标记之间的段落"
+    description = "Regenerates the sections between the generated markers in README.md"
     classpath = sourceSets["testFixtures"].runtimeClasspath
     mainClass.set("com.ganguydhrubo.aira.core.docs.ReadmeSections")
     args(rootProject.projectDir.absolutePath)

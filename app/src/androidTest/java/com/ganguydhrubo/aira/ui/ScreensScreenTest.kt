@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.ui.theme.AiraTheme
 import org.junit.Assert.assertEquals
@@ -23,7 +23,7 @@ import com.ganguydhrubo.aira.chat.ui.ScreensCopy
 /** 「后台屏」那一页:空态、一块屏一行、点开小画面(只用假数据,不建真屏)。 */
 @RunWith(AndroidJUnit4::class)
 class ScreensScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

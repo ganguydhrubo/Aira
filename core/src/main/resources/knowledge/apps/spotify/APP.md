@@ -2,34 +2,34 @@
 name: spotify
 display: Spotify
 packages: ["com.spotify.music"]
-aliases: ["Spotify", "spotify", "声田"]
+aliases: ["Spotify", "spotify"]
 open: Spotify
-description: 音乐与播客流媒体:歌曲播放、歌单、搜索与资料库
+description: Music and podcast streaming: play songs, playlists, search and library
 ---
-## 是什么
-Spotify 是音乐与播客流媒体 App,包名 `com.spotify.music`。支持全球单曲、专辑、自建与推荐歌单,以及各类播客收听。
+## What it is
+Spotify is a music and podcast streaming app, package `com.spotify.music`. It offers songs and albums from around the world, your own and recommended playlists, and all kinds of podcasts.
 
-## 界面
-底部导航通常为三个标签:「首页」「搜索」「你的音乐库」(部分版本为四个,含「创建」)。
-- **首页**:顶部左侧是头像(进入设置与个人资料),中间有「全部」「音乐」「播客」筛选胶囊;主体为最近播放的专辑/歌单网格与个性化推荐流。
-- **搜索页**:顶部为搜索栏「想听什么?」,点击进入输入界面,下方平铺各类浏览分类(流行、播客、排行榜等)。
-- **你的音乐库**:顶部可按「播放列表」「播客」「艺人」「专辑」过滤,展示收藏的歌曲(Liked Songs)、自建歌单和关注的播客。右上角「+」可新建播放列表。
-- **迷你播放栏**:悬浮在底部导航栏上方,显示当前封面、曲名、艺人与播放/暂停按钮。
-- **全屏播放器**:上方为大封面,中间为歌曲与艺人名、加号/心形收藏图标,下方为进度条、随机播放、上一首、播放/暂停、下一首、单曲循环图标。向上滑动展开实时同步歌词。
+## Screens
+The bottom navigation usually has three tabs: "Home", "Search" and "Your Library" (some versions have four, including "Create").
+- **Home**: your profile picture at top left (opens settings and profile), with "All", "Music" and "Podcasts" filter pills; the main area is a grid of recently played albums/playlists and personal recommendations.
+- **Search**: the search bar "What do you want to listen to?" at the top; tap it to start typing. Below are browse categories (Pop, Podcasts, Charts and so on).
+- **Your Library**: filter at the top by "Playlists", "Podcasts", "Artists" and "Albums". Shows Liked Songs, your playlists and followed podcasts. "+" at top right creates a new playlist.
+- **Mini player**: floats just above the bottom navigation, showing the current cover, song name, artist and a play/pause button.
+- **Full-screen player**: large cover at the top; song and artist name with the plus/heart save icon in the middle; below are the progress bar, shuffle, previous, play/pause, next and repeat icons. Swipe up to see live synced lyrics.
 
-## 功能
-- **防全屏遮挡与状态恢复**:
-  - 若上次退出时全屏播放器处于展开状态,重新打开时可能直接停留在大封面全屏播放器,**遮挡底部导航栏**。此时必须先点击左上角的向下折叠箭头「v」或从顶部向下滑动,将播放器收缩为底部迷你栏,才能看到搜索与音乐库入口。
-- **精准搜索与播放**:
-  - 在搜索栏输入歌曲或艺人名。结果页利用顶部胶囊精准切换「单曲」「艺人」「播放列表」「专辑」,避免在综合结果中点错。
-  - 点击艺人进入艺人主页,上方列出「热门单曲(Popular)」榜单。
-- **管理歌单与收藏**:
-  - 点击歌曲右侧三点菜单可「添加到播放列表」「加入已点赞的歌曲」「查看艺人」「查看专辑」。
-  - 在「你的音乐库」中点击「+」输入歌单名称并点击「创建」即可新建歌单。
-- **设备连接**:迷你栏或全屏页上的设备图标(扬声器/显示器图标)可切换音频输出设备(本机、蓝牙耳机、局域网音响)。
+## Features
+- **Clear the full-screen player and restore state**:
+  - If the full-screen player was open when the app was last closed, it may reopen straight on the large-cover player, **hiding the bottom navigation**. First tap the down arrow "v" at top left or swipe down from the top to shrink the player to the mini bar; then Search and Your Library become visible.
+- **Search and play exactly**:
+  - Type a song or artist name in the search bar. On the results page use the pills at the top to switch to "Songs", "Artists", "Playlists" or "Albums", so you do not tap the wrong item in mixed results.
+  - Tap an artist to open their page, which lists "Popular" songs at the top.
+- **Manage playlists and saves**:
+  - The three-dot menu to the right of a song offers "Add to playlist", "Add to Liked Songs", "Go to artist" and "Go to album".
+  - In "Your Library", tap "+", type a playlist name and tap "Create" to make a new playlist.
+- **Connect devices**: the device icon (speaker/screen icon) on the mini bar or full-screen player switches the audio output (this phone, Bluetooth headphones, speakers on the local network).
 
-## 已知现象
-- **免费版限制**:移动端免费账号(Free)点单曲通常进入「随机播放(Shuffle)模式」,无法精确点播非推荐单曲;切歌有每小时次数上限(通常 6 次),用尽后下一首按钮失效置灰。
-- **音频/视频广告**:免费账号在切歌或定时播放期间会插播全屏广告,广告期间不可跳过或拖动进度条。
-- **Premium 促销拦截**:频繁弹出「免费试用 1 个月」或「升级 Premium」全屏弹窗,需点击右上角「×」或底部「不用了/跳过」退出。
-- **离线与下载**:下载歌曲/歌单离线收听属于 Premium 会员功能,免费账号的下载开关置灰或弹出付费提示。
+## Known behaviour
+- **Free plan limits**: on the mobile Free plan, tapping a song usually starts "Shuffle" mode, so you cannot always play exactly the song you want. Skips are limited per hour (usually 6); after that the next button is greyed out.
+- **Audio/video ads**: Free accounts get full-screen ads between songs or at intervals. Ads cannot be skipped or scrubbed.
+- **Premium promotions**: full-screen pop-ups such as "Try 1 month free" or "Get Premium" appear often. Tap "×" at top right or "No thanks / Skip" at the bottom to close them.
+- **Offline and downloads**: downloading songs or playlists for offline listening is a Premium feature. On Free accounts the download switch is greyed out or shows an upgrade prompt.

@@ -19,7 +19,7 @@ Nó làm việc trên một màn hình nền ẩn, nên bạn vẫn dùng điệ
 
 <br/>
 
-[English](../../README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) · [Türkçe](README.tr.md) · Tiếng Việt
+[English](../../README.md) · [日本語](README.ja.md) · [한국어](README.ko.md) · [Español](README.es.md) · [Türkçe](README.tr.md) · Tiếng Việt
 
 <sub>Bản tiếng Việt này được dịch từ README.md tiếng Anh. Nếu thấy chỗ nào nghe chưa tự nhiên hoặc chưa khớp với bản gốc, rất mong bạn góp ý sửa qua một PR.</sub>
 
@@ -41,13 +41,13 @@ Nó làm việc trên một màn hình nền ẩn, nên bạn vẫn dùng điệ
 ## Bắt đầu trong ba bước
 
 1. **Cài đặt**: tải APK từ [Releases](https://github.com/ganguydhrubo/Aira/releases/latest).
-2. **Kết nối mô hình**: trong Settings › Model (Cài đặt › Mô hình), chọn một nhà cung cấp và nhập khóa API, hoặc chỉ cần đăng nhập bằng tài khoản ([mô hình và đăng nhập](../models.en.md)).
-3. **Để điều khiển ứng dụng trên điện thoại**: làm theo trình hướng dẫn "Set up phone control" (Thiết lập điều khiển điện thoại) trong Cài đặt và ghép nối gỡ lỗi không dây trên điện thoại một lần ([hướng dẫn thiết lập](../setup-guide.en.md)). Bỏ qua bước này nếu bạn chỉ muốn trò chuyện, web và tệp.
+2. **Kết nối mô hình**: trong Settings › Model (Cài đặt › Mô hình), chọn một nhà cung cấp và nhập khóa API, hoặc chỉ cần đăng nhập bằng tài khoản ([mô hình và đăng nhập](../models.md)).
+3. **Để điều khiển ứng dụng trên điện thoại**: làm theo trình hướng dẫn "Set up phone control" (Thiết lập điều khiển điện thoại) trong Cài đặt và ghép nối gỡ lỗi không dây trên điện thoại một lần ([hướng dẫn thiết lập](../setup-guide.md)). Bỏ qua bước này nếu bạn chỉ muốn trò chuyện, web và tệp.
 
 Sau đó thử nói: "Đặt báo thức lúc 9:40 và 10:00 sáng mai" hoặc "Kiểm tra thời tiết lúc 8 giờ mỗi sáng và chỉ báo cho tôi nếu trời sẽ mưa".
 
 > 💡 Có máy tính bên cạnh? Gửi câu này cho AI agent trên máy tính của bạn và nó sẽ cài đặt mọi thứ giúp bạn:<br/>
-> `Làm theo https://github.com/ganguydhrubo/Aira/blob/main/docs/install-with-agent.en.md để cài Aira lên điện thoại Android đang kết nối qua USB.`
+> `Làm theo https://github.com/ganguydhrubo/Aira/blob/main/docs/install-with-agent.md để cài Aira lên điện thoại Android đang kết nối qua USB.`
 
 ## Aira làm được gì
 
@@ -60,11 +60,11 @@ Sau đó thử nói: "Đặt báo thức lúc 9:40 và 10:00 sáng mai" hoặc "
 | **Can thiệp hoặc dừng bất cứ lúc nào** | Tiếp tục nói trong khi một tác vụ đang chạy để bổ sung hoặc sửa chữa (nhấn giữ để rút lại hoặc sửa một tin nhắn Aira chưa xử lý); sau khi dừng, nó báo đã làm đến đâu, và "tiếp tục" sẽ làm tiếp từ đó |
 | **Nhấn giữ để nói** | Nhấn giữ ô nhập trò chuyện để nói và sửa chữ trước khi gửi; nhấn giữ viên nang nổi để nói và thả ra là gửi. Dùng nhận dạng giọng nói tích hợp của điện thoại, hoặc mô hình giọng nói của một nhà cung cấp nếu điện thoại không có |
 | **Tệp và tính toán** | Một sandbox Linux cho mỗi cuộc trò chuyện, chạy Python, Node và shell trên các tệp bạn gửi (arm64) |
-| **Từ máy tính của bạn** | Các công cụ AI trên máy tính của bạn có thể giao việc cho Aira qua CLI + Skill hoặc MCP ([dùng Aira từ máy tính](../computer.en.md)) |
+| **Từ máy tính của bạn** | Các công cụ AI trên máy tính của bạn có thể giao việc cho Aira qua CLI + Skill hoặc MCP ([dùng Aira từ máy tính](../computer.md)) |
 
-Mặc định Aira chạy ở **chế độ Ask (Hỏi)**: nó chỉ hỏi bạn trước khi tiêu tiền (đặt hàng, thanh toán) và tự làm mọi việc còn lại. Bạn cũng có thể chuyển sang **chế độ Autonomous (Tự chủ)**. Xem [Ask và Autonomous](../modes.en.md).
+Mặc định Aira chạy ở **chế độ Ask (Hỏi)**: nó chỉ hỏi bạn trước khi tiêu tiền (đặt hàng, thanh toán) và tự làm mọi việc còn lại. Bạn cũng có thể chuyển sang **chế độ Autonomous (Tự chủ)**. Xem [Ask và Autonomous](../modes.md).
 
-Để biết mỗi tính năng hoạt động thế nào và các chi tiết sâu hơn, xem [tính năng chi tiết](../features.en.md).
+Để biết mỗi tính năng hoạt động thế nào và các chi tiết sâu hơn, xem [tính năng chi tiết](../features.md).
 
 <details>
 <summary>Ứng dụng và trang web có sẵn kiến thức sử dụng tích hợp (không có trong danh sách vẫn dùng được)</summary>
@@ -78,7 +78,7 @@ Danh sách đầy đủ nằm trong mục [What it can do](../../README.md#what-
 
 Các nhà cung cấp có sẵn và các loại API mà tùy chọn "Custom" (Tùy chỉnh) kết nối được đều nằm trong mục [What it can do](../../README.md#what-it-can-do) của README tiếng Anh, tự cập nhật từ mã nguồn.
 
-Bạn cũng có thể bỏ qua khóa và đăng nhập bằng tài khoản ChatGPT (Plus / Pro), xAI / Grok hoặc OpenRouter. Các bước thêm một mô hình, và những điều cần biết về từng cách đăng nhập, nằm trong [mô hình và đăng nhập](../models.en.md).
+Bạn cũng có thể bỏ qua khóa và đăng nhập bằng tài khoản ChatGPT (Plus / Pro), xAI / Grok hoặc OpenRouter. Các bước thêm một mô hình, và những điều cần biết về từng cách đăng nhập, nằm trong [mô hình và đăng nhập](../models.md).
 
 </details>
 
@@ -96,14 +96,14 @@ Không chắc điện thoại của bạn có đáp ứng được không? Chạ
 
 - **Không có máy chủ Aira**: những gì bạn nói và những gì trên màn hình của bạn chỉ được gửi đến nhà cung cấp mô hình bạn đã thiết lập.
 - Khóa API và ký ức được lưu mã hóa trên điện thoại; các cuộc trò chuyện và bản ghi chạy tác vụ ở lại trên thiết bị; việc kiểm tra cập nhật chỉ liên hệ GitHub.
-- Tự động điều khiển ứng dụng và trang web của bên thứ ba có thể vi phạm điều khoản dịch vụ của họ, vì vậy hãy tự cân nhắc. Với việc quan trọng, hãy dùng chế độ Ask và kiểm tra kết quả. Xem [tuyên bố miễn trừ](../disclaimer.en.md).
+- Tự động điều khiển ứng dụng và trang web của bên thứ ba có thể vi phạm điều khoản dịch vụ của họ, vì vậy hãy tự cân nhắc. Với việc quan trọng, hãy dùng chế độ Ask và kiểm tra kết quả. Xem [tuyên bố miễn trừ](../disclaimer.md).
 
 <details>
 <summary><b>Câu hỏi thường gặp</b></summary>
 
 **Gỡ lỗi không dây tự tắt?** Android tắt nó khi bạn đổi Wi-Fi hoặc khởi động lại. Nếu bạn cho phép, Aira sẽ tự bật lại; nếu vẫn không kết nối được, hãy quay lại "Set up phone control" và ghép nối lại.
 
-**Không tìm thấy gỡ lỗi không dây trên điện thoại?** Một số hệ điều hành điện thoại không có tính năng này. Bạn có thể khởi động trợ lý điện thoại từ máy tính qua USB thay thế; xem [hướng dẫn thiết lập](../setup-guide.en.md).
+**Không tìm thấy gỡ lỗi không dây trên điện thoại?** Một số hệ điều hành điện thoại không có tính năng này. Bạn có thể khởi động trợ lý điện thoại từ máy tính qua USB thay thế; xem [hướng dẫn thiết lập](../setup-guide.md).
 
 **Một số màn hình không đọc hoặc chụp được?** Các trang như thanh toán và nhập mật khẩu chặn chụp màn hình, vì vậy Aira sẽ nhờ bạn tiếp quản ở đó.
 
@@ -113,13 +113,13 @@ Không chắc điện thoại của bạn có đáp ứng được không? Chạ
 
 **Cập nhật đến từ đâu?** Chỉ từ [Releases](https://github.com/ganguydhrubo/Aira/releases) của repo này; bạn cũng có thể nâng cấp trong ứng dụng từ About › Check for updates (Giới thiệu › Kiểm tra cập nhật).
 
-Thêm câu trả lời trong [FAQ](../faq.en.md).
+Thêm câu trả lời trong [FAQ](../faq.md).
 
 </details>
 
 ## Cộng đồng & đóng góp
 
-- **Tài liệu**: toàn bộ tài liệu và thứ tự đọc gợi ý nằm trong [mục lục tài liệu](../README.en.md)
+- **Tài liệu**: toàn bộ tài liệu và thứ tự đọc gợi ý nằm trong [mục lục tài liệu](../README.md)
 - **Báo lỗi**: [mở một issue](https://github.com/ganguydhrubo/Aira/issues/new/choose); trong ứng dụng, About › Send feedback (Giới thiệu › Gửi phản hồi) có thể đính kèm thông tin chẩn đoán
 - **Đóng góp**: thêm kiến thức sử dụng cho một ứng dụng hoặc trang web (văn bản thuần, không cần code), hoặc đóng góp mã; xem [hướng dẫn đóng góp](../../.github/CONTRIBUTING.md)
 

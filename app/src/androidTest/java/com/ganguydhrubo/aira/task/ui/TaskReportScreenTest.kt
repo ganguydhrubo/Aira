@@ -10,7 +10,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.core.run.record.PlaybackMark
 import com.ganguydhrubo.aira.core.run.record.RunEvent
 import com.ganguydhrubo.aira.record.RunStore
@@ -26,7 +26,7 @@ import com.ganguydhrubo.aira.settings.ui.models.use
 /** 使用独立测试记录，不操作真实设备或调用模型。 */
 @RunWith(AndroidJUnit4::class)
 class TaskReportScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
 
     private val dirs = mutableListOf<java.io.File>()

@@ -1,81 +1,79 @@
-# 参与贡献
+# Contributing
 
-[English](CONTRIBUTING.md) | 简体中文
+Help make Aira better. The easiest way is to add usage knowledge for an app or website, which needs no code; bug reports and code are welcome too.
 
-欢迎一起把 Aira 做得更好。最简单的是补一份 App、网站的使用知识，不用写代码；也欢迎报告问题、贡献代码。
+## Add app / website knowledge (no code needed)
 
-## 补充 App / 网站知识（不用写代码）
+The easiest contribution: write an `APP.md` for an app or a `SITE.md` for a website, or improve an existing one. They are plain-text Markdown files with a header, under [`core/src/main/resources/knowledge/`](../core/src/main/resources/knowledge/); general how-to skills for a few kinds of tasks live under [`core/src/main/resources/skills/`](../core/src/main/resources/skills/). See [`docs/dev/knowledge-format.md`](../docs/dev/knowledge-format.md) for the format. Existing knowledge is in Chinese, but new files can be written in English.
 
-最简单的贡献：给某个 App 写一份 `APP.md`、给某个网站写一份 `SITE.md`，或者改进已有的。它们是带头部的 Markdown 纯文本，放在 [`core/src/main/resources/knowledge/`](../core/src/main/resources/knowledge/) 下；几类事情的通用做法（技能）在 [`core/src/main/resources/skills/`](../core/src/main/resources/skills/) 下。格式见 [`docs/dev/knowledge-format.md`](../docs/dev/knowledge-format.md)。
+Aira can get things done just by looking at the screen; for apps and websites with usage knowledge (where things are, common ways to do things, what to watch out for), it looks the knowledge up when needed and takes fewer wrong turns. The current list is in the collapsed section under "What it can do" in the [README](../README.md).
 
-没有任何说明，Aira 也能看着屏幕把事办成；写了使用知识（入口在哪、常见做法、要注意什么）的 App 和网站，Aira 用到时自动查阅，少走弯路。现有清单见 [README](../docs/readme/README.zh-CN.md) 里「能做什么」下面的折叠段。
+## Reporting issues
 
-## 报告问题
+When opening an issue, please include your **phone model, Android version and Aira version** ("About Aira" in Settings), what you did, what you expected and what actually happened. Screenshots from "View steps" help a lot (hide anything private first). In the app, About › Send feedback can copy diagnostics for you to paste into the issue; results from Settings › Recovery & repair › Compatibility self-check can be filed as a [device report](https://github.com/ganguydhrubo/Aira/issues/new?template=device-report.yml).
 
-开 Issue 时请写上：**手机型号、安卓版本、Aira 版本**（设置里的「关于 Aira」），做了什么、期望什么、实际发生了什么。能附上「查看过程」里的截图更好（注意先遮掉隐私）。App 里「关于 › 反馈问题」可以复制诊断信息贴进 Issue；设置 › 恢复与修复 › 兼容性自检的结果可以用[设备报告](https://github.com/ganguydhrubo/Aira/issues/new?template=device-report.yml)提交。
+## Contributing code
 
-## 贡献代码
+PRs welcome. Start with [`docs/dev/architecture.md`](../docs/dev/architecture.md) (written against the current code, with class names and file paths) and [`docs/dev/roadmap.md`](../docs/dev/roadmap.md) (done, next, known issues). Please include unit tests with your changes. The developer docs are in Chinese for now.
 
-欢迎 PR。先读 [`docs/dev/architecture.md`](../docs/dev/architecture.md)（按代码现状写，带类名和文件路径）和 [`docs/dev/roadmap.md`](../docs/dev/roadmap.md)（已完成、接下来、已知问题）。改动请带单元测试。
+When you open a PR, keep **"Allow edits by maintainers"** checked (on by default for PRs from a personal fork). If a PR is close but needs a few fixes (an edge case, a missing translation, a rebase onto the latest `main`), a maintainer can add commits on top of yours on your PR branch and merge it, instead of you having to iterate on every change. Your commits stay as they are (no force-push), and the merge keeps you as the author. If edits are not allowed, a maintainer has to open a separate PR to make the fixes; you'll still be credited with `Co-authored-by`, but your original PR will be closed in favour of the new one. The `PR policy` check fails while the option is off.
 
-提 PR 时请保持勾选 **「Allow edits by maintainers」**（允许维护者编辑；从个人 fork 提的 PR 默认勾选）。PR 已经接近可合、只差一些修改（边界情况、漏掉的翻译、跟上最新的 `main`）时，维护者可以直接在你的 PR 分支上追加提交后合并，不用你一轮轮来回改。你原来的提交原样保留（不强推），合并后作者仍是你。如果没有开放编辑，维护者只能另开一个 PR 来改；你仍会以 `Co-authored-by` 署名，但原 PR 会关闭并指向新 PR。没勾选时 `PR policy` 检查会失败。
+### Build and test
 
-### 构建与测试
-
-需要 JDK 17 和 Android SDK（`local.properties` 里的 `sdk.dir`，或环境变量 `ANDROID_HOME`）。CLI 测试另需 Python 3.10+，可用 `-PairaPython=/path/to/python3` 指定解释器。
+Requires JDK 17 and the Android SDK (`sdk.dir` in `local.properties`, or the `ANDROID_HOME` environment variable). CLI tests also require Python 3.10+; select an interpreter with `-PairaPython=/path/to/python3`.
 
 ```bash
-./gradlew :app:assembleDebug                  # 调试包
-./gradlew :app:assemblePerf                   # 看流畅度用的包：和发布版一样预先编译、不可调试，用调试签名，可直接覆盖调试包
-./gradlew :core:test :core:cliTest :app:testDebugUnitTest   # 单元测试
-python3 -m unittest discover -s tools/i18n -v              # 翻译工具测试（不需要 JDK/Android SDK）
-python3 tools/i18n/translations.py check                  # 轻量翻译资源检查
-python3 -m unittest discover -s tools -p 'test_pull_logs.py' -v   # 日志导出工具测试（用模拟的 adb，不需要手机）
-python3 -m unittest discover -s tools/voice-models -v      # 语音包工具测试
-./gradlew updateReadme                        # 重新生成 README 里的内置知识、服务商清单
+./gradlew :app:assembleDebug                  # debug build
+./gradlew :app:assemblePerf                   # build for judging smoothness: precompiled and non-debuggable like release, debug-signed, installs over the debug build
+./gradlew :core:test :core:cliTest :app:testDebugUnitTest   # unit tests
+python3 -m unittest discover -s tools/i18n -v              # translation tool tests (no JDK/Android SDK)
+python3 tools/i18n/translations.py check                  # lightweight translation resource checks
+python3 -m unittest discover -s tools -p 'test_pull_logs.py' -v   # log export tool tests (adb is mocked; no phone needed)
+python3 -m unittest discover -s tools/voice-models -v      # voice pack tool tests
+./gradlew updateReadme                        # regenerate the built-in knowledge and provider lists in the READMEs
 ```
 
-调试包不做预先编译，界面会慢好几倍；判断流畅度请用 perf 包。
+The debug build is not precompiled and its UI is several times slower; use the perf build to judge smoothness.
 
-- 仓库有两个模块：`:core` 是纯 Kotlin，主循环、工具、提示词、知识都在这里，可以在电脑上用单测和假模型跑；`:app` 是安卓宿主。
-- README 里夹在 `generated` 标记之间的段落由 `./gradlew updateReadme` 生成，不要手改；单元测试会检查它们没过期。
-- README 有几种语言：仓库根目录的英文 `README.md` 是原文，译文都在 `docs/readme/`。其中简体中文 `README.zh-CN.md` 和 `README.md` 一样带生成段落；`README.zh-Hant.md`、`README.ja.md`、`README.ko.md`、`README.es.md` 的生成段落换成一句指向英文或简体中文 README 的话。根目录的 `README.en.md` 只是一句指向 `README.md` 的话，留着让旧链接还能用。每份译文开头有 `<!-- translated-from: README.md @ <指纹> -->`，指纹是根目录 README.md 去掉生成段落后的 SHA-256 前 12 位。改了 README.md 以后，`ReadmeTranslationsTest` 会列出过期的译文并给出新指纹：照着改动更新译文，再把开头的指纹换成新的。译文还要和 README.md 的 `## ` 小节数、本地图片保持一致。欢迎母语使用者直接提 PR 改进译文。
-- 沙箱的原生程序和自带运行环境已在仓库里；重新构建见 [`tools/sandbox/README.md`](../tools/sandbox/README.md)。
-- 不需要 JDK 或 Android SDK 的翻译 key 检查与多语对照 CSV 导出见 [`tools/i18n/README.md`](../tools/i18n/README.md)。轻量检查覆盖当前全部 11 种 UI 语言（含 Arabic 和 Persian），但不能替代 JVM `StringResourcesTest` 对精确占位符、CLDR 复数规则和语言注册的权威检查。
-- 真机评测见 [`eval/README.md`](../eval/README.md)。
+- The repository has two modules: `:core` is pure Kotlin and holds the main loop, tools, prompts and knowledge, and can be run on a computer with unit tests and a fake model; `:app` is the Android host.
+- README sections between the `generated` markers are produced by `./gradlew updateReadme`; don't edit them by hand. Unit tests check that they are up to date.
+- The README comes in several languages. The English `README.md` at the repository root is the original; the translations are in `docs/readme/`. `README.zh-CN.md` (Simplified Chinese) has the same generated sections as `README.md`; in `README.zh-Hant.md`, `README.ja.md`, `README.ko.md` and `README.es.md` the generated sections are replaced by one sentence pointing to the English or Simplified Chinese README. `README.md` at the root only points to `README.md`, kept so old links still work. Each translation starts with `<!-- translated-from: README.md @ <fingerprint> -->`, where the fingerprint is the first 12 hex digits of the SHA-256 of the root README.md with the generated sections removed. After you change README.md, `ReadmeTranslationsTest` lists the stale translations and prints the new fingerprint: update the translations to match, then replace the fingerprint at the top. Translations must also keep the same number of `## ` sections and the same local images as README.md. Native speakers are welcome to improve a translation with a PR.
+- The sandbox's native binaries and bundled runtime are checked into the repository; to rebuild them see [`tools/sandbox/README.md`](../tools/sandbox/README.md).
+- For translation key checks and a multi-language reference CSV without a JDK or Android SDK, see [`tools/i18n/README.md`](../tools/i18n/README.md). These lightweight checks cover all 11 current UI languages, including Arabic and Persian, but do not replace the JVM `StringResourcesTest` checks for exact placeholders, CLDR plural rules and language registration.
+- For on-device evaluation see [`eval/README.md`](../eval/README.md).
 
 ### CI
 
-PR 和合入 `main` 的提交会在 GitHub Actions 上跑（[`ci.yml`](workflows/ci.yml)），不需要配置任何密钥：
+Pull requests and pushes to `main` run on GitHub Actions ([`ci.yml`](workflows/ci.yml)); no secrets are required:
 
-- `core (JVM)`：`./gradlew :core:test`
-- `cli (Python)`：`./gradlew :core:cliTest`，另跑 `tools/i18n` 单元测试、翻译资源检查和日志导出工具 `tools/pull-logs.py` 和语音包工具 `tools/voice-models` 的单元测试（Python 3.10+；CI 使用 3.12）
-- `app (Android)`：`./gradlew :app:testDebugUnitTest :app:assembleDebug :app:compileDebugAndroidTestKotlin`（设备测试只编译、不运行）
-- `relay (Go)`：先在 `companions/relay` 下跑 `go test ./...`，再跑 `./gradlew :core:relayTest`
-- `maintainer edits allowed`（[`pr-maintainer-edits.yml`](workflows/pr-maintainer-edits.yml)）：从 fork 提的 PR 没勾选「Allow edits by maintainers」时失败；勾选本身不会触发重跑，勾上后推一个提交或请维护者重新运行。组织名下的 fork 没有这个选项，只给警告。
+- `core (JVM)`: `./gradlew :core:test`
+- `cli (Python)`: `./gradlew :core:cliTest`, plus `tools/i18n` unit tests, translation resource checks and unit tests for the log export tool `tools/pull-logs.py` and the voice pack tools in `tools/voice-models` (Python 3.10+; CI uses 3.12)
+- `app (Android)`: `./gradlew :app:testDebugUnitTest :app:assembleDebug :app:compileDebugAndroidTestKotlin` (device tests are compiled, not run)
+- `relay (Go)`: `go test ./...` in `companions/relay`, then `./gradlew :core:relayTest`
+- `maintainer edits allowed` ([`pr-maintainer-edits.yml`](workflows/pr-maintainer-edits.yml)): PRs from a fork fail until "Allow edits by maintainers" is checked; ticking it doesn't start a new run, so push a commit or ask a maintainer to re-run it. Organization-owned forks, where GitHub doesn't offer the option, only get a warning.
 
-本地按上面的命令逐项复现即可。仓库用 `.gitattributes` 把文本文件固定成 LF：金样、提示词和 README 都按字节比较，换行随平台变（例如 `core.autocrlf=true` 的旧 Windows 检出）会让测试和金样对不上。工作区不是 LF 时，先重新检出或把换行改回 LF，再运行测试或 `-PupdateSnapshots`。
+Reproduce locally with the commands above. The repository pins text files to LF in `.gitattributes`: goldens, prompts and the README are compared byte-for-byte, so line endings that vary by platform (for example an old Windows checkout with `core.autocrlf=true`) make tests and goldens disagree. If your working tree is not LF, re-checkout or convert it back to LF before running the tests or `-PupdateSnapshots`.
 
-### 模型配置细节
+### Model configuration details
 
-- 三个用途：**主模型**（办事，要支持工具调用）、**看图模型**（描述界面、看图定位；新装默认不用，可选「用主模型」）、**轻量模型**（判断结局、提取记忆、理解意图等小事，默认用主模型）。
-- 「测试并保存」列出模型目录就保存服务商；已经有主模型时只发这一个列模型请求。还没有主模型时（首次上手、第一家），再让一个候选模型（手填了模型名的用它，否则按推荐顺序）带一个试用工具调用一次，通过才设为主模型；没通过服务商照样保存、不定主模型，说明原因并给出「选主模型」。手填的模型 ID 也可通过「不测试，直接保存」保存。任何入口把某个模型设为主模型前（选择页、手填、服务商详情「用作 → 主模型」、解决旧设置冲突），都先对这一个模型试调用一次，只回话不调用工具也算没通过，没通过原来的主模型不变；只有已经是主模型的不再试（`verifiedModels` 只记录回复过，不能证明会调用工具）；解决旧设置冲突时总会试调用。从列表里选看图、轻量、备援，以及「仅用于朗读」标记，都不试调用；手填的模型名（任何用途、任何备援，包括服务商详情「用作」里手填的）都先试调用一次，看图模型只回话也算通过；从跳过测试存下的服务商里选主模型的备援也会试调用。把模型组设为主模型、账号登录后自动设主模型不试调用。TTS 模型通过声音设置中的试听来验证语音合成。
-- 模型列表上的能力标签（工具调用、看图、上下文长度）：接口给了的照实显示，没给的沿用预设初值并标「未确认」，只作参考，不拦。看图这一项用户可以在模型的「用作」面板里用「能看图」开关自己定（按服务商和模型名记，比列表和初值都算数）；看图模型就是主模型那条（含「用主模型」）时主模型也算能看图，这是取配置时推出来的，不改存着的标记。
-- 「看图定位已验证」在设置里的「开发者选项」（调试版可见），对当前看图模型生效。
+- Three roles: the **main model** (does the work; must support tool calling), the **vision model** (describes the UI and locates things in screenshots; off by default on a fresh install, or choose "use main model"), and the **light model** (small jobs like judging outcomes, extracting memories and understanding intent; defaults to the main model).
+- “Test and save” saves the provider once its model catalog is listed; if a main model already exists, that list request is the only one sent. If there is no main model yet (initial setup or the first provider), one candidate (the typed model name if any, otherwise the recommended order) is asked to call a test tool once and becomes the main model only if that works; if it fails, the provider is still saved without a main model, the reason is shown and a “Choose main model” link is offered. A typed model ID can also be saved with “Don’t test, save anyway”. Every path that makes a model the main model (the picker, a typed name, “Use as → Main model” in provider details, resolving a legacy conflict) first test-calls exactly that model; a reply without a tool call counts as a failure, and on failure the previous main model stays. Only the current main model skips the test (`verifiedModels` just records a reply, not a tool call); resolving a legacy TTS conflict always tests. Vision, light and fallback picks from the list, and “Speech only” marks, make no test call. Any manually typed model name (any role, any fallback slot, including via “Use as” in provider details) is test-called once first, and a vision model accepts a plain reply; a main-fallback pick from a provider saved without testing is test-called too. Selecting a model group as the main model and an account sign-in setting the main model are not test-called. Speech synthesis is tested by playing a sample in Voice model settings.
+- Capability tags on the model list (tool calling, vision, context length) show what the API reports; anything it does not report falls back to the preset's initial values and is marked "unconfirmed". They are for reference only and never block anything. Vision can be set by the user with the "Can see images" switch in a model's "Use as" sheet (stored per provider and model name, and it beats both the list and the initial values); when the vision role uses the main model's own config (including "use main model"), the main model counts as seeing too. That is derived when the config is resolved, not written into the stored flags.
+- "Vision grounding verified" lives in "Developer options" in Settings (visible in debug builds) and applies to the current vision model.
 
-### 文档
+### Docs
 
-开发文档的目录和阅读顺序见 [`docs/dev/README.md`](../docs/dev/README.md)；面向用户的文档目录见 [`docs/README.md`](../docs/README.md)。
+The developer docs index and reading order are in [`docs/dev/README.md`](../docs/dev/README.md); the user docs index is [`docs/README.md`](../docs/README.md).
 
-- [`docs/dev/architecture.md`](../docs/dev/architecture.md)：整体结构。
-- [`docs/dev/roadmap.md`](../docs/dev/roadmap.md)：已完成、接下来、已知问题与暂缓。
-- [`docs/dev/knowledge-format.md`](../docs/dev/knowledge-format.md)（[English](../docs/dev/knowledge-format.en.md)）：App、网站知识与技能的格式。
-- [`docs/dev/skill-scripts.md`](../docs/dev/skill-scripts.md)：知识与技能自带的沙箱脚本。
-- 面向用户的说明：[功能详细说明](../docs/features.md)、[模型与登录](../docs/models.md)、[询问与自主](../docs/modes.md)、[手机操作设置指南](../docs/setup-guide.md)、[常见问题](../docs/faq.md)、[从电脑使用 Aira](../docs/computer.md)、[电脑端 CLI / Skill](../docs/computer-install.md)、[电脑连接（MCP）](../docs/mcp.md)、[免责声明与数据隐私](../docs/disclaimer.md)。
+- [`docs/dev/architecture.md`](../docs/dev/architecture.md): overall structure.
+- [`docs/dev/roadmap.md`](../docs/dev/roadmap.md): done, next, known issues and deferred items.
+- [`docs/dev/knowledge-format.md`](../docs/dev/knowledge-format.md): format of app and website knowledge and skills.
+- [`docs/dev/skill-scripts.md`](../docs/dev/skill-scripts.md): sandbox scripts that come with knowledge and skills.
+- User-facing guides: [features in detail](../docs/features.md), [models and sign-in](../docs/models.md), [Ask and Autonomous](../docs/modes.md), [phone control setup](../docs/setup-guide.md), [FAQ](../docs/faq.md), [use Aira from a computer](../docs/computer.md), [computer CLI / Skill](../docs/computer-install.md), [computer access (MCP)](../docs/mcp.md), [disclaimer, data and privacy](../docs/disclaimer.md).
 
-### 发布与更新（维护者）
+### Releases and updates (maintainers)
 
-- 发布在 GitHub Releases，tag 用 `vX.Y.Z`，APK 作为附件挂在这个版本上。
-- 发布包用 `perf` 构建类型打，它用项目的正式签名。每个版本挂两个 APK，版本号和签名相同：`./gradlew :app:assemblePerf` 在 `app/build/outputs/apk/perf/` 下出 `app-universal-perf.apk`（全架构）和 `app-arm64-v8a-perf.apk`（只带 arm64-v8a 原生库，更小）。**先传 `app-universal-perf.apk`**，改名为 `Aira-vX.Y.Z.apk`；再传 `app-arm64-v8a-perf.apk`，改名为 `Aira-vX.Y.Z-arm64.apk`。旧版 App 取附件里第一个 `.apk`；新版 App 在支持 arm64-v8a 的设备上取 `-arm64.apk`，其他设备取全架构包。全架构包的名字不要改，用电脑装的说明和旧版 App 都按这个名字找。
-- 检查更新：每次打开 App 查一次 `https://api.github.com/repos/ganguydhrubo/Aira/releases/latest`，不经别的地址。
-- 关于页点「下载更新」后由系统下载服务在后台下载 APK，可查看进度、删除下载或失败后重试，重开应用仍可继续查看。下载完成后点「安装更新」，首次按提示允许 Aira 安装未知应用，再在系统安装页确认。安装前检查 APK 大小、发布附件提供的 SHA-256、包名、版本号和签名证书，系统安装器还会再验一次签名；自行编译、签名不同的版本不能直接覆盖成官方版，要先卸载。发布未包含 APK 时仍打开发布页。
+- Releases are published on GitHub Releases with tags `vX.Y.Z`, with the APK attached to the release.
+- Releases are built from the `perf` build type, which is signed with the project's release key. Each release carries two APKs with the same version and signature: `./gradlew :app:assemblePerf` writes `app-universal-perf.apk` (all architectures) and `app-arm64-v8a-perf.apk` (arm64-v8a native libraries only, smaller) to `app/build/outputs/apk/perf/`. Upload **`app-universal-perf.apk` first**, renamed to `Aira-vX.Y.Z.apk`, then `app-arm64-v8a-perf.apk` renamed to `Aira-vX.Y.Z-arm64.apk`: older app versions take the first `.apk` asset. Current versions take `-arm64.apk` on devices that support arm64-v8a and the all-architecture APK elsewhere. Keep the all-architecture name unchanged; the install-by-computer guide and older app versions look for it.
+- Update checks: each time you open the app it queries `https://api.github.com/repos/ganguydhrubo/Aira/releases/latest` and no other address.
+- After you tap "Download update" on the About page, the system download service fetches the APK in the background; you can watch progress, delete the download or retry after a failure, and it is still there after reopening the app. When it finishes, tap "Install update", allow Aira to install unknown apps the first time, then confirm on the system installer. Before installing, Aira checks the APK size, the SHA-256 published with the release asset, the package name, the version and the signing certificate, and the system installer verifies the signature again; a build you compiled and signed yourself cannot be installed over the official one without uninstalling first. If a release has no APK, the release page is opened instead.

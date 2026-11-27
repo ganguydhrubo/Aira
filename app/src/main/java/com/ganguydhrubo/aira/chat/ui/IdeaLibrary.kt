@@ -25,7 +25,7 @@ internal object IdeaLibrary {
         (0 until list.length()).mapNotNull { i ->
             val e = list.getJSONObject(i)
             val texts = e.getJSONObject("text")
-            val text = texts.optString(key).ifEmpty { texts.optString(if (set == "zh") "zh-Hans" else "en") }
+            val text = texts.optString(key).ifEmpty { texts.optString("en") }
             val pkgs = e.getJSONArray("packages").let { a -> (0 until a.length()).map(a::getString) }
             text.takeIf { it.isNotEmpty() }?.let { Entry(e.getString("scene"), pkgs, it) }
         }
@@ -34,10 +34,6 @@ internal object IdeaLibrary {
     /** 界面语言 → (用哪套, 取哪种文字)。中文看文字体系或地区分简繁;印尼语老写法 in 当 id。 */
     internal fun setFor(locale: Locale): Pair<String, String> {
         val lang = locale.language.let { if (it == "in") "id" else it }
-        if (lang == "zh") {
-            val hant = locale.script == "Hant" || (locale.script.isEmpty() && locale.country in setOf("TW", "HK", "MO"))
-            return "zh" to (if (hant) "zh-Hant" else "zh-Hans")
-        }
         return "intl" to lang
     }
 

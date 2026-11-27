@@ -5,7 +5,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.chat.*
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.settings.KeyCipher
@@ -36,7 +36,7 @@ import com.ganguydhrubo.aira.task.ui.SavedChecklistsScreen
 
 @RunWith(AndroidJUnit4::class)
 class SavedChecklistsDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createComposeRule()
     private val context = InstrumentationRegistry.getInstrumentation().targetContext
     private val directory = File(context.cacheDir, "saved-checklists-test-${UUID.randomUUID()}").apply { mkdirs() }

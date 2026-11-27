@@ -1,38 +1,38 @@
 ---
 name: info-research
-display: 查清一件事
-description: 在网上把一件事查清楚:找方向、读原始出处、多方核对,写明出处和时间
-aliases: ["调研", "查一下", "帮我了解"]
-apps: ["xiaohongshu", "zhihu", "bilibili", "weibo"]
-sites: ["zhihu.com", "tieba.baidu.com", "weibo.com", "douban.com"]
-terms: ["调研", "查一下", "了解", "背景", "对比", "靠不靠谱", "出处", "最新"]
+display: Find out the facts
+description: Get to the bottom of something on the web: find leads, read the original sources, cross-check, and state sources and dates
+aliases: ["research", "look this up", "find out about", "help me understand"]
+apps: ["reddit", "youtube", "x"]
+sites: ["youtube.com"]
+terms: ["research", "look up", "find out", "background", "compare", "is it reliable", "source", "latest"]
 ---
-## 入口
+## Entry
 
-先把要查的对象定下来:全称、地区、时间段、版本或型号。有重名、说法有歧义时问用户一次,等回答的同时先查不受这个问题影响的部分。用户没给的条件(比如时间范围),自己选一组常见的,在结论开头写明用的是哪一组。
+First pin down what to look into: full name, region, time period, version or model. If there are same-name items or the wording is ambiguous, ask the user once, and while waiting for the answer, start on the parts that do not depend on it. For conditions the user did not give (such as a time range), choose a common set yourself and state at the start of the conclusion which set you used.
 
-起步用 `web_navigate` 打开搜索页(百度、必应),或在相关 App 里用站内搜索。
+To begin, open a search page with `web_navigate` (Google, Bing), or use the in-app search of a relevant app.
 
-## 步骤
+## Steps
 
-1. **找方向**:先做两三次宽一些的搜索,看这件事有哪些说法、哪些网站在讲、有没有权威的发布方。站内搜索用两到四个关键词,不用整句提问。
-2. **找原始出处**:用户直接问的那个事实,追到最早发布它的地方:发布方自己的网站、官方公告、原始文件、论文原文、产品或服务本身的页面。新闻和转载只当线索,顺着它们给的链接或名称找原文。
-3. **补体验和反面**:真实使用感受看社区和视频平台(小红书、知乎、贴吧、微博、B 站、豆瓣),问题看投诉平台。专门搜一次反面的词(「问题」「投诉」「缺点」)。
-4. **交叉核对**:关键结论至少在两个互不相干的来源里读到原文。两边说法不一致时,看发布时间、看哪一方离事情更近,并把分歧本身写出来。
-5. **写结论**:每条结论后面写出处(网站或发布方)和那条内容的时间;原文说的和自己推断的分开写;查过但没查到的,写清查了哪些地方、还缺什么。
+1. **Find leads**: first do two or three broad searches to see what is being said, which sites cover it, and whether there is an authoritative publisher. For in-app search use two to four keywords, not a full question.
+2. **Find the original source**: for the exact fact the user asked about, trace it to where it was first published: the publisher's own website, an official announcement, the original document, the full paper, or the page of the product or service itself. Treat news and reposts only as leads, and follow the links or names they give to find the original.
+3. **Add real experience and the downside**: for real user experience look at communities and video platforms (Reddit, Quora, X, YouTube, review sites); for problems look at complaint and review sites such as Trustpilot or consumer complaint forums. Do one search with negative words on purpose ("problem", "complaint", "drawbacks").
+4. **Cross-check**: read each key conclusion in the original text of at least two unrelated sources. When they disagree, look at the publication dates and which side is closer to the event, and write down the disagreement itself.
+5. **Write the conclusion**: after each conclusion, give the source (website or publisher) and the date of that content; keep what the source says separate from your own inference; for things you searched but did not find, say where you looked and what is still missing.
 
-## 容易出错的地方
+## Common pitfalls
 
-- 搜索结果的摘要不是原文,常常截断或过时;要用 `web_read_page` 打开读正文,并看清最终落在哪个网站。
-- 同一篇通稿会被很多网站转载,看起来来源很多,其实只有一个出处。
-- 推广文、带购买链接的测评和匿名爆料可信度低,用到时要标明。
-- 页面上的日期可能是转载或更新的日期,不一定是事情发生的时间。
-- 没搜到、页面打不开、被登录页挡住,都只说明这一次没读到,不能当成「没有这回事」。
+- A search result snippet is not the original; it is often cut off or out of date. Open the page with `web_read_page` to read the body, and note which website you finally landed on.
+- The same press release gets reposted by many sites; it looks like many sources but there is only one.
+- Promotional articles, reviews with purchase links and anonymous leaks are less trustworthy; flag them when you use them.
+- The date on a page may be the date of reposting or updating, not when the event happened.
+- Finding nothing, a page that will not open, or being blocked by a sign-in page only means you could not read it this time; it does not mean "this never happened".
 
-## 怎样算办成(核实证据)
+## How to verify it is done (evidence)
 
-每条结论都能指回这次实际读过的某个页面,写着出处和时间;关键结论有两个独立来源;薄弱或互相矛盾的地方说明了原因。
+Every conclusion points back to a page actually read this time, with its source and date; key conclusions have two independent sources; weak or contradictory points have the reason explained.
 
-## 什么时候停下交给用户
+## When to stop and hand over to the user
 
-要看的内容得登录才能看,或者下一步变成预约、购买、报名这类要用户本人决定或付钱的事时,把查到的结果交给用户。
+When the content needs a sign-in to view, or the next step becomes booking, buying, registering or anything else the user must decide or pay for, hand what you found to the user.

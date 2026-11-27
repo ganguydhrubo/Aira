@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.browser.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.i18n.tr
 import androidx.compose.foundation.layout.Column
@@ -47,7 +47,7 @@ import com.ganguydhrubo.aira.voice.ui.nameOf
 /** 侧栏的「浏览器」入口;起始页的几段(搜索、常用网站、整理、最近打开),网页的顶栏和工具栏、「更多」面板、「给 Aira 登录」横幅。 */
 @RunWith(AndroidJUnit4::class)
 class BrowserScreenTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

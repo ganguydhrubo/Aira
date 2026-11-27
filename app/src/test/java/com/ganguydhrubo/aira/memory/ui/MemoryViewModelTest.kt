@@ -144,7 +144,7 @@ class MemoryViewModelTest {
     }
 
     private fun skillMd(name: String, body: String) = "---\nname: $name\ndisplay: 会议纪要整理\ndescription: 把会议记录整理成决定和待办\n---\n$body"
-    private fun fullMd(name: String, steps: String) = skillMd(name, "## 入口\n打开一份会议记录\n## 步骤\n$steps\n## 容易出错的地方\n遗漏决定事项\n## 怎样算办成(核实证据)\n纪要包含决定和待办\n## 什么时候停下交给用户\n要登录时")
+    private fun fullMd(name: String, steps: String) = skillMd(name, "## Entry\n打开一份会议记录\n## Steps\n$steps\n## Common mistakes\n遗漏决定事项\n## Done when (proof)\n纪要包含决定和待办\n## When to stop and hand over\n要登录时")
 
     private fun TestScope.skillsVm(skills: com.ganguydhrubo.aira.task.MapSkills, builtin: Set<String> = emptySet()): MemoryViewModel =
         MemoryViewModel(store, MemorySettings(File(tmp.newFolder(), "s.json")), skills, backgroundScope, builtinSkillNames = builtin)
@@ -152,11 +152,11 @@ class MemoryViewModelTest {
 
     @Test fun approveWithEdit() = runTest {
         val skills = com.ganguydhrubo.aira.task.MapSkills()
-        skills.putPending("d1", com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## 步骤\n1. 点搜索"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.pending, "r1", null, 0, emptyList()))
+        skills.putPending("d1", com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点搜索"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.pending, "r1", null, 0, emptyList()))
         val vm = skillsVm(skills)
         assertEquals(listOf("d1"), vm.ui.value.skills.drafts.map { it.id })
         // 改过的全文同样过校验:缺小节、带敏感信息、提到没有的工具都不收
-        vm.approveSkill("d1", skillMd("meeting-notes", "## 步骤\n1. 点搜索框")); runCurrent()
+        vm.approveSkill("d1", skillMd("meeting-notes", "## Steps\n1. 点搜索框")); runCurrent()
         assertTrue(vm.ui.value.message!!.contains("五个小节"))
         vm.dismissMessage()
         vm.approveSkill("d1", fullMd("meeting-notes", "支付密码是123456")); runCurrent()
@@ -174,15 +174,15 @@ class MemoryViewModelTest {
     }
 
     @Test fun updateDraftShowsChangedLines() = runTest {
-        val old = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## 步骤\n1. 点搜索\n2. 整理待办"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.active, "r0", null, 0, emptyList())
+        val old = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点搜索\n2. 整理待办"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.active, "r0", null, 0, emptyList())
         val skills = com.ganguydhrubo.aira.task.MapSkills(old)
-        skills.putPending("d2", old.copy(markdown = skillMd("meeting-notes", "## 步骤\n1. 点搜索\n2. 补充负责人"), replacesDraftOf = "meeting-notes"))
+        skills.putPending("d2", old.copy(markdown = skillMd("meeting-notes", "## Steps\n1. 点搜索\n2. 补充负责人"), replacesDraftOf = "meeting-notes"))
         val vm = skillsVm(skills)
         assertEquals(listOf("+ 2. 补充负责人", "- 2. 整理待办"), vm.ui.value.skills.drafts.single().changedLines)
     }
 
     @Test fun restoreSuspended() = runTest {
-        val s = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## 步骤\n1. 点搜索"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.suspended, "r0", null, 0, listOf("failed", "verified", "unverified"))
+        val s = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点搜索"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.suspended, "r0", null, 0, listOf("failed", "verified", "unverified"))
         val skills = com.ganguydhrubo.aira.task.MapSkills(s)
         val vm = skillsVm(skills)
         val row = vm.ui.value.skills.installed.single()
@@ -218,7 +218,7 @@ class MemoryViewModelTest {
     @Test fun importRefusesBadOrClashingSkills() = runTest {
         val vm = skillsVm(com.ganguydhrubo.aira.task.MapSkills(), builtin = setOf("meeting-notes"))
         assertEquals("和内置技能重名了，改个名字再试。", vm.importSkill(fullMd("meeting-notes", "1. 点搜索框")))
-        assertTrue(vm.importSkill(skillMd("other", "## 步骤\n1. 点搜索框"))!!.contains("五个小节"))
+        assertTrue(vm.importSkill(skillMd("other", "## Steps\n1. 点搜索框"))!!.contains("五个小节"))
         // 原因由导入框自己显示,页面上不另弹提示
         assertEquals(null, vm.ui.value.message)
         assertTrue(vm.ui.value.skills.drafts.isEmpty())

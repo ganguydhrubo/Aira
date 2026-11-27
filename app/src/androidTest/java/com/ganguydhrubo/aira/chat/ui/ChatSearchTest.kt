@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -36,7 +36,7 @@ import java.util.UUID
  */
 @RunWith(AndroidJUnit4::class)
 class ChatSearchTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

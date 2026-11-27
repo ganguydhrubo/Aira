@@ -16,7 +16,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.browser.PageAskMode
 import com.ganguydhrubo.aira.browser.UserBrowser
 import com.ganguydhrubo.aira.capsule.CapsuleModel
@@ -43,7 +43,7 @@ import com.ganguydhrubo.aira.chat.ui.DrawerConversation
  */
 @RunWith(AndroidJUnit4::class)
 class PageAskTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
 
     @get:Rule val compose = createComposeRule()
 

@@ -6,7 +6,7 @@ import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.ganguydhrubo.aira.ChineseUi
+import com.ganguydhrubo.aira.EnglishUi
 import com.ganguydhrubo.aira.AiraApp
 import com.ganguydhrubo.aira.core.run.record.RunEvent
 import com.ganguydhrubo.aira.record.RunStore
@@ -27,7 +27,7 @@ import com.ganguydhrubo.aira.task.ui.RunTimelineViewModel
 
 @RunWith(AndroidJUnit4::class)
 class OtlpSendDeviceTest {
-    @get:Rule(order = Int.MIN_VALUE) val chinese = ChineseUi()
+    @get:Rule(order = Int.MIN_VALUE) val chinese = EnglishUi()
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
 
     @Test fun confirmedSendSurvivesCollapseAndActivityRecreation() {
