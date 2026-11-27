@@ -1,0 +1,866 @@
+package com.ganguydhrubo.aira.settings.ui
+
+import android.app.ActivityManager
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.ganguydhrubo.aira.BuildConfig
+import com.ganguydhrubo.aira.R
+import com.ganguydhrubo.aira.cap.phone.a11y.ScreenAccessibility
+import com.ganguydhrubo.aira.cap.sandbox.SandboxState
+import com.ganguydhrubo.aira.cap.web.WebProxy
+import com.ganguydhrubo.aira.capsule.CapsuleMode
+import com.ganguydhrubo.aira.capsule.CapsuleSetup
+import com.ganguydhrubo.aira.core.agent.SpeedFlags
+import com.ganguydhrubo.aira.core.cap.sandbox.SandboxStatus
+import com.ganguydhrubo.aira.core.model.ModelRole
+import com.ganguydhrubo.aira.core.device.shell.BuiltinShellStatus
+import com.ganguydhrubo.aira.i18n.AppLanguage
+import com.ganguydhrubo.aira.i18n.tr
+import com.ganguydhrubo.aira.i18n.trPlural
+import com.ganguydhrubo.aira.record.RunStore
+import com.ganguydhrubo.aira.settings.AccessibilityState
+import com.ganguydhrubo.aira.settings.FeatureFlags
+import com.ganguydhrubo.aira.settings.NetProxyStore
+import com.ganguydhrubo.aira.settings.Prerequisites
+import com.ganguydhrubo.aira.settings.Problem
+import com.ganguydhrubo.aira.settings.ProviderConnection
+import com.ganguydhrubo.aira.settings.ProviderStore
+import com.ganguydhrubo.aira.settings.SystemStatus
+import com.ganguydhrubo.aira.settings.WebSearchConfig
+import com.ganguydhrubo.aira.settings.WebSearchSettings
+import com.ganguydhrubo.aira.settings.configFor
+import com.ganguydhrubo.aira.settings.notificationOverview
+import com.ganguydhrubo.aira.settings.setVisionGroundingVerified
+import com.ganguydhrubo.aira.task.ParallelCapability
+import com.ganguydhrubo.aira.ui.components.ButtonKind
+import com.ganguydhrubo.aira.ui.components.ButtonSize
+import com.ganguydhrubo.aira.ui.components.FocusTargetHost
+import com.ganguydhrubo.aira.ui.components.GroupCard
+import com.ganguydhrubo.aira.ui.components.GroupLabel
+import com.ganguydhrubo.aira.ui.components.ListRow
+import com.ganguydhrubo.aira.ui.components.LocalFocusTarget
+import com.ganguydhrubo.aira.ui.components.AiraButton
+import com.ganguydhrubo.aira.ui.components.AiraDialog
+import com.ganguydhrubo.aira.ui.components.AiraSwitch
+import com.ganguydhrubo.aira.ui.components.PageScaffold
+import com.ganguydhrubo.aira.ui.components.PageScrolls
+import com.ganguydhrubo.aira.ui.components.PillTone
+import com.ganguydhrubo.aira.ui.components.RowChevron
+import com.ganguydhrubo.aira.ui.components.RowValue
+import com.ganguydhrubo.aira.ui.components.ValueTone
+import com.ganguydhrubo.aira.ui.components.StateCard
+import com.ganguydhrubo.aira.ui.components.StatusPill
+import com.ganguydhrubo.aira.ui.components.TileTone
+import com.ganguydhrubo.aira.ui.components.focusHighlightTarget
+import com.ganguydhrubo.aira.ui.theme.AiraIcons
+import com.ganguydhrubo.aira.ui.theme.AiraTheme
+import com.ganguydhrubo.aira.wechat.WechatConnectionState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.ganguydhrubo.aira.about.ui.AboutCopy
+import com.ganguydhrubo.aira.about.ui.TrailingValue
+import com.ganguydhrubo.aira.backup.ui.BackupScreen
+import com.ganguydhrubo.aira.calls.ui.CallSettingsScreen
+import com.ganguydhrubo.aira.capsule.ui.CapsuleScreen
+import com.ganguydhrubo.aira.capsule.ui.CapsuleSettingsCopy
+import com.ganguydhrubo.aira.chat.ui.AutoArchiveDialog
+import com.ganguydhrubo.aira.files.ui.DeviceDirectoriesScreen
+import com.ganguydhrubo.aira.mcp.ui.McpScreen
+import com.ganguydhrubo.aira.mcp.ui.McpServersScreen
+import com.ganguydhrubo.aira.memory.ui.Link
+import com.ganguydhrubo.aira.plugin.ui.PluginsScreen
+import com.ganguydhrubo.aira.selfcheck.ui.SelfCheckScreen
+import com.ganguydhrubo.aira.settings.ui.models.edit
+import com.ganguydhrubo.aira.settings.ui.models.refresh
+import com.ganguydhrubo.aira.task.ui.RecommendedTasksScreen
+import com.ganguydhrubo.aira.task.ui.RunStatsScreen
+import com.ganguydhrubo.aira.task.ui.SavedChecklistsScreen
+import com.ganguydhrubo.aira.ui.openInBrowser
+import com.ganguydhrubo.aira.wechat.ui.WechatEntryStatus
+import com.ganguydhrubo.aira.wechat.ui.WechatSettingsScreen
+import com.ganguydhrubo.aira.workflow.ui.WorkflowsScreen
+
+private const val SHIZUKU_SETUP_GUIDE_URL = "https://shizuku.rikka.app/guide/setup/"
+
+/**
+ * 设置页:总状态卡 + 常用 / 我的数据 / 其他。高级与其他只增加一层,各子页返回来时的页面。
+ * 模型页由 [onOpenModels]、记忆与数据由 [onOpenMemory]、关于页由 [onOpenAbout] 交给 Activity。
+ * 修复动作由 [onFix] 交给 Activity 去做(请求权限、跳转系统设置)。
+ */
+@Composable
+fun SettingsScreen(
+    store: ProviderStore,
+    status: SystemStatus,
+    androidRelease: String,
+    onFix: (Fix) -> Unit,
+    onBack: () -> Unit,
+    onOpenModels: () -> Unit,
+    onOpenMemory: (() -> Unit)? = null,
+    onOpenBrowser: () -> Unit = {},
+    onOpenFiles: () -> Unit = {},
+    onOpenPersonal: () -> Unit = {},
+    onOpenPlans: () -> Unit = {},
+    /** 任务运行里的「自主模式」:当前值和换它的办法。 */
+    autonomous: Boolean = false,
+    onAutonomous: (Boolean) -> Unit = {},
+    /** 查到的新版本号;有它时「关于 Aira」一行写「x 可更新」带红点。 */
+    updateVersion: String? = null,
+    onOpenAbout: () -> Unit = {},
+    /** 通话设置迁移后打开统一语音模型目录。 */
+    onOpenVoiceCatalog: () -> Unit = {},
+    /** 外部 MCP server 设置(outbound);为空时不显示入口。 */
+    mcpServers: com.ganguydhrubo.aira.settings.McpServerStore? = null,
+    /** 人格设置;为空时不显示入口。 */
+    onOpenPersonas: (() -> Unit)? = null,
+    openPhoneOps: Boolean = false,
+    onPhoneOpsOpened: () -> Unit = {},
+    /** 别处的「去暂停页」(如助手已暂停的提示)直接打开「暂停 Aira」页。 */
+    openPause: Boolean = false,
+    onPauseOpened: () -> Unit = {},
+    /** 模型下的子页(用量、语音输入、朗读、通话方式、语音服务、图片/视频模型),由 Activity 路由打开。 */
+    onOpenModelRoute: ((SettingsModelRoute) -> Unit)? = null,
+) {
+    val configs by store.configs.collectAsState()
+    val roles by store.roles.collectAsState()
+    val groups by store.groups.collectAsState()
+    // 开发者选项里的「看图定位已验证」跟着看图模型(看图用主模型时是主模型那条配置)
+    val visionConfig = remember(configs, roles) { store.configFor(ModelRole.Vision) }
+    var page by rememberSaveable { mutableStateOf(
+        when {
+            openPhoneOps -> SettingsPage.PhoneOps
+            openPause -> SettingsPage.Pause
+            else -> SettingsPage.Home
+        },
+    ) }
+    // 进子页时当前页离开组合,它自己记的滚动位置随之丢掉;有子页可进的几页在这里记,回来接着刚才的位置
+    val pageScrolls = rememberSaveable(saver = PageScrolls.Saver) { PageScrolls() }
+    val focusHost = remember { FocusTargetHost() }
+    var explaining by remember { mutableStateOf<Problem?>(null) }
+    // 「完全退出」先问一句:任务、胶囊和通知都会停
+    var confirmingQuit by remember { mutableStateOf(false) }
+
+    LaunchedEffect(openPhoneOps) {
+        if (openPhoneOps) {
+            focusHost.clear()
+            page = SettingsPage.PhoneOps
+            onPhoneOpsOpened()
+        }
+    }
+    LaunchedEffect(openPause) {
+        if (openPause) {
+            focusHost.clear()
+            page = SettingsPage.Pause
+            onPauseOpened()
+        }
+    }
+
+    fun fix(f: Fix) = when (f) {
+        Fix.AddModel -> onOpenModels()
+        Fix.OpenPhoneOps -> { focusHost.clear(); page = SettingsPage.PhoneOps }
+        Fix.OpenPause -> { focusHost.clear(); page = SettingsPage.Pause }
+        else -> onFix(f)
+    }
+    val onProblem: (Problem) -> Unit = { p -> StatusCopy.directFix(p)?.let(::fix) ?: run { explaining = p } }
+
+    // 并行任务的上限只在实验开关 parallelTasks 打开时出现;设备能力按此刻算,第二块屏建失败过就按失败算
+    val context = LocalContext.current
+    val recommendedTasks = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).recommendedTasks }
+    val savedChecklists = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).savedChecklists }
+    val workflows = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).workflows }
+    val shellManager = remember { com.ganguydhrubo.aira.cap.phone.PhoneServices.of(context).shellManager }
+    val root = remember { shellManager.root }
+    val rootState by root.state.collectAsState()
+    LaunchedEffect(Unit) { root.refresh() }
+    val wechat = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).wechat }
+    val wechatState by wechat.state.collectAsState()
+    val airaPaused by com.ganguydhrubo.aira.settings.AiraPause.get(context).state.collectAsState()
+    val flags = remember { FeatureFlags.get(context) }
+    var personalStart by remember { mutableStateOf(flags.personalStart()) }
+    var parallelMax by remember { mutableIntStateOf(flags.parallelMax()) }
+    var keepScreenOn by remember { mutableStateOf(flags.keepScreenOn()) }
+    val pocketPrefs = remember { context.getSharedPreferences(com.ganguydhrubo.aira.pocket.PocketGuardManager.PREFS, 0) }
+    var pocketGuard by remember { mutableStateOf(pocketPrefs.getBoolean(com.ganguydhrubo.aira.pocket.PocketGuardManager.ENABLED, false)) }
+    var pocketCompletionLock by remember { mutableStateOf(pocketPrefs.getBoolean(com.ganguydhrubo.aira.pocket.PocketGuardManager.LOCK_ON_COMPLETION, false)) }
+    var showTaskCost by remember { mutableStateOf(flags.showTaskCost()) }
+    var muteTarget by remember { mutableStateOf(flags.muteTarget()) }
+    var operatingPace by remember { mutableStateOf(flags.operatingPace()) }
+    var stepLimit by remember { mutableStateOf(flags.taskStepLimit()) }
+    var triggerRunMinutes by remember { mutableStateOf(flags.triggerRunMinutes()) }
+    var sandboxBudgetMinutes by remember { mutableStateOf(flags.sandboxBudgetMinutes()) }
+    var attachmentMaxMb by remember { mutableStateOf(flags.attachmentMaxMb()) }
+    var workspaceMaxGb by remember { mutableStateOf(flags.workspaceMaxGb()) }
+    var tokenBudget by remember { mutableStateOf(flags.taskTokenBudget()) }
+    var selfConfig by remember { mutableStateOf(flags.selfConfig()) }
+    var selfOperate by remember { mutableStateOf(flags.selfOperate()) }
+    var deviceFiles by remember { mutableStateOf(flags.deviceFiles()) }
+    var pipOperate by remember { mutableStateOf(flags.pipOperate()) }
+    var externalSchedule by remember { mutableStateOf(flags.externalSchedule()) }
+    var autoArchiveDays by remember { mutableStateOf(flags.autoArchiveDays()) }
+    var editingAutoArchive by remember { mutableStateOf(false) }
+    val capsuleMode by remember(flags) { flags.capsuleModeChanges() }.collectAsState(flags.capsuleMode())
+    var capsuleIdleOpacity by remember { mutableStateOf(flags.capsuleIdleOpacity()) }
+    var capsuleCardScale by remember { mutableStateOf(flags.capsuleCardScale()) }
+    // 换语言时界面会重建,这里每次进来读一次即可
+    val language = remember { AppLanguage.current(context) }
+    val runtimeLimit by (context.applicationContext as com.ganguydhrubo.aira.AiraApp).taskState.parallelLimit.collectAsState()
+    var speed by remember { mutableStateOf(flags.speedFlags()) }
+    val scope = rememberCoroutineScope()
+    val sandboxStatus by remember { SandboxState.get(context) }.status.collectAsState()
+    // 网络代理:只在这里改;读设置要解密、看浏览器支不支持要加载 WebView,都放到后台
+    val proxies = remember { NetProxyStore.get(context) }
+    var proxy by remember { mutableStateOf<String?>(null) }
+    var browserProxy by remember { mutableStateOf<WebProxy.Mode?>(null) }
+    var editingProxy by remember { mutableStateOf(false) }
+    LaunchedEffect(proxy) {
+        if (proxy == null) proxy = withContext(Dispatchers.IO) { proxies.get() }
+        browserProxy = withContext(Dispatchers.IO) { WebProxy.mode() }
+    }
+    val searchSettings = remember { WebSearchSettings.get(context) }
+    var webSearch by remember { mutableStateOf<WebSearchConfig?>(null) }
+    var editingSearch by remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) { webSearch = withContext(Dispatchers.IO) { searchSettings.get() } }
+    val mcp = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).mcp }
+    val mcpServerList = mcpServers?.servers?.collectAsState()?.value
+    val mcpNetworkOn by mcp.settings.enabled.collectAsState()
+    val mcpUsbOn by mcp.usb.enabled.collectAsState()
+    val mcpOn = mcpNetworkOn || mcpUsbOn
+    val pluginRegistry = remember { (context.applicationContext as com.ganguydhrubo.aira.AiraApp).plugins }
+    val pluginRecords by pluginRegistry.plugins.collectAsState()
+    val parallel = if (!speed.parallelTasks) null else ParallelSetting(
+        parallelMax,
+        ParallelCapability.detect(
+            status.sdkInt, context.getSystemService(ActivityManager::class.java).isLowRamDevice, parallelMax,
+            secondDisplayFailed = runtimeLimit.reason == ParallelCapability.SECOND_DISPLAY_FAILED,
+        ),
+    )
+    // 开发者选项只在调试版和性能测试版里列出:发布版的各开关按评测结果统一定默认值。
+    // 主动能力不在里面:入口在设置首页,每个版本都有,默认关着
+    val showDeveloper = com.ganguydhrubo.aira.record.DetailedTraces.supportedBuild
+    // 顶栏返回按钮和系统返回键都回到上一层(见 parent()),不要在子页里另写一份;离开时丢掉还没用掉的定位请求
+    val back: () -> Unit = { focusHost.clear(); page = page.parent() }
+
+    if (page != SettingsPage.Home) BackHandler { back() }
+
+    // 设置搜索:搜索框的字记在这里,从结果点进子页再回来还在;能力条件和下面各入口的显示条件一致
+    var searchQuery by rememberSaveable { mutableStateOf("") }
+    val searchAvailable = buildSet {
+        if (status.sdkInt >= Prerequisites.MIN_SDK) add(SettingsRequirement.Recovery)
+        if (sandboxStatus !is SandboxStatus.Unsupported) add(SettingsRequirement.Sandbox)
+        if (mcpServers != null) add(SettingsRequirement.McpServers)
+        if (rootState.suPresent) add(SettingsRequirement.Root)
+        if (showDeveloper) add(SettingsRequirement.Developer)
+        if (personalStart) add(SettingsRequirement.PersonalStart)
+        if (onOpenPersonas != null) add(SettingsRequirement.Personas)
+        if (onOpenMemory != null) add(SettingsRequirement.Memory)
+        if (onOpenModelRoute != null) add(SettingsRequirement.ModelSubPages)
+        if (parallel != null) add(SettingsRequirement.ParallelTasks)
+        if (status.sdkInt >= 36) add(SettingsRequirement.LiveTaskUpdates)
+    }
+    val openSearchResult: (SettingsDestination) -> Unit = { d ->
+        // 每次跳转先丢掉上一次没用掉的定位请求,只有页内条目才发新的
+        focusHost.clear()
+        when (d) {
+            is SettingsDestination.Page -> {
+                d.item?.let(focusHost::request)
+                if (d.page == SettingsPage.Home) {
+                    searchQuery = ""
+                } else {
+                    page = d.page
+                }
+            }
+            SettingsDestination.Models -> onOpenModels()
+            is SettingsDestination.ModelRoute -> onOpenModelRoute?.invoke(d.route)
+            SettingsDestination.Plans -> onOpenPlans()
+            SettingsDestination.Files -> onOpenFiles()
+            SettingsDestination.Personal -> onOpenPersonal()
+            SettingsDestination.Personas -> onOpenPersonas?.invoke()
+            SettingsDestination.Memory -> onOpenMemory?.invoke()
+            SettingsDestination.AutoArchive -> editingAutoArchive = true
+            SettingsDestination.Proxy -> editingProxy = true
+            SettingsDestination.WebSearch -> editingSearch = true
+            SettingsDestination.Quit -> confirmingQuit = true
+            SettingsDestination.About -> onOpenAbout()
+        }
+    }
+
+    val visiblePage = when {
+        !showDeveloper && (page == SettingsPage.Developer || page == SettingsPage.DeviceDirectories || page == SettingsPage.RunStats) -> SettingsPage.Home
+        page == SettingsPage.Root && !rootState.suPresent -> SettingsPage.Advanced
+        else -> page
+    }
+    CompositionLocalProvider(LocalFocusTarget provides focusHost) {
+    when (visiblePage) {
+        SettingsPage.Home -> SettingsContent(
+            status = status, androidRelease = androidRelease,
+            mainModel = roles.main?.let { id -> configs.firstOrNull { it.id == id } }?.let(ProviderConnection::displayName)
+                ?: roles.mainGroup?.let { id -> groups.firstOrNull { it.id == id }?.name },
+            onBack = onBack, onProblem = onProblem, onOpenModels = onOpenModels,
+            onOpenPhoneOps = { page = SettingsPage.PhoneOps },
+            onOpenCalls = { page = SettingsPage.Calls },
+            wechatState = wechatState, wechatBound = wechat.store.account() != null,
+            onOpenWechat = { page = SettingsPage.Wechat },
+            onOpenProactive = { page = SettingsPage.Proactive },
+            onOpenAppAccess = { page = SettingsPage.AppAccess },
+            onOpenSmsLogin = { page = SettingsPage.SmsLogin },
+            onOpenDuringWork = { page = SettingsPage.DuringWork },
+            capsuleMode = capsuleMode, onOpenCapsule = { page = SettingsPage.Capsule },
+            onOpenNotifications = { page = SettingsPage.Notifications },
+            language = language, onOpenLanguage = { page = SettingsPage.Language },
+            personalStart = personalStart,
+            onPersonalStart = { flags.setPersonalStart(it); personalStart = it },
+            autoArchiveDays = autoArchiveDays,
+            onOpenAutoArchive = { editingAutoArchive = true },
+            onOpenMemory = onOpenMemory,
+            onOpenBackup = { page = SettingsPage.Backup },
+            onOpenPause = { page = SettingsPage.Pause },
+            airaPaused = airaPaused,
+            onOpenRecommendations = { page = SettingsPage.Recommendations },
+            onOpenPersonas = onOpenPersonas,
+            onOpenAdvanced = { page = SettingsPage.Advanced },
+            onOpenBrowser = onOpenBrowser,
+            onOpenFiles = onOpenFiles,
+            onOpenPersonal = onOpenPersonal,
+            onOpenPlans = onOpenPlans,
+            versionName = BuildConfig.VERSION_NAME, updateVersion = updateVersion, onOpenAbout = onOpenAbout,
+            searchQuery = searchQuery, onSearchQuery = { searchQuery = it },
+            searchAvailable = searchAvailable, onOpenSearchResult = openSearchResult,
+            scrollState = pageScrolls.of(SettingsPage.Home),
+        )
+        SettingsPage.Advanced -> AdvancedSettingsContent(
+            proxy = proxy, proxyNote = proxy?.let { NetProxyCopy.subtitle(it, browserProxy) }, onOpenProxy = { editingProxy = true },
+            webSearch = webSearch, onOpenWebSearch = { editingSearch = true },
+            sandbox = sandboxStatus, onOpenSandbox = { page = SettingsPage.Sandbox },
+            pluginsCount = pluginRecords.size, onOpenPlugins = { page = SettingsPage.Plugins },
+            onOpenEnvVars = { page = SettingsPage.EnvVars },
+            showRecovery = status.sdkInt >= Prerequisites.MIN_SDK, onOpenRecovery = { page = SettingsPage.Recovery },
+            computerAccess = mcpOn, onOpenComputerAccess = { page = SettingsPage.ComputerAccess },
+            mcpServersCount = mcpServerList?.size, onOpenMcpServers = { page = SettingsPage.McpServers },
+            showRoot = rootState.suPresent, rootCommands = rootState.commands, onOpenRoot = { page = SettingsPage.Root },
+            showDeveloper = showDeveloper, onOpenDeveloper = { page = SettingsPage.Developer },
+            onBack = back,
+            onQuit = { confirmingQuit = true },
+            scrollState = pageScrolls.of(SettingsPage.Advanced),
+        )
+        SettingsPage.AppAccess -> AppAccessScreen(onBack = back)
+        SettingsPage.SmsLogin -> SmsLoginSettingsScreen(onBack = back)
+        SettingsPage.Wechat -> WechatSettingsScreen(wechat, onBack = back)
+        SettingsPage.PhoneOps -> PhoneOpsScreen(
+            status, androidRelease, onProblem,
+            onRepair = { onFix(Fix.RepairPhoneHelper) }, onUnpair = { onFix(Fix.UnpairPhoneHelper) }, onBack = back,
+            onSelectTransport = { shellManager.engine.selectTransport(it) },
+            onGrantShizuku = {
+                if (!shellManager.shizuku.openGrantPermissionOrApp(context)) {
+                    openInBrowser(context, SHIZUKU_SETUP_GUIDE_URL)
+                }
+            },
+            onOpenShizukuGuide = { openInBrowser(context, SHIZUKU_SETUP_GUIDE_URL) },
+            onRefreshShizuku = { shellManager.refreshShizukuAsync() },
+        )
+        SettingsPage.Calls -> CallSettingsScreen((context.applicationContext as com.ganguydhrubo.aira.AiraApp).calls, onBack = back, onOpenVoiceCatalog = onOpenVoiceCatalog)
+        SettingsPage.Notifications -> NotificationsScreen(status, onFix = ::fix, onBack = back)
+        SettingsPage.DuringWork -> DuringWorkScreen(
+            keepScreenOn, onKeepScreenOn = { flags.setKeepScreenOn(it); keepScreenOn = it },
+            muteTarget, onMuteTarget = { flags.setMuteTarget(it); muteTarget = it },
+            parallel, onParallelMax = { flags.setParallelMax(it); parallelMax = it }, onBack = back,
+            autonomous = autonomous, onAutonomous = onAutonomous,
+            operatingPace = operatingPace, onOperatingPace = { flags.setOperatingPace(it); operatingPace = it },
+            stepLimit = stepLimit, onStepLimit = { flags.setTaskStepLimit(it); stepLimit = it },
+            triggerRunMinutes = triggerRunMinutes, onTriggerRunMinutes = { flags.setTriggerRunMinutes(it); triggerRunMinutes = it },
+            sandboxBudgetMinutes = sandboxBudgetMinutes, onSandboxBudgetMinutes = { flags.setSandboxBudgetMinutes(it); sandboxBudgetMinutes = it },
+            attachmentMaxMb = attachmentMaxMb, onAttachmentMaxMb = { flags.setAttachmentMaxMb(it); attachmentMaxMb = it },
+            workspaceMaxGb = workspaceMaxGb, onWorkspaceMaxGb = { flags.setWorkspaceMaxGb(it); workspaceMaxGb = it },
+            tokenBudget = tokenBudget, onTokenBudget = { flags.setTaskTokenBudget(it); tokenBudget = it },
+            showTaskCost = showTaskCost, onShowTaskCost = { flags.setShowTaskCost(it); showTaskCost = it },
+            pocketGuard = pocketGuard, onPocketGuard = { pocketPrefs.edit().putBoolean(com.ganguydhrubo.aira.pocket.PocketGuardManager.ENABLED, it).apply(); pocketGuard = it },
+            pocketCompletionLock = pocketCompletionLock, onPocketCompletionLock = { pocketPrefs.edit().putBoolean(com.ganguydhrubo.aira.pocket.PocketGuardManager.LOCK_ON_COMPLETION, it).apply(); pocketCompletionLock = it },
+            selfConfig = selfConfig, onSelfConfig = { flags.setSelfConfig(it); selfConfig = it },
+            selfOperate = selfOperate, onSelfOperate = { flags.setSelfOperate(it); selfOperate = it },
+            pipOperate = pipOperate, onPipOperate = { flags.setPipOperate(it); pipOperate = it },
+            externalSchedule = externalSchedule, onExternalSchedule = { flags.setExternalSchedule(it); externalSchedule = it },
+            onOpenAppPace = { page = SettingsPage.AppPace },
+            deviceAccess = (context.applicationContext as com.ganguydhrubo.aira.AiraApp).deviceAccess.settings,
+            scrollState = pageScrolls.of(SettingsPage.DuringWork),
+        )
+        SettingsPage.AppPace -> AppPaceScreen(operatingPace, flags, onBack = back)
+        SettingsPage.Language -> LanguageScreen(language, onLanguage = { AppLanguage.set(context, it) }, onBack = back)
+        SettingsPage.Recommendations -> RecommendedTasksScreen(recommendedTasks, onBack = back,
+            onOpenChecklists = { page = SettingsPage.Checklists },
+            onOpenWorkflows = { page = SettingsPage.Workflows })
+        SettingsPage.Checklists -> SavedChecklistsScreen(savedChecklists, onBack = back)
+        SettingsPage.Workflows -> WorkflowsScreen(workflows, onBack = back)
+        SettingsPage.Capsule -> CapsuleScreen(
+            capsuleMode, onMode = {
+                flags.setCapsuleMode(it)
+                if (CapsuleSetup.needsAccessibility(it, ScreenAccessibility.instance.value != null)) onFix(Fix.OpenAccessibility)
+            }, onBack = back,
+            idleOpacity = capsuleIdleOpacity,
+            onIdleOpacity = { flags.setCapsuleIdleOpacity(it); capsuleIdleOpacity = it },
+            cardScale = capsuleCardScale,
+            onCardScale = { flags.setCapsuleCardScale(it); capsuleCardScale = it },
+        )
+        SettingsPage.Plugins -> PluginsScreen(pluginRegistry, onBack = back)
+        SettingsPage.EnvVars -> EnvVarSettingsScreen(remember { com.ganguydhrubo.aira.settings.EnvVarStore.get(context) }, onBack = back)
+        SettingsPage.Sandbox -> SandboxScreen(onBack = back)
+        SettingsPage.Recovery -> RecoveryScreen(
+            onBack = back, onOpenSelfCheck = { page = SettingsPage.SelfCheck }, scrollState = pageScrolls.of(SettingsPage.Recovery),
+        )
+        SettingsPage.SelfCheck -> SelfCheckScreen(status, onBack = back)
+        SettingsPage.ComputerAccess -> McpScreen(mcp, onBack = back)
+        SettingsPage.McpServers -> mcpServers?.let { McpServersScreen(it, onBack = back) }
+        SettingsPage.Root -> RootScreen(helperRow = status.sdkInt >= Prerequisites.MIN_SDK, onBack = back)
+        SettingsPage.Developer -> DeveloperOptionsScreen(
+            speed, onSpeed = { flags.setSpeed(it); speed = it }, onBack = back,
+            deviceFiles = deviceFiles, onDeviceFiles = { flags.setDeviceFiles(it); deviceFiles = it },
+            grounding = visionConfig?.let { GroundingSetting(it.model, it.capabilities.groundingVerified) },
+            onGrounding = { verified -> scope.launch { withContext(Dispatchers.IO) { store.setVisionGroundingVerified(verified) } } },
+            onOpenRunStats = { page = SettingsPage.RunStats },
+            onDeviceDirectories = { page = SettingsPage.DeviceDirectories },
+            scrollState = pageScrolls.of(SettingsPage.Developer),
+        )
+        SettingsPage.DeviceDirectories -> DeviceDirectoriesScreen(
+            remember { com.ganguydhrubo.aira.settings.DeviceDirectoryStore.get(context) },
+            remember { com.ganguydhrubo.aira.cap.phone.PhoneServices.of(context).hub },
+            onBack = back,
+        )
+        SettingsPage.RunStats -> RunStatsScreen(remember { RunStore(context).metrics }, onBack = back)
+        SettingsPage.Proactive -> com.ganguydhrubo.aira.proactive.ProactiveScreen(onBack = back)
+        SettingsPage.Backup -> BackupScreen(onBack = back)
+        SettingsPage.Pause -> PauseScreen(onBack = back, onFix = ::fix)
+    }
+    }
+
+    if (editingProxy) NetProxyDialog(
+        initial = proxy.orEmpty(),
+        onDismiss = { editingProxy = false },
+        onSave = { v ->
+            scope.launch {
+                withContext(Dispatchers.IO) { proxies.set(v) }
+                proxy = v.trim()
+                editingProxy = false
+            }
+        },
+    )
+
+    if (editingSearch) WebSearchDialog(
+        initial = webSearch ?: WebSearchConfig(),
+        onDismiss = { editingSearch = false },
+        onSave = { config ->
+            scope.launch {
+                withContext(Dispatchers.IO) { searchSettings.set(config) }
+                webSearch = searchSettings.get()
+                editingSearch = false
+            }
+        },
+    )
+
+    explaining?.let { p ->
+        val e = StatusCopy.explain(p, androidRelease)
+        AiraDialog(
+            onDismissRequest = { explaining = null },
+            title = { Text(e.title) },
+            text = {
+                Column {
+                    Text(e.body)
+                    e.secondaryAction?.let { (label, destination) ->
+                        TextButton(onClick = {
+                            explaining = null
+                            fix(destination)
+                        }) { Text(label) }
+                    }
+                }
+            },
+            confirmButton = {
+                if (e.action != null && e.fix != null) {
+                    TextButton({ explaining = null; fix(e.fix) }) { Text(e.action) }
+                } else {
+                    TextButton({ explaining = null }) { Text(stringResource(R.string.ok_got_it)) }
+                }
+            },
+            dismissButton = if (e.fix != null) ({ TextButton({ explaining = null }) { Text(stringResource(R.string.cancel)) } }) else null,
+        )
+    }
+
+    if (confirmingQuit) {
+        AlertDialog(
+            onDismissRequest = { confirmingQuit = false },
+            title = { Text(stringResource(R.string.quit_title)) },
+            text = { Text(stringResource(R.string.quit_confirm_body)) },
+            confirmButton = {
+                TextButton({ confirmingQuit = false; com.ganguydhrubo.aira.AiraQuit.quit(context) }) {
+                    Text(stringResource(R.string.quit_confirm_action), color = AiraTheme.colors.bad)
+                }
+            },
+            dismissButton = { TextButton({ confirmingQuit = false }) { Text(stringResource(R.string.cancel)) } },
+        )
+    }
+
+    if (editingAutoArchive) {
+        AutoArchiveDialog(
+            current = autoArchiveDays,
+            onPick = { days ->
+                flags.setAutoArchiveDays(days)
+                autoArchiveDays = days
+                editingAutoArchive = false
+                // 选完马上按新设置跑一次,老对话立刻进归档
+                (context.applicationContext as com.ganguydhrubo.aira.AiraApp).autoArchiveNow()
+            },
+            onDismiss = { editingAutoArchive = false },
+        )
+    }
+}
+
+/** 不带状态的设置首页,便于测试。首页只列常用入口,高级能力统一从 [onOpenAdvanced] 进入。 */
+@Composable
+internal fun SettingsContent(
+    status: SystemStatus,
+    androidRelease: String,
+    /** 当前主模型的名字;没有可用的主模型时为空。 */
+    mainModel: String?,
+    onBack: () -> Unit,
+    onProblem: (Problem) -> Unit,
+    onOpenModels: () -> Unit,
+    onOpenPhoneOps: () -> Unit = {},
+    onOpenCalls: () -> Unit = {},
+    wechatState: WechatConnectionState = WechatConnectionState.NeedsBinding,
+    wechatBound: Boolean = false,
+    onOpenWechat: () -> Unit = {},
+    /** 「主动能力」的入口,在「微信」和「任务运行」之间。 */
+    onOpenProactive: () -> Unit = {},
+    onOpenAppAccess: () -> Unit = {},
+    onOpenSmsLogin: () -> Unit = {},
+    onOpenDuringWork: () -> Unit = {},
+    /** 悬浮胶囊此刻的选择,写在「悬浮胶囊」一行的右边。 */
+    capsuleMode: CapsuleMode = CapsuleMode.DEFAULT,
+    onOpenCapsule: () -> Unit = {},
+    onOpenNotifications: () -> Unit = {},
+    /** 此刻选的界面语言,写在「语言与外观」一行的右边。 */
+    language: AppLanguage = AppLanguage.System,
+    onOpenLanguage: () -> Unit = {},
+    onOpenMemory: (() -> Unit)? = null,
+    onOpenBackup: (() -> Unit)? = null,
+    /** 「暂停 Aira」页的入口;暂停着时首页这一行写「已暂停」。 */
+    onOpenPause: (() -> Unit)? = null,
+    airaPaused: Boolean = false,
+    onOpenRecommendations: () -> Unit = {},
+    onOpenPersonas: (() -> Unit)? = null,
+    onOpenAdvanced: () -> Unit = {},
+    onOpenBrowser: () -> Unit = {},
+    onOpenFiles: () -> Unit = {},
+    onOpenPersonal: () -> Unit = {},
+    onOpenPlans: () -> Unit = {},
+    versionName: String = "",
+    updateVersion: String? = null,
+    onOpenAbout: () -> Unit = {},
+    personalStart: Boolean = false,
+    onPersonalStart: ((Boolean) -> Unit)? = null,
+    /** 自动归档:多久没有新消息的对话自动归档;0 表示关闭。 */
+    autoArchiveDays: Int = 0,
+    onOpenAutoArchive: () -> Unit = {},
+    /** 顶上搜索框里的字;非空时这一页换成搜索结果,返回键先清空它。状态由切页的一方持有,从结果点进子页再回来还在。 */
+    searchQuery: String = "",
+    onSearchQuery: (String) -> Unit = {},
+    /** 此刻具备的能力:要某种能力的入口(见 [SettingsSearchIndex])在设置里不显示时,搜索里也不出现。 */
+    searchAvailable: Set<SettingsRequirement> = emptySet(),
+    onOpenSearchResult: (SettingsDestination) -> Unit = {},
+    /** 这一页的滚动状态;切页的一方给进来,从子页回来才停得住。 */
+    scrollState: ScrollState = rememberScrollState(),
+) {
+    val check = Prerequisites.check(status, hasMainModel = mainModel != null)
+    if (searchQuery.isNotEmpty()) BackHandler { onSearchQuery("") }
+    PageScaffold(stringResource(R.string.settings_title), onBack, scrollState = scrollState, viewportModifier = Modifier.imePadding()) {
+        SettingsSearchBar(searchQuery, onSearchQuery)
+        Spacer(Modifier.height(12.dp))
+        if (searchQuery.isNotBlank()) {
+            SettingsSearchResults(searchQuery, remember(searchAvailable) { SettingsSearchIndex.available(searchAvailable) }, onOpenSearchResult)
+            return@PageScaffold
+        }
+
+        StatusSummary(check, onProblem)
+
+        GroupLabel(stringResource(R.string.settings_model))
+        GroupCard {
+            ListRow(AiraIcons.Spark, stringResource(R.string.settings_model), first = true, onClick = onOpenModels) {
+                RowValue(mainModel ?: stringResource(R.string.settings_not_set))
+                RowChevron()
+            }
+        }
+
+        GroupLabel(stringResource(R.string.settings_capabilities))
+        GroupCard {
+            ListRow(AiraIcons.Phone, stringResource(R.string.settings_phone_ops), first = true, onClick = onOpenPhoneOps) {
+                PhoneOpsPill(status)
+                RowChevron()
+            }
+            onOpenPause?.let {
+                ListRow(
+                    AiraIcons.Power, stringResource(R.string.pause_title),
+                    stringResource(if (airaPaused) R.string.pause_row_sub_paused else R.string.pause_row_sub_active),
+                    onClick = it,
+                ) {
+                    RowValue(
+                        stringResource(if (airaPaused) R.string.pause_helper_paused else R.string.pause_state_active),
+                        if (airaPaused) ValueTone.Plain else ValueTone.Ok,
+                    )
+                    RowChevron()
+                }
+            }
+            ListRow(AiraIcons.Clock, stringResource(R.string.drawer_plans), onClick = onOpenPlans) { RowChevron() }
+            ListRow(AiraIcons.Paperclip, stringResource(R.string.file_library_title), onClick = onOpenFiles) { RowChevron() }
+            ListRow(AiraIcons.Chats, stringResource(R.string.wechat_title), onClick = onOpenWechat) {
+                WechatEntryStatus(wechatState, wechatBound)
+                RowChevron()
+            }
+            ListRow(AiraIcons.Ripple, stringResource(R.string.proactive_title), onClick = onOpenProactive) { RowChevron() }
+            if (personalStart) {
+                ListRow(AiraIcons.Message, stringResource(R.string.drawer_personal), onClick = onOpenPersonal) { RowChevron() }
+            }
+        }
+
+        GroupLabel(stringResource(R.string.settings_preferences))
+        GroupCard {
+            ListRow(AiraIcons.Moon, stringResource(R.string.settings_during_work), first = true, onClick = onOpenDuringWork) { RowChevron() }
+            ListRow(AiraIcons.Message, CapsuleSettingsCopy.TITLE, onClick = onOpenCapsule) {
+                RowValue(CapsuleSettingsCopy.label(capsuleMode))
+                RowChevron()
+            }
+            ListRow(AiraIcons.Globe, stringResource(R.string.settings_language_appearance), onClick = onOpenLanguage) {
+                RowValue(languageLabel(language))
+                RowChevron()
+            }
+            // 人格和语言、外观是一类:定 Aira 怎么表现的全局取值。行尾是现在在用的,主界面上没有别的地方显示它
+            onOpenPersonas?.let { open ->
+                val personas = (LocalContext.current.applicationContext as? com.ganguydhrubo.aira.AiraApp)?.personas
+                ListRow(AiraIcons.Chats, stringResource(R.string.persona_title), onClick = open) {
+                    if (personas != null) RowValue(personaSummaryValue(personas))
+                    RowChevron()
+                }
+            }
+            val (notifText, notifTone) = StatusCopy.notificationSummary(status.notificationOverview().summary)
+            ListRow(AiraIcons.Bell, StatusCopy.NOTIFICATIONS, onClick = onOpenNotifications) {
+                RowValue(notifText, notifTone)
+                RowChevron()
+            }
+            onPersonalStart?.let { change ->
+                val label = stringResource(R.string.settings_personal_start)
+                ListRow(AiraIcons.Spark, label, modifier = Modifier.focusHighlightTarget(SettingsFocusKey.PERSONAL_START)) {
+                    AiraSwitch(personalStart, change, Modifier.semantics { contentDescription = label })
+                }
+            }
+        }
+
+        GroupLabel(stringResource(R.string.settings_data))
+        GroupCard {
+            onOpenMemory?.let {
+                ListRow(AiraIcons.Heart, stringResource(R.string.memory_and_skills), first = true, onClick = it) { RowChevron() }
+            }
+            onOpenBackup?.let {
+                ListRow(AiraIcons.Archive, stringResource(R.string.backup_title), first = onOpenMemory == null, onClick = it) { RowChevron() }
+            }
+            ListRow(
+                AiraIcons.Archive,
+                stringResource(R.string.settings_auto_archive),
+                first = onOpenMemory == null && onOpenBackup == null,
+                onClick = onOpenAutoArchive,
+            ) {
+                RowValue(
+                    if (autoArchiveDays <= 0) stringResource(R.string.state_off)
+                    else pluralStringResource(R.plurals.settings_auto_archive_days, autoArchiveDays, autoArchiveDays),
+                )
+                RowChevron()
+            }
+            ListRow(
+                AiraIcons.Message,
+                stringResource(R.string.recommendations_title),
+                onClick = onOpenRecommendations,
+            ) { RowChevron() }
+            ListRow(AiraIcons.Shield, stringResource(R.string.appaccess_title), onClick = onOpenAppAccess) { RowChevron() }
+            ListRow(AiraIcons.Shield, stringResource(R.string.sms_login_title), onClick = onOpenSmsLogin) { RowChevron() }
+        }
+
+        GroupLabel(stringResource(R.string.settings_advanced))
+        GroupCard {
+            ListRow(AiraIcons.Wrench, stringResource(R.string.settings_advanced), first = true, onClick = onOpenAdvanced) { RowChevron() }
+        }
+        GroupCard {
+            ListRow(AiraIcons.Info, stringResource(R.string.settings_about), first = true, onClick = onOpenAbout) {
+                TrailingValue(AboutCopy.settingsValue(updateVersion, versionName))
+                RowChevron()
+            }
+        }
+    }
+}
+
+/** 高级与其他:网络与连接、维护、开发者三组;各能力仍使用原来的完整子页。 */
+@Composable
+fun AdvancedSettingsContent(
+    onBack: () -> Unit,
+    proxy: String? = null,
+    proxyNote: String? = null,
+    onOpenProxy: () -> Unit = {},
+    webSearch: WebSearchConfig? = null,
+    onOpenWebSearch: () -> Unit = {},
+    sandbox: SandboxStatus? = null,
+    onOpenSandbox: () -> Unit = {},
+    pluginsCount: Int? = null,
+    onOpenPlugins: () -> Unit = {},
+    onOpenEnvVars: () -> Unit = {},
+    showRecovery: Boolean = true,
+    onOpenRecovery: () -> Unit = {},
+    computerAccess: Boolean? = null,
+    onOpenComputerAccess: () -> Unit = {},
+    mcpServersCount: Int? = null,
+    onOpenMcpServers: () -> Unit = {},
+    showRoot: Boolean = false,
+    rootCommands: Boolean = false,
+    onOpenRoot: () -> Unit = {},
+    showDeveloper: Boolean = false,
+    onOpenDeveloper: () -> Unit = {},
+    onQuit: () -> Unit = {},
+    scrollState: ScrollState = rememberScrollState(),
+) {
+    PageScaffold(stringResource(R.string.settings_advanced), onBack, scrollState = scrollState) {
+        val sandboxRow = sandbox?.takeIf { it !is SandboxStatus.Unsupported }
+        if (computerAccess != null || mcpServersCount != null || pluginsCount != null || showRoot) {
+            GroupLabel(stringResource(R.string.settings_extensions))
+            GroupCard {
+                var first = true
+                fun take(): Boolean = first.also { first = false }
+                computerAccess?.let { on ->
+                    ListRow(AiraIcons.Desktop, stringResource(R.string.mcp_title), first = take(), onClick = onOpenComputerAccess) {
+                        RowValue(stringResource(if (on) R.string.state_on else R.string.state_off)); RowChevron()
+                    }
+                }
+                mcpServersCount?.let { count ->
+                    ListRow(AiraIcons.Link, stringResource(R.string.mcp_servers_title), first = take(), onClick = onOpenMcpServers) {
+                        RowValue(stringResource(R.string.mcp_servers_count, count)); RowChevron()
+                    }
+                }
+                pluginsCount?.let {
+                    ListRow(AiraIcons.Spark, stringResource(R.string.plugins_title), first = take(), onClick = onOpenPlugins) {
+                        RowValue(trPlural(R.plurals.plugins_count, it)); RowChevron()
+                    }
+                }
+                if (showRoot) {
+                    ListRow(AiraIcons.Key, PhoneSetupCopy.ROOT_GROUP, PhoneSetupCopy.rootEntryLine(rootCommands), first = take(), onClick = onOpenRoot) {
+                        RowChevron()
+                    }
+                }
+            }
+        }
+        GroupCard {
+            ListRow(AiraIcons.Code, stringResource(R.string.env_vars_title), first = true, onClick = onOpenEnvVars) { RowChevron() }
+        }
+        if (proxy != null || webSearch != null) {
+            GroupLabel(stringResource(R.string.settings_network))
+            GroupCard {
+                var first = true
+                fun take(): Boolean = first.also { first = false }
+                proxy?.let {
+                    ListRow(AiraIcons.Link, NetProxyCopy.TITLE, proxyNote, first = take(), onClick = onOpenProxy) {
+                        RowValue(NetProxyCopy.value(it))
+                        RowChevron()
+                    }
+                }
+                webSearch?.let { config ->
+                    ListRow(AiraIcons.Globe, stringResource(R.string.web_search_title), first = take(), onClick = onOpenWebSearch) {
+                        RowValue(WebSearchCopy.value(config)); RowChevron()
+                    }
+                }
+            }
+        }
+        if (sandboxRow != null) {
+            GroupLabel(stringResource(R.string.settings_runtime))
+            GroupCard {
+                ListRow(AiraIcons.Terminal, stringResource(R.string.settings_sandbox), first = true, onClick = onOpenSandbox) {
+                    RowValue(sandboxValue(sandboxRow)); RowChevron()
+                }
+            }
+        }
+        if (showRecovery) {
+            GroupLabel(stringResource(R.string.settings_maintenance))
+            GroupCard {
+                ListRow(AiraIcons.Wrench, stringResource(R.string.settings_recovery), first = true, onClick = onOpenRecovery) { RowChevron() }
+            }
+        }
+        if (showDeveloper) {
+            GroupLabel(stringResource(R.string.settings_developer_group))
+            GroupCard {
+                ListRow(AiraIcons.Code, stringResource(R.string.settings_developer), first = true, onClick = onOpenDeveloper) { RowChevron() }
+            }
+        }
+
+        // 完全退出:和无障碍服务不同,它只是让 Aira 安静下来;下次打开 App 就回来
+        GroupCard {
+            ListRow(
+                AiraIcons.Power, stringResource(R.string.quit_title), note = stringResource(R.string.quit_row_sub),
+                first = true, titleColor = AiraTheme.colors.bad, onClick = onQuit,
+            ) { RowChevron() }
+        }
+    }
+}
+
+/** 「手机操作」一行尾部的状态胶囊:无障碍和内置助手都就绪才是「可用」。 */
+@Composable
+private fun PhoneOpsPill(status: SystemStatus) {
+    when {
+        status.sdkInt < Prerequisites.MIN_SDK -> StatusPill(stringResource(R.string.pill_unsupported), PillTone.Neutral)
+        status.builtinShell == BuiltinShellStatus.Running && status.accessibility == AccessibilityState.On -> StatusPill(stringResource(R.string.pill_available), PillTone.Ok)
+        else -> StatusPill(stringResource(R.string.pill_needs_attention), PillTone.Warn)
+    }
+}
+
+private fun sandboxValue(s: SandboxStatus): String = when (s) {
+    is SandboxStatus.Ready -> tr(R.string.sandbox_ready)
+    is SandboxStatus.Installing -> tr(R.string.sandbox_preparing)
+    is SandboxStatus.Broken -> tr(R.string.pill_needs_attention)
+    else -> tr(R.string.sandbox_not_prepared)
+}
+
+/**
+ * 页面顶上的总状态:一切正常是「一切就绪」;否则变成第一个问题的提示,带修复按钮。
+ * 焦点提醒改不了,只在手机操作页的「系统版本」一行里提示,不占这里。
+ */
+@Composable
+private fun StatusSummary(check: Prerequisites.Check, onProblem: (Problem) -> Unit) {
+    val problem = check.problems.firstOrNull { it != Problem.FocusMayLeak }
+    if (problem == null) {
+        StateCard(AiraIcons.Check, stringResource(R.string.all_ready), tone = TileTone.Ok, modifier = Modifier.testTag("settings-status"))
+    } else {
+        val copy = StatusCopy.banner(problem)
+        StateCard(
+            AiraIcons.Exclaim, copy.title, copy.detail,
+            if (problem in check.blockers) TileTone.Bad else TileTone.Warn,
+            Modifier.testTag("settings-status"),
+        ) {
+            AiraButton(copy.link, { onProblem(problem) }, kind = ButtonKind.Tonal, size = ButtonSize.Small)
+        }
+    }
+}

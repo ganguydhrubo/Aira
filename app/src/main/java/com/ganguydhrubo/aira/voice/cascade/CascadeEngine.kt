@@ -1,0 +1,140 @@
+package com.ganguydhrubo.aira.voice.cascade
+
+import android.content.Context
+import android.util.Log
+import com.ganguydhrubo.aira.core.agent.Turn
+import com.ganguydhrubo.aira.core.frontdesk.DeskBackground
+import com.ganguydhrubo.aira.core.frontdesk.LlmBrain
+import com.ganguydhrubo.aira.core.model.ChatModel
+import com.ganguydhrubo.aira.core.model.ToolSpec
+import com.ganguydhrubo.aira.core.model.TtsCapabilities
+import com.ganguydhrubo.aira.core.model.TtsRequest
+import com.ganguydhrubo.aira.core.model.usage.ConversationMeter
+import com.ganguydhrubo.aira.frontdesk.deskModel
+import com.ganguydhrubo.aira.settings.VoiceSettings
+import com.ganguydhrubo.aira.voice.Pcm16
+import com.ganguydhrubo.aira.voice.model.CallEngine
+import com.ganguydhrubo.aira.voice.model.SttSelection
+import com.ganguydhrubo.aira.voice.model.SttSelectionController
+import com.ganguydhrubo.aira.voice.model.VoiceErrorCategory
+import com.ganguydhrubo.aira.voice.model.VoiceModelEnvironment
+import com.ganguydhrubo.aira.voice.model.VoiceModelError
+import com.ganguydhrubo.aira.voice.model.VoiceModelRef
+import com.ganguydhrubo.aira.voice.model.VoiceSelections
+import com.ganguydhrubo.aira.voice.model.adapters.SttHooks
+import com.ganguydhrubo.aira.voice.ondevice.OnDeviceCatalog
+
+/** Which call is asking: the in-app voice call or an AI phone call (which may have its own models). */
+enum class CallUse { InApp, Phone }
+
+/** Why a standard call cannot start; each one has a settings page that fixes it. */
+enum class StandardBlocker { NoListenModel, ListenNotConfigured, NoSpeakModel, SpeakNotConfigured, NoThinkModel }
+
+/**
+ * Builds standard (listen → think → speak) calls from the voice selections. Device speech recognition cannot hear
+ * a call's audio, so listening always uses a service model.
+ */
+class CascadeEngine(private val context: Context, private val environment: VoiceModelEnvironment = VoiceModelEnvironment.get(context)) {
+    private val selections: VoiceSelections get() = environment.catalog.state.value.selections
+
+    fun engine(use: CallUse): CallEngine = when (use) {
+        CallUse.InApp -> selections.resolvedEngine
+        CallUse.Phone -> selections.resolvedCallEngine
+    }
+
+    /**
+     * 通话听写用哪个模型。手机自带识别听不到通话的声音;本机语音包第一版也不用(出字太慢,
+     * 比如 Whisper 5 秒语音要 4 秒左右),只有它们时得到 [StandardBlocker.NoListenModel]。
+     */
+    fun listenRef(use: CallUse): VoiceModelRef? {
+        val shared = (selections.stt as? SttSelection.Model)?.ref
+            ?.takeIf { it != SttSelectionController.SYSTEM_STT_REF && !OnDeviceCatalog.isOnDevice(it) }
+        return when (use) {
+            CallUse.InApp -> shared
+            CallUse.Phone -> when (val own = selections.callStt) {
+                null -> shared
+                // AI 电话自己选的是语音包:照实说没有可用的,不悄悄改用语音输入那一个
+                else -> own.takeUnless(OnDeviceCatalog::isOnDevice)
+            }
+        }
+    }
+
+    fun speakRef(use: CallUse): VoiceModelRef? = when (use) {
+        CallUse.InApp -> selections.tts
+        CallUse.Phone -> selections.callTts ?: selections.tts
+    }
+
+    /** The phone's own voice when calls have their own speak model, else the voice chosen for reading aloud. */
+    private fun voice(use: CallUse): String? =
+        selections.callTtsVoice.takeIf { use == CallUse.Phone && selections.callTts != null && it.isNotBlank() }
+            ?: VoiceSettings.get(context).state.value.voice.takeIf { it.isNotBlank() && !(use == CallUse.Phone && selections.callTts != null) }
+
+    /** 和前台用同一个思考模型(见 [deskModel])。 */
+    private fun thinkModel(): ChatModel? = deskModel(context)
+
+    /** The first thing missing, or null when a standard call can start. Reads no secrets. */
+    fun blocker(use: CallUse): StandardBlocker? {
+        val listen = listenRef(use) ?: return StandardBlocker.NoListenModel
+        if (!configured(listen)) return StandardBlocker.ListenNotConfigured
+        val speak = speakRef(use) ?: return StandardBlocker.NoSpeakModel
+        if (!configured(speak)) return StandardBlocker.SpeakNotConfigured
+        if (thinkModel() == null) return StandardBlocker.NoThinkModel
+        return null
+    }
+
+    private fun configured(ref: VoiceModelRef): Boolean = runCatching {
+        val snapshot = environment.catalog.state.value
+        val service = snapshot.services.firstOrNull { it.id == ref.serviceId } ?: return false
+        snapshot.models.any { it.serviceId == ref.serviceId && it.id == ref.modelId } &&
+            environment.accountResolver.credentialsConfigured(service)
+    }.getOrDefault(false)
+
+    /**
+     * Opens a standard call. [instructions] are the call's own rules (phone policy, or the in-app voice rules);
+     * [tools] are offered to the thinking model and surface as function calls. Throws [VoiceModelError] when
+     * something is missing. [prior] seeds the thinking model's history with the conversation so far (only when the
+     * brain has none yet); [background] is fetched before every model call (the front desk's task board and memory).
+     */
+    fun open(
+        use: CallUse,
+        instructions: String,
+        tools: List<ToolSpec>,
+        language: String?,
+        prior: List<Turn> = emptyList(),
+        background: DeskBackground? = null,
+        meter: ConversationMeter? = null,
+    ): CascadeVoiceSession {
+        blocker(use)?.let { throw VoiceModelError.IncompleteConfig("Standard call is not ready: $it") }
+        val listen = listenRef(use)!!
+        val speakRef = speakRef(use)!!
+        val think = thinkModel() ?: throw VoiceModelError.IncompleteConfig("No chat model")
+        // 选的就是朗读/语音输入那一个时带上它的备援链(见 backupsFor),AI 电话自己另选的不带
+        val tts = environment.tts.createSpeaker(context, speakRef, TtsCapabilities())
+        // 备援链里的本机语音包通话也不用
+        val listenBackups = environment.stt.backupsFor(listen).filterNot(OnDeviceCatalog::isOnDevice)
+        val voice = voice(use)
+        val speed = VoiceSettings.get(context).state.value.speed.takeIf { it > 0f && it != 1f }
+        // 口语说明只放一次:前台的口语提示词自己已经带着。
+        val system = if (instructions.startsWith(LlmBrain.SPOKEN_STYLE)) instructions else LlmBrain.SPOKEN_STYLE + "\n\n" + instructions
+        val brain = LlmBrain(think, system, tools, background = background, log = { Log.w(TAG, it) }, recordRequest = use == CallUse.InApp)
+        brain.seed(prior)
+        val s = selections
+        return CascadeVoiceSession(
+            brain = brain,
+            listen = { feed -> environment.stt.start(context, listen, language, SttHooks(recorder = feed), listenBackups) },
+            speak = { text ->
+                val response = tts.synthesize(TtsRequest(text, voice = voice, speed = speed, format = "wav"))
+                val wav = Pcm16.parseWav(response.bytes)
+                    ?: throw VoiceModelError.Protocol(VoiceErrorCategory.UNSUPPORTED, "Speech is not WAV audio")
+                CascadeVoiceSession.PcmAudioOut(Pcm16.toBytes(wav.samples), wav.sampleRate)
+            },
+            silenceMs = s.silenceMs.coerceIn(VoiceSelections.MIN_SILENCE_MS, VoiceSelections.MAX_SILENCE_MS),
+            bargeIn = s.bargeIn,
+            meter = meter,
+        )
+    }
+
+    private companion object {
+        const val TAG = "AiraCascade"
+    }
+}

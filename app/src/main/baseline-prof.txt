@@ -1,0 +1,10 @@
+# 预先编译清单:安装后系统按它把这些代码提前编译成机器码,第一次进各个页面就不用边解释边跑。
+# 界面库自带清单,这里只补 Aira 自己的代码:启动和各个页面(Application、界面、设置、对话存储)。
+HSPLcom/ganguydhrubo/aira/AiraApp;->**(**)**
+HSPLcom/ganguydhrubo/aira/ui/**;->**(**)**
+HSPLcom/ganguydhrubo/aira/settings/**;->**(**)**
+HSPLcom/ganguydhrubo/aira/chat/**;->**(**)**
+Lcom/ganguydhrubo/aira/AiraApp;
+Lcom/ganguydhrubo/aira/ui/**;
+Lcom/ganguydhrubo/aira/settings/**;
+Lcom/ganguydhrubo/aira/chat/**;

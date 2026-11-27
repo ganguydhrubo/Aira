@@ -1,0 +1,458 @@
+package com.ganguydhrubo.aira.calls.ui
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextDirection
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import com.ganguydhrubo.aira.ui.theme.AiraSize
+import com.ganguydhrubo.aira.ui.theme.AiraType
+import com.ganguydhrubo.aira.R
+import com.ganguydhrubo.aira.calls.CallActionResult
+import com.ganguydhrubo.aira.calls.CallConfig
+import com.ganguydhrubo.aira.calls.CallPolicy
+import com.ganguydhrubo.aira.calls.CallRuntimeState
+import com.ganguydhrubo.aira.calls.CallSim
+import com.ganguydhrubo.aira.calls.CallTaskBrief
+import com.ganguydhrubo.aira.ui.components.*
+import com.ganguydhrubo.aira.ui.theme.AiraIcons
+import com.ganguydhrubo.aira.ui.theme.AiraTheme
+import com.ganguydhrubo.aira.chat.ui.draft
+import com.ganguydhrubo.aira.memory.ui.Row
+
+/** A private draft in the workspace, never a saved call profile or background request. */
+@Stable
+internal class CallTaskDraft {
+    /** The number with its cursor/selection, so the dial pad edits where the user is pointing. */
+    var numberInput by mutableStateOf(TextFieldValue())
+    var number: String
+        get() = numberInput.text
+        set(value) { if (value != numberInput.text) numberInput = TextFieldValue(value, TextRange(value.length)) }
+    var goal by mutableStateOf("")
+    var questions by mutableStateOf("")
+    var context by mutableStateOf("")
+    var constraints by mutableStateOf("")
+    var simOverride by mutableStateOf<String?>(null)
+
+    /** Any typed character counts, whitespace included, so it can be cleared and undo never writes over it. */
+    val hasContent: Boolean
+        get() = number.isNotEmpty() || goal.isNotEmpty() || questions.isNotEmpty() ||
+            context.isNotEmpty() || constraints.isNotEmpty()
+
+    fun fill(number: String, brief: CallTaskBrief) {
+        this.number = number
+        goal = brief.goal
+        questions = brief.questions.joinToString("\n")
+        context = brief.context
+        constraints = brief.constraints
+        simOverride = null
+    }
+
+    fun snapshotFields(): List<String> = listOf(number, goal, questions, context, constraints, simOverride.orEmpty())
+
+    fun pressDialKey(key: Char) { numberInput = replaceNumberSelection(numberInput, key.toString()) }
+
+    fun pressDialBackspace() { numberInput = deleteNumberSelection(numberInput) }
+
+    /**
+     * Empties the written fields and hands back what was there, for an in-memory undo.
+     * The SIM chosen for this call is not part of the text and stays as it is.
+     */
+    fun clearText(): ClearedCallTaskText? {
+        if (!hasContent) return null
+        val cleared = ClearedCallTaskText(number, goal, questions, context, constraints)
+        number = ""; goal = ""; questions = ""; context = ""; constraints = ""
+        return cleared
+    }
+
+    /** Puts cleared text back, but never over anything the user has written since. */
+    fun undoClear(cleared: ClearedCallTaskText): Boolean {
+        if (hasContent) return false
+        number = cleared.number; goal = cleared.goal; questions = cleared.questions
+        context = cleared.context; constraints = cleared.constraints
+        return true
+    }
+
+    companion object {
+        val Saver = listSaver<CallTaskDraft, String>(
+            save = { draft -> listOf(draft.number, draft.goal, draft.questions, draft.context,
+                draft.constraints, draft.simOverride.orEmpty()) },
+            restore = { fields ->
+                fields.takeIf { it.size == 6 }?.let {
+                    CallTaskDraft().apply {
+                        number = it[0]
+                        goal = it[1]
+                        questions = it[2]
+                        context = it[3]
+                        constraints = it[4]
+                        simOverride = it[5].takeIf(String::isNotEmpty)
+                    }
+                }
+            },
+        )
+    }
+}
+
+/** Text taken out by "clear draft"; lives only in memory and is never written to saved state. */
+internal class ClearedCallTaskText(
+    val number: String, val goal: String, val questions: String, val context: String, val constraints: String,
+) {
+    override fun toString(): String = "ClearedCallTaskText(redacted)"
+}
+
+internal data class CallTaskSubmission(
+    val number: String, val simId: String?, val simLabel: String, val voiceName: String, val brief: CallTaskBrief,
+) {
+    override fun toString(): String = "CallTaskSubmission(redacted)"
+}
+
+@Composable
+internal fun CallTaskScreen(
+    draft: CallTaskDraft, config: CallConfig, state: CallRuntimeState, ready: Boolean,
+    editable: Boolean, canDial: Boolean, feedback: CallActionResult?,
+    onSetup: () -> Unit, onConfirm: (CallTaskSubmission) -> Unit,
+    onConfirmLocked: (CallTaskSubmission) -> Unit,
+    voiceSummary: String,
+    onVoiceProfiles: () -> Unit,
+    voiceBriefing: VoiceBriefingLauncher? = null,
+) {
+    var showSims by rememberSaveable { mutableStateOf(false) }
+    var review by remember { mutableStateOf<CallTaskSubmission?>(null) }
+    var dialPadOpen by rememberSaveable { mutableStateOf(false) }
+    // Undo is memory-only: a saved-state restore or process death never brings cleared text back.
+    var cleared by remember(draft) { mutableStateOf<ClearedCallTaskText?>(null) }
+    LaunchedEffect(draft, draft.hasContent) { if (draft.hasContent) cleared = null }
+    val number = CallPolicy.outgoingNumber(draft.number)
+    val goalLength = draft.goal.trim().length
+    val maxGoal = CallTaskBrief.MAX_GOAL_CHARS
+    val questions = remember(draft.questions) { draft.questions.lineSequence().map(String::trim).filter(String::isNotEmpty).toList() }
+    val badQuestions = questions.size > CallTaskBrief.MAX_QUESTIONS ||
+        questions.any { it.length > CallTaskBrief.MAX_QUESTION_CHARS }
+    val contextLength = draft.context.trim().length
+    val constraintsLength = draft.constraints.trim().length
+    val preferred = state.simOptions.firstOrNull { it.id == config.defaultOutgoingSimId }
+    val sim = CallPolicy.chooseOutgoingSim(state.simOptions, draft.simOverride, config.defaultOutgoingSimId)
+    val missingSim = stringResource(R.string.calls_task_pick_sim)
+    val brief = remember(draft.goal, questions, draft.context, draft.constraints) {
+        runCatching { CallTaskBrief(draft.goal, questions, draft.context, draft.constraints).validatedSnapshot() }.getOrNull()
+    }
+
+    feedback?.let { CallFeedback(it) }
+    val numberError = draft.number.isNotBlank() && number == null
+    GroupCard(Modifier.testTag("call-task-fields")) {
+        CallFieldRow(AiraIcons.Phone, draft.numberInput, { draft.numberInput = it }, stringResource(R.string.calls_number),
+            editable, "call-number", error = if (numberError) stringResource(R.string.calls_task_number_hint) else null) {
+            IconButton(onClick = { dialPadOpen = !dialPadOpen }, enabled = editable, modifier = Modifier.testTag("call-dial-keypad-toggle")) {
+                Icon(AiraIcons.Keyboard, stringResource(if (dialPadOpen) R.string.calls_hide_dialpad else R.string.calls_show_dialpad),
+                    tint = if (dialPadOpen) AiraTheme.colors.accent else AiraTheme.colors.ink3)
+            }
+        }
+        if (dialPadOpen) {
+            Hairline()
+            CallDialPad(editable, canDelete = draft.numberInput.selection.max > 0,
+                onKey = draft::pressDialKey, onBackspace = draft::pressDialBackspace)
+        }
+        Hairline()
+        CallFieldRow(AiraIcons.Doc, draft.goal, { draft.goal = it }, stringResource(R.string.calls_task_goal_example),
+            editable, "call-task-goal", minLines = 3, maxLines = 6,
+            error = if (goalLength > maxGoal) stringResource(R.string.calls_task_limit, goalLength, maxGoal) else null)
+    }
+
+    val pendingUndo = cleared?.takeIf { !draft.hasContent }
+    if (draft.hasContent || pendingUndo != null) {
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            if (pendingUndo != null) TextButton(onClick = { draft.undoClear(pendingUndo); cleared = null }, enabled = editable,
+                modifier = Modifier.testTag("call-task-undo-clear")) { Text(stringResource(R.string.undo)) }
+            else TextButton(onClick = { cleared = draft.clearText() }, enabled = editable,
+                modifier = Modifier.testTag("call-task-clear")) { Text(stringResource(R.string.calls_clear_draft)) }
+        }
+    }
+
+    // 三个可选项收在一行里;填过的草稿(例如从记录里复用)直接展开
+    val anyExtra = draft.questions.isNotBlank() || draft.context.isNotBlank() || draft.constraints.isNotBlank()
+    var extrasOpen by rememberSaveable { mutableStateOf(false) }
+    val showExtras = extrasOpen || anyExtra
+    GroupCard {
+        ListRow(if (showExtras) AiraIcons.ListChecks else AiraIcons.Plus,
+            stringResource(R.string.calls_task_more), first = true, titleColor = AiraTheme.colors.accent,
+            onClick = { if (!anyExtra) extrasOpen = !extrasOpen }.takeIf { !anyExtra },
+            modifier = Modifier.testTag("call-task-more"))
+        if (showExtras) {
+            Hairline()
+            CallFieldRow(AiraIcons.Doc, draft.questions, { draft.questions = it },
+                stringResource(R.string.calls_task_questions) + " · " + stringResource(R.string.calls_task_questions_hint),
+                editable, "call-task-questions", minLines = 2, maxLines = 5,
+                error = if (badQuestions) stringResource(R.string.calls_task_questions_limit,
+                    CallTaskBrief.MAX_QUESTIONS, CallTaskBrief.MAX_QUESTION_CHARS) else null)
+            Hairline()
+            CallFieldRow(AiraIcons.Message, draft.context, { draft.context = it }, stringResource(R.string.calls_task_context),
+                editable, "call-task-context", minLines = 1, maxLines = 5,
+                error = if (contextLength > CallTaskBrief.MAX_CONTEXT_CHARS)
+                    stringResource(R.string.calls_task_limit, contextLength, CallTaskBrief.MAX_CONTEXT_CHARS) else null)
+            Hairline()
+            CallFieldRow(AiraIcons.Key, draft.constraints, { draft.constraints = it }, stringResource(R.string.calls_task_constraints),
+                editable, "call-task-constraints", minLines = 1, maxLines = 5,
+                error = if (constraintsLength > CallTaskBrief.MAX_CONSTRAINT_CHARS)
+                    stringResource(R.string.calls_task_limit, constraintsLength, CallTaskBrief.MAX_CONSTRAINT_CHARS) else null)
+        }
+    }
+
+    GroupLabel(stringResource(R.string.calls_this_call))
+    GroupCard {
+        ListRow(AiraIcons.Mic, stringResource(R.string.calls_voice_title), first = true,
+            onClick = onVoiceProfiles.takeIf { editable }) { RowValue(callVoiceShort(voiceSummary)); RowChevron() }
+        val simValue = when {
+            sim != null -> sim.label
+            config.defaultOutgoingSimId != null && draft.simOverride == null -> stringResource(R.string.calls_sim_unavailable)
+            else -> stringResource(R.string.calls_not_set)
+        }
+        ListRow(AiraIcons.Phone, stringResource(R.string.calls_sim),
+            onClick = if (editable) ({ showSims = true }) else null) {
+            RowValue(simValue, if (sim == null) ValueTone.Warn else ValueTone.Plain); RowChevron()
+        }
+    }
+
+    if (!ready) AiraButton(stringResource(R.string.calls_device_and_permissions), onSetup,
+        Modifier.fillMaxWidth().padding(bottom = 10.dp), kind = ButtonKind.Tonal)
+    Row(Modifier.fillMaxWidth().padding(top = 8.dp), horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalAlignment = Alignment.CenterVertically) {
+        AiraButton(
+            stringResource(R.string.calls_task_review),
+            {
+                if (number != null && brief != null) {
+                    review = CallTaskSubmission(number, sim?.id, sim?.label ?: missingSim, voiceSummary, brief)
+                }
+            },
+            Modifier.weight(1f).testTag("call-task-review"),
+            enabled = editable && number != null && brief != null,
+        )
+        voiceBriefing?.let { voice ->
+            val voiceLabel = stringResource(R.string.calls_voice_briefing_start)
+            val canVoice = ready && canDial && editable && !voice.busy && number != null && sim != null
+            Box(
+                Modifier.size(AiraSize.Button).background(AiraTheme.colors.fill, CircleShape).clip(CircleShape)
+                    .clickable(enabled = canVoice, onClickLabel = voiceLabel, role = Role.Button) {
+                        if (number != null && sim != null) voice.start(number, sim.id, sim.label)
+                    }
+                    .alpha(if (canVoice) 1f else 0.4f)
+                    .semantics { contentDescription = voiceLabel }
+                    .testTag("call-task-voice"),
+                contentAlignment = Alignment.Center,
+            ) { Icon(AiraIcons.Mic, null, Modifier.size(22.dp), tint = AiraTheme.colors.ink) }
+        }
+    }
+    Spacer(Modifier.height(4.dp))
+    FooterNote(stringResource(R.string.calls_task_one_off))
+
+    if (showSims) CallTaskSimDialog(
+        state.simOptions, config.defaultOutgoingSimId, draft.simOverride,
+        onChoose = { draft.simOverride = it; showSims = false }, onDismiss = { showSims = false },
+    )
+    review?.let { submission ->
+        val allowed = ready && canDial && state.simOptions.any { it.id == submission.simId }
+        CallTaskReviewDialog(
+            submission, allowed,
+            onDismiss = { review = null },
+            onDial = { locked ->
+                if (allowed) {
+                    review = null
+                    if (locked) onConfirmLocked(submission) else onConfirm(submission)
+                }
+            },
+        )
+    }
+}
+
+/**
+ * 分组里的输入行:左边图标块,右边无边框的输入框(空时显示 [placeholder]),出错时下面一行红字。
+ * 和同组的 [ListRow] 共用一条左边线。
+ */
+@Composable
+private fun CallFieldRow(
+    icon: ImageVector, value: String, onValue: (String) -> Unit, placeholder: String,
+    enabled: Boolean, tag: String, minLines: Int = 1, maxLines: Int = 1, error: String? = null,
+) {
+    val single = maxLines == 1
+    CallFieldRowFrame(icon, value.isEmpty(), placeholder, single, error) {
+        BasicTextField(
+            value, onValue, Modifier.fillMaxWidth().testTag(tag), enabled = enabled,
+            singleLine = single, minLines = minLines, maxLines = maxLines,
+            textStyle = AiraType.Body.copy(color = AiraTheme.colors.ink, textDirection = TextDirection.Content),
+            cursorBrush = SolidColor(AiraTheme.colors.accent),
+        )
+    }
+}
+
+/** The number row: keeps the cursor/selection (the dial pad edits there), reads left to right, and has a [trailing] action. */
+@Composable
+private fun CallFieldRow(
+    icon: ImageVector, value: TextFieldValue, onValue: (TextFieldValue) -> Unit, placeholder: String,
+    enabled: Boolean, tag: String, error: String? = null, trailing: @Composable () -> Unit,
+) {
+    CallFieldRowFrame(icon, value.text.isEmpty(), placeholder, single = true, error, trailing) {
+        BasicTextField(
+            value, onValue, Modifier.fillMaxWidth().testTag(tag), enabled = enabled, singleLine = true,
+            textStyle = AiraType.Body.copy(color = AiraTheme.colors.ink, textDirection = TextDirection.Ltr),
+            cursorBrush = SolidColor(AiraTheme.colors.accent),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+        )
+    }
+}
+
+@Composable
+private fun CallFieldRowFrame(
+    icon: ImageVector, empty: Boolean, placeholder: String, single: Boolean, error: String?,
+    trailing: (@Composable () -> Unit)? = null, field: @Composable () -> Unit,
+) {
+    val c = AiraTheme.colors
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = AiraSize.RowMin)
+            .padding(start = 16.dp, end = if (trailing != null) 4.dp else 16.dp, top = if (single) 0.dp else 12.dp,
+                bottom = if (single) 0.dp else 12.dp),
+        verticalAlignment = if (single) Alignment.CenterVertically else Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        IconTile(icon)
+        Column(Modifier.weight(1f).padding(top = if (single) 0.dp else 5.dp)) {
+            Box {
+                if (empty) Text(placeholder, style = AiraType.Body, color = c.ink3)
+                field()
+            }
+            error?.let { Text(it, Modifier.padding(top = 4.dp), style = AiraType.Caption, color = c.bad) }
+        }
+        trailing?.invoke()
+    }
+}
+
+/** Only edits the draft number at its cursor; dialling still goes through the review dialog. */
+@Composable
+private fun CallDialPad(enabled: Boolean, canDelete: Boolean, onKey: (Char) -> Unit, onBackspace: () -> Unit) {
+    CallDialPadGrid(CallDialLayouts.number, Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp)
+        .testTag("call-dial-pad"), spacing = 6.dp) { key ->
+        when (key) {
+            CallDialKey.Backspace -> CallDialKeyButton(onBackspace, enabled && canDelete, "call-dial-backspace",
+                minHeight = 48.dp, verticalPadding = 2.dp) {
+                Text(stringResource(R.string.calls_delete_digit), style = AiraType.Body)
+            }
+            is CallDialKey.Symbol -> CallDialKeyButton({ onKey(key.char) }, enabled, "call-dial-key-${key.char}",
+                minHeight = 48.dp, verticalPadding = 2.dp) {
+                Text(key.char.toString(), style = AiraType.Title)
+            }
+        }
+    }
+}
+
+@Composable
+private fun CallTaskSimDialog(
+    options: List<CallSim>, preferred: String?, selectedOverride: String?, onChoose: (String?) -> Unit, onDismiss: () -> Unit,
+) {
+    val remembered = options.firstOrNull { it.id == preferred }
+    val platformDefault = options.singleOrNull { it.isDefault }
+    AlertDialog(
+        onDismissRequest = onDismiss, title = { Text(stringResource(R.string.calls_sim)) },
+        text = {
+            Column(Modifier.heightIn(max = 360.dp).verticalScroll(rememberScrollState())) {
+                if (remembered != null) RadioRow(
+                    stringResource(R.string.calls_sim_preferred, remembered.label), selectedOverride == null,
+                    onClick = { onChoose(null) }, first = true,
+                )
+                if (platformDefault != null && options.size > 1) RadioRow(
+                    stringResource(R.string.calls_default), selectedOverride == "default",
+                    onClick = { onChoose("default") }, first = remembered == null, subtitle = platformDefault.label,
+                )
+                options.forEachIndexed { index, option ->
+                    RadioRow(option.label, selectedOverride == option.id, onClick = { onChoose(option.id) },
+                        first = index == 0 && remembered == null && platformDefault == null)
+                }
+                if (options.isEmpty()) Text(stringResource(R.string.calls_task_pick_sim))
+            }
+        },
+        confirmButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.calls_cancel)) } },
+    )
+}
+
+@Composable
+private fun CallTaskReviewDialog(submission: CallTaskSubmission, canDial: Boolean, onDismiss: () -> Unit, onDial: (Boolean) -> Unit) {
+    var locked by remember { mutableStateOf(false) }
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.calls_task_review)) },
+        modifier = Modifier.testTag("call-task-review-dialog"),
+        text = {
+            Column(Modifier.heightIn(max = 400.dp).verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                TaskReviewField(stringResource(R.string.calls_number), "\u2066${submission.number}\u2069")
+                TaskReviewField(stringResource(R.string.calls_sim), submission.simLabel)
+                TaskReviewField(stringResource(R.string.calls_voice_title), submission.voiceName)
+                TaskReviewField(stringResource(R.string.calls_task_goal), submission.brief.goal)
+                if (submission.brief.questions.isNotEmpty()) {
+                    TaskReviewField(stringResource(R.string.calls_task_questions),
+                        submission.brief.questions.mapIndexed { index, question -> "${index + 1}. $question" }.joinToString("\n"))
+                }
+                if (submission.brief.context.isNotBlank()) TaskReviewField(stringResource(R.string.calls_task_context), submission.brief.context)
+                if (submission.brief.constraints.isNotBlank()) TaskReviewField(stringResource(R.string.calls_task_constraints), submission.brief.constraints)
+                if (canDial) {
+                    for (mode in listOf(false, true)) {
+                        Row(Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                            .testTag(if (mode) "call-mode-lock" else "call-mode-now")
+                            .selectable(selected = locked == mode, role = Role.RadioButton) { locked = mode },
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            RadioButton(selected = locked == mode, onClick = null)
+                            Text(stringResource(if (mode) R.string.calls_task_dial_locked else R.string.calls_task_dial_now))
+                        }
+                    }
+                }
+                Text(stringResource(when {
+                    !canDial -> R.string.calls_task_review_blocked
+                    locked -> R.string.calls_task_dial_locked_note
+                    else -> R.string.calls_task_confirm_note
+                }),
+                    style = MaterialTheme.typography.bodySmall, color = AiraTheme.colors.ink3)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onDial(locked) }, enabled = canDial,
+                modifier = Modifier.testTag(if (locked) "call-dial-locked" else "call-dial")) {
+                Text(stringResource(if (locked) R.string.calls_task_dial_locked_confirm else R.string.calls_task_confirm_dial))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss, modifier = Modifier.testTag("call-task-review-cancel")) {
+                Text(stringResource(R.string.calls_task_back_to_edit))
+            }
+        },
+    )
+}
+
+@Composable
+private fun TaskReviewField(label: String, value: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(label, style = MaterialTheme.typography.labelMedium, color = AiraTheme.colors.ink3)
+        Text(value, style = MaterialTheme.typography.bodyMedium)
+    }
+}

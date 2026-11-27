@@ -1,0 +1,246 @@
+package com.ganguydhrubo.aira.voice.model
+
+import com.ganguydhrubo.aira.settings.Provider
+import com.ganguydhrubo.aira.settings.ProviderConfig
+import com.ganguydhrubo.aira.voice.SpeechChoice
+import com.ganguydhrubo.aira.voice.model.adapters.AndroidSystemSttAdapter
+import com.ganguydhrubo.aira.voice.model.adapters.BailianSttAdapter
+import com.ganguydhrubo.aira.voice.model.adapters.DoubaoSttAdapter
+import com.ganguydhrubo.aira.voice.model.adapters.FunAsrSttAdapter
+import com.ganguydhrubo.aira.voice.model.adapters.SttHooks
+import com.ganguydhrubo.aira.voice.model.adapters.ProviderSttAdapter
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertSame
+import org.junit.Test
+
+internal class MemoryVoiceCatalogBackend(initial: String? = null) : VoiceCatalogBackend {
+    var value: String? = initial
+    var writes: Int = 0
+        private set
+    var clears: Int = 0
+        private set
+
+    override fun read(): String? = value
+
+    override fun write(value: String): Boolean {
+        writes++
+        this.value = value
+        return true
+    }
+
+    override fun clear() {
+        clears++
+        value = null
+    }
+}
+
+internal class FakeVoiceProviderAccountSource(
+    vararg values: Provider,
+) : VoiceProviderAccountSource {
+    private val providers = values.associateBy { it.id }
+    var resolveCount: Int = 0
+        private set
+
+    override fun provider(id: String): Provider? {
+        resolveCount++
+        return providers[id]
+    }
+
+    override fun activeApiKey(id: String): String? = "provider-test-key"
+    override fun hasKey(id: String): Boolean = true
+    override fun keyRevision(id: String): Long = 0L
+    override fun headers(provider: Provider): Map<String, String> = mapOf("User-Agent" to "Aira/test")
+}
+
+internal class FakeVoiceOwnedAccountSource : VoiceOwnedAccountSource {
+    override fun read(secretId: String): VoiceCredentials = VoiceCredentials(apiKey = "owned-test-key")
+    override fun credentialsConfigured(secretId: String): Boolean = true
+    override fun configurationToken(secretId: String): String = "test-ciphertext-revision"
+}
+
+internal fun voiceTestEnvironment(
+    catalog: VoiceCatalogStore,
+    providers: VoiceProviderAccountSource = FakeVoiceProviderAccountSource(),
+    owned: VoiceOwnedAccountSource = FakeVoiceOwnedAccountSource(),
+    registry: VoiceAdapterRegistry = VoiceAdapterRegistry(),
+) = VoiceModelEnvironment(
+    catalog = catalog,
+    accountResolver = VoiceAccountResolver(providers, owned),
+    registry = registry,
+    credentials = owned,
+)
+
+internal fun voiceTestProvider(
+    id: String = "p1",
+    baseUrl: String = "https://provider.example/v1",
+    kind: ProviderConfig.Kind = ProviderConfig.Kind.OpenAiCompat,
+) = Provider(id = id, name = "Provider", kind = kind, baseUrl = baseUrl)
+
+class SttSelectionControllerTest {
+    @Test fun `auto off and system selections use modes and the built in model without resolving accounts`() {
+        val backend = MemoryVoiceCatalogBackend()
+        val catalog = VoiceCatalogStore(backend, migrated = true)
+        val providers = FakeVoiceProviderAccountSource()
+        val controller = voiceTestEnvironment(catalog, providers).stt
+        val selectionWrites = backend.writes
+        assertEquals(SttSelectionController.SYSTEM_STT_SERVICE, catalog.state.value.services.single { it.id == "android-system" })
+        assertEquals(SttSelectionController.SYSTEM_STT_MODEL, catalog.state.value.models.single { it.id == "system-stt" })
+
+        controller.select(SpeechChoice.Auto)
+        assertEquals(SttSelection.Auto, controller.current())
+        controller.select(SpeechChoice.Off)
+        assertEquals(SttSelection.Off, controller.current())
+        controller.select(SpeechChoice.System)
+
+        val systemRef = SttSelectionController.SYSTEM_STT_REF
+        assertEquals(SttSelection.Model(systemRef), controller.current())
+        val resolved = controller.requireModel(systemRef)
+        assertEquals("android-system", resolved.service.id)
+        assertEquals("system-stt", resolved.model.id)
+        assertEquals(SttProtocol.AndroidSystem, resolved.model.stt?.protocol)
+        assertSame(ResolvedAccount.None, resolved.account)
+        assertEquals(0, providers.resolveCount)
+        assertEquals(selectionWrites + 3, backend.writes)
+    }
+
+    @Test fun `selecting a model only persists its explicit ref`() {
+        val provider = voiceTestProvider()
+        val source = FakeVoiceProviderAccountSource(provider)
+        val catalog = VoiceCatalogStore(MemoryVoiceCatalogBackend(), migrated = true)
+        catalog.upsertService(VoiceService("provider:p1", "Provider", VoiceAccount.ExistingProvider("p1")))
+        catalog.upsertModel(VoiceModel("provider:p1", "whisper-1", "Whisper", stt = SttBinding(SttProtocol.AudioTranscriptions)))
+        val ref = VoiceModelRef("provider:p1", "whisper-1", VoiceCapability.STT)
+        val controller = voiceTestEnvironment(catalog, source).stt
+
+        controller.select(ref)
+
+        assertEquals(SttSelection.Model(ref), controller.current())
+        assertEquals(0, source.resolveCount)
+    }
+
+    @Test fun `only batch protocols expose a file transcription model`() {
+        SttProtocol.entries.forEach { protocol ->
+            val catalog = VoiceCatalogStore(MemoryVoiceCatalogBackend(), migrated = true)
+            val provider = voiceTestProvider(kind = if (protocol == SttProtocol.GeminiInline) ProviderConfig.Kind.Gemini else ProviderConfig.Kind.OpenAiCompat)
+            val account = when (protocol) {
+                SttProtocol.AndroidSystem, SttProtocol.FunAsrStreaming -> VoiceAccount.None
+                SttProtocol.DoubaoStreaming, SttProtocol.BailianStreaming -> VoiceAccount.VoiceOwned("owned-$protocol")
+                else -> VoiceAccount.ExistingProvider("p1")
+            }
+            val serviceId = if (protocol == SttProtocol.AndroidSystem) "android-system" else "service-$protocol"
+            val modelId = if (protocol == SttProtocol.AndroidSystem) "system-stt" else "model-$protocol"
+            if (protocol != SttProtocol.AndroidSystem) {
+                catalog.upsertService(VoiceService(serviceId, serviceId, account))
+                val binding = when (protocol) {
+                    SttProtocol.FunAsrStreaming -> SttBinding(protocol, endpoint = "ws://localhost:10095")
+                    SttProtocol.BailianStreaming -> SttBinding(protocol, region = "Beijing")
+                    else -> SttBinding(protocol)
+                }
+                catalog.upsertModel(VoiceModel(serviceId, modelId, modelId, stt = binding))
+            }
+            val ref = VoiceModelRef(serviceId, modelId, VoiceCapability.STT)
+            val controller = voiceTestEnvironment(catalog, FakeVoiceProviderAccountSource(provider)).stt
+            controller.select(ref)
+
+            val batch = controller.batchModel()
+            if (protocol in setOf(SttProtocol.AudioTranscriptions, SttProtocol.ChatInputAudio, SttProtocol.GeminiInline)) {
+                assertEquals(protocol.name, ref.modelId, batch?.model?.id)
+            } else {
+                assertNull(protocol.name, batch)
+            }
+        }
+    }
+
+    @Test fun `environment shares its catalog and registry with the STT controller`() {
+        val registry = VoiceAdapterRegistry(
+            sttAdapters = listOf(
+                AndroidSystemSttAdapter(),
+                ProviderSttAdapter(SttProtocol.AudioTranscriptions),
+                ProviderSttAdapter(SttProtocol.ChatInputAudio),
+                ProviderSttAdapter(SttProtocol.GeminiInline),
+                DoubaoSttAdapter(),
+                FunAsrSttAdapter(),
+                BailianSttAdapter(),
+            ),
+        )
+        val catalog = VoiceCatalogStore(MemoryVoiceCatalogBackend(), migrated = true)
+        val environment = voiceTestEnvironment(catalog, registry = registry)
+
+        assertSame(registry, environment.registry)
+        assertSame(catalog, environment.catalog)
+        assertSame(catalog, environment.stt.catalog)
+    }
+
+    /** 记下适配器收到的语言,不真的开录音。 */
+    private fun spokenLanguage(model: VoiceModel, callerLanguage: String?): String {
+        var seen = "<not started>"
+        val session = object : com.ganguydhrubo.aira.voice.SpeechSession {
+            override val events = kotlinx.coroutines.flow.emptyFlow<com.ganguydhrubo.aira.voice.SpeechEvent>()
+            override val live = true
+            override fun release() {}
+            override fun cancel() {}
+        }
+        val registry = VoiceAdapterRegistry(
+            sttAdapters = listOf(
+                FunAsrSttAdapter { _, _, tag, _ -> seen = tag; session },
+                BailianSttAdapter { _, _, tag, _ -> seen = tag; session },
+                ProviderSttAdapter(SttProtocol.AudioTranscriptions) { _, _, tag, _ -> seen = tag; session },
+            ),
+        )
+        val catalog = VoiceCatalogStore(MemoryVoiceCatalogBackend(), migrated = true)
+        catalog.upsertService(VoiceService(model.serviceId, "S", VoiceAccount.ExistingProvider("p1")))
+        catalog.upsertModel(model)
+        val controller = voiceTestEnvironment(catalog, FakeVoiceProviderAccountSource(voiceTestProvider()), registry = registry).stt
+        controller.start(android.content.ContextWrapper(null), VoiceModelRef(model.serviceId, model.id, VoiceCapability.STT), callerLanguage, SttHooks())
+        return seen
+    }
+
+    @Test fun `self-hosted streaming recognition speaks the language set on the service, and none when it is left on automatic`() {
+        fun funAsr(language: String) = VoiceModel("s", "m", "M", stt = SttBinding(SttProtocol.FunAsrStreaming, endpoint = "ws://h:1", language = language))
+        // 没设:不指定语言,不跟调用方(界面语言)
+        assertEquals("", spokenLanguage(funAsr(""), "zh-CN"))
+        assertEquals("", spokenLanguage(funAsr(""), null))
+        // 设了:用设的,同样不看调用方
+        assertEquals("ja", spokenLanguage(funAsr("ja"), "zh-CN"))
+        // 传下去的空串到了协议那里就是「自动」,不发语言
+        assertEquals(com.ganguydhrubo.aira.voice.AsrLanguage.Auto, com.ganguydhrubo.aira.voice.model.adapters.asrLanguage(""))
+        assertEquals(com.ganguydhrubo.aira.voice.AsrLanguage.Japanese, com.ganguydhrubo.aira.voice.model.adapters.asrLanguage("ja"))
+        assertEquals(com.ganguydhrubo.aira.voice.AsrLanguage.Cantonese, com.ganguydhrubo.aira.voice.model.adapters.asrLanguage("yue"))
+    }
+
+    @Test fun `the other streaming recognition keeps a set language and otherwise follows the caller as before`() {
+        fun bailian(language: String) = VoiceModel("s", "m", "M", stt = SttBinding(SttProtocol.BailianStreaming, region = "Beijing", language = language))
+        assertEquals("zh-CN", spokenLanguage(bailian(""), "zh-CN"))
+        assertEquals("en", spokenLanguage(bailian("en"), "zh-CN"))
+    }
+
+    @Test fun `recognition that has no language of its own still uses the caller's`() {
+        val upload = VoiceModel("s", "m", "M", stt = SttBinding(SttProtocol.AudioTranscriptions))
+        assertEquals("en-US", spokenLanguage(upload, "en-US"))
+    }
+
+    @Test fun chainSkipsOuterTimeoutForOnDevice() = kotlinx.coroutines.runBlocking {
+        // 本机识别自己按录音长短限时,链上不再套整段上传那 30 秒(否则慢机器会被当成「连不上」)
+        val slow = object : com.ganguydhrubo.aira.voice.model.adapters.SttAdapter {
+            override val protocol = SttProtocol.OnDevice
+            override fun spec(model: ResolvedVoiceModel) = com.ganguydhrubo.aira.voice.SpeechEngineSpec.OnDevice(model.model.id)
+            override fun start(context: android.content.Context, model: ResolvedVoiceModel, language: String?, hooks: SttHooks) =
+                throw UnsupportedOperationException()
+            override fun utterance(context: android.content.Context, model: ResolvedVoiceModel, language: String?):
+                com.ganguydhrubo.aira.voice.model.adapters.UtteranceTranscribe = { _ ->
+                kotlinx.coroutines.delay(400)
+                "本机"
+            }
+        }
+        val catalog = VoiceCatalogStore(MemoryVoiceCatalogBackend(), migrated = true)
+        catalog.installVoicePack(com.ganguydhrubo.aira.voice.model.adapters.testPackEntry("pack"))
+        val env = voiceTestEnvironment(catalog, registry = VoiceAdapterRegistry(sttAdapters = listOf(slow)))
+        val ref = com.ganguydhrubo.aira.voice.ondevice.OnDeviceCatalog.ref("pack")
+
+        val text = env.stt.transcribeChain(android.content.ContextWrapper(null), listOf(ref), "zh-CN", attemptTimeoutMs = 50)(
+            com.ganguydhrubo.aira.voice.Wav.silence(80),
+        )
+        assertEquals("本机", text)
+    }
+}
