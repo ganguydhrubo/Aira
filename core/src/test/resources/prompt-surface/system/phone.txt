@@ -419,7 +419,7 @@ handle_obstacle #1a00c1e71b3c
 phone_observe #7f08ffaddb70
 phone_list_elements #882ee52750e8
 phone_tap #3ac6fe34c137
-phone_scroll #967be325c8da
+phone_scroll #814087c961f4
 phone_swipe #1414183e8db3
 phone_type_text #c862584c1212
 phone_clear_text #642fb201da31
@@ -437,12 +437,12 @@ phone_gesture #21e14b6b424d
 phone_set_wheel #2f720c0e7f10
 phone_run #c3fd7552e338
 do_each #c3006aab613b
-phone_system_command #2192dc344623
+phone_system_command #59d13609c3d6
 phone_list_apps #d28d98424a02
 phone_launch_app #481c3f3a74a2
 phone_app_after_task #1b6ad7e372ef
 phone_share_text #a68241065b81
-phone_set_alarm #5150e4035482
+phone_set_alarm #b67a99d623ec
 phone_set_timer #af4b216664f5
 phone_show_alarms #e751fa4ec7c8
 phone_add_calendar_event #b888e527321e
