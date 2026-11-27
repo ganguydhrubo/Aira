@@ -5,9 +5,9 @@ package com.ganguydhrubo.aira.cap.sandbox
 /** 随安装包自带的运行环境(assets/runtime/rootfs.tar.xz)。 */
 object BundledRuntime {
     const val ASSET = "runtime/rootfs.tar.xz"
-    const val VERSION = "3.22.7-87756a3797cb"
-    const val SHA256 = "87756a3797cb57b7c584cd6655650f88edf689df10a969648522e955d7043adf"
-    const val BYTES = 59144348L
+    const val VERSION = "3.22.7-c521b2dae647"
+    const val SHA256 = "c521b2dae647f6758e6215a7b3d1c07cc08ec2891967d57877f122c967add42c"
+    const val BYTES = 59117808L
     /** 解出的普通文件总字节数与条目数:解包时的上限按它们定,多一点余量。 */
     const val FILE_BYTES = 236298284L
     const val ENTRIES = 8709
