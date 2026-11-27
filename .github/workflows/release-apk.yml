@@ -40,4 +40,4 @@ jobs:
           sha256sum Aira.apk > SHA256SUMS.txt
           gh release create "$TAG" Aira.apk SHA256SUMS.txt \
             --title "Aira $TAG" \
-            --notes "Download **Aira.apk** below and open it on your Android phone (Android 10 or later) to install."
+            --notes-file .github/release-notes.md
