@@ -6,13 +6,13 @@ import com.ganguydhrubo.aira.voice.model.adapters.installTestPack
 import com.ganguydhrubo.aira.voice.model.adapters.testOnDeviceAdapter
 import com.ganguydhrubo.aira.voice.model.adapters.testPackEntry
 import com.ganguydhrubo.aira.voice.ondevice.OnDeviceCatalog
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 class VoiceCatalogStoreTest {
@@ -214,7 +214,7 @@ class VoiceCatalogStoreTest {
 
         assertTrue(store.setFallback(VoiceCapability.STT, 0, b))
         assertTrue(store.setFallback(VoiceCapability.STT, 1, c))
-        assertFalse("链头不能当自己", store.setFallback(VoiceCapability.STT, 2, sttRef))
+        assertFalse("链头不能当自己的备援", store.setFallback(VoiceCapability.STT, 2, sttRef))
         assertFalse("流式识别进不了链", store.setFallback(VoiceCapability.STT, 2, VoiceModelRef("svc", "live", VoiceCapability.STT)))
         assertFalse("能力不对", store.setFallback(VoiceCapability.STT, 2, ttsRef))
         assertTrue(store.moveFallback(VoiceCapability.STT, 1, 0))
@@ -321,7 +321,7 @@ class VoiceCatalogStoreTest {
 
         store.removeVoicePack("sense")
 
-        assertEquals("删掉选中的语音包Back to “自动」,不是「关闭」", SttSelection.Auto, store.state.value.selections.stt)
+        assertEquals("删掉选中的语音包回到「自动」,不是「关闭」", SttSelection.Auto, store.state.value.selections.stt)
         assertTrue(store.state.value.models.isEmpty())
     }
 

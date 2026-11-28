@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.task
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import com.ganguydhrubo.aira.settings.KeyCipher
 import org.junit.Test
 

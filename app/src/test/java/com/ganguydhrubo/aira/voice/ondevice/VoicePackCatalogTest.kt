@@ -1,11 +1,11 @@
 package com.ganguydhrubo.aira.voice.ondevice
 
 import com.ganguydhrubo.aira.i18n.AppLanguage
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 import java.io.File
 
@@ -55,8 +55,9 @@ class VoicePackCatalogTest {
             assertEquals(p.files.sumOf { it.size }, p.totalBytes)
         }
         val tags = AppLanguage.entries.mapNotNull { it.tag }.toSet()
-        assertEquals(13, tags.size)
-        assertEquals(tags, c.packs.flatMap { it.recommendedFor }.toSet())
+        assertEquals(11, tags.size)
+        // every UI language has a recommended pack; the catalog still lists zh-Hans/zh-Hant (Chinese speech models)
+        assertEquals(tags, c.packs.flatMap { it.recommendedFor }.toSet() - setOf("zh-Hans", "zh-Hant"))
     }
 
     @Test

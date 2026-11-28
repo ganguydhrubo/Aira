@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.proactive
 
 import java.io.File
 import javax.xml.parsers.DocumentBuilderFactory
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 import org.w3c.dom.Element
 

@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.chat.ui
 
 import com.ganguydhrubo.aira.chat.ConversationCall
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 class ChatCallMarksTest {

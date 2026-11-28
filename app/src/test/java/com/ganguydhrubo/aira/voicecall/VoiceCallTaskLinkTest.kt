@@ -2,14 +2,14 @@ package com.ganguydhrubo.aira.voicecall
 
 import com.ganguydhrubo.aira.core.agent.Turn as ChatTurn
 import com.ganguydhrubo.aira.core.frontdesk.DeskTaskPhase
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class VoiceCallTaskLinkTest {
     private val saved = listOf(
         ChatTurn("开设置", "开好了", "succeeded", runId = "run-1"),
-        ChatTurn("再看下蓝牙", "Viewed ", "succeeded", runId = "run-2"),
+        ChatTurn("再看下蓝牙", "看了", "succeeded", runId = "run-2"),
         ChatTurn("谢谢", "", "desk"),
     )
 

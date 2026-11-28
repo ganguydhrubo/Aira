@@ -13,9 +13,9 @@ import com.ganguydhrubo.aira.chat.ui.Exchange
 import com.ganguydhrubo.aira.chat.ui.ExchangeStatus
 import com.ganguydhrubo.aira.chat.ui.StepRow
 import com.ganguydhrubo.aira.chat.ui.StepState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class CapsuleCardModelTest {
@@ -71,7 +71,7 @@ class CapsuleCardModelTest {
         val waits = listOf(
             running to CapsuleKind.Running,
             TaskState.Held(GateReason("q")) to CapsuleKind.Held,
-            TaskState.WaitingTakeover("login", "Sign-in") to CapsuleKind.NeedTakeover,
+            TaskState.WaitingTakeover("login", "登录") to CapsuleKind.NeedTakeover,
             TaskState.WaitingInput("几点？") to CapsuleKind.NeedAnswer,
             TaskState.WaitingConfirmation(ConfirmationRequest(IrrevAction.send, "张三", "明天见", null, "com.chat")) to CapsuleKind.NeedConfirm,
         )
@@ -104,27 +104,27 @@ class CapsuleCardModelTest {
         assertEquals("a", CapsuleCards.stopKey(CapsuleCards.of(listOf(card("a", running, onScreen = false)), null)!!))
         assertEquals("a", CapsuleCards.stopKey(CapsuleCards.of(listOf(card("a", TaskState.WaitingInput("几点？"), CapsuleKind.NeedAnswer, onScreen = false)), null)!!))
         assertNull(CapsuleCards.stopKey(CapsuleCards.of(listOf(card("a", TaskState.Succeeded("好了"), CapsuleKind.Done)), null)!!))
-        assertNull(CapsuleCards.stopKey(CapsuleCards.of(listOf(card("a", TaskState.WaitingTakeover("login", "Sign-in"), CapsuleKind.NeedTakeover)), null)!!))
+        assertNull(CapsuleCards.stopKey(CapsuleCards.of(listOf(card("a", TaskState.WaitingTakeover("login", "登录"), CapsuleKind.NeedTakeover)), null)!!))
         assertNull(CapsuleCards.stopKey(CardView.Chat("c1")))
     }
 
     // ---------- 每种状态放什么 ----------
 
     @Test fun workingListsAllStepsEndingWithTheCurrentLine() {
-        val ex = Exchange("g", listOf("Open 购物", "点框", "输入牙膏", "看结果").map { StepRow(1, it, "", StepState.Ok) }, ExchangeStatus.Working, live = true)
-        assertEquals(listOf("Open 购物", "点框", "输入牙膏", "看结果", "挑销量高的"), CapsuleCards.steps(ex, "挑销量高的"))
+        val ex = Exchange("g", listOf("打开购物", "点搜索框", "输入牙膏", "看结果").map { StepRow(1, it, "", StepState.Ok) }, ExchangeStatus.Working, live = true)
+        assertEquals(listOf("打开购物", "点搜索框", "输入牙膏", "看结果", "挑销量高的"), CapsuleCards.steps(ex, "挑销量高的"))
         // 此刻那句就是最后一步:不重复
-        assertEquals(listOf("Open 购物", "点框", "输入牙膏", "看结果"), CapsuleCards.steps(ex, "看结果"))
-        assertEquals(listOf("Thinking of the next step"), CapsuleCards.steps(null, "Thinking of the next step"))
-        assertEquals(CardContent.Working(listOf("Thinking")), CapsuleCards.content(card("a", running, line = "Thinking")))
+        assertEquals(listOf("打开购物", "点搜索框", "输入牙膏", "看结果"), CapsuleCards.steps(ex, "看结果"))
+        assertEquals(listOf("在想下一步"), CapsuleCards.steps(null, "在想下一步"))
+        assertEquals(CardContent.Working(listOf("在想")), CapsuleCards.content(card("a", running, line = "在想")))
     }
 
     @Test fun takeoverSaysWhyWithPaymentAndQueue() {
         val s = TaskState.WaitingTakeover("payment", "请输入支付密码", item = "牙膏", amount = "¥19.9", address = "家")
-        val first = CapsuleCards.content(card("a", s, CapsuleKind.NeedTakeover, "Needs you: 付款", behind = 2)) as CardContent.Takeover
-        assertEquals("Needs you: 付款", first.need)
-        assertEquals("请输入支付密码\nItem: 牙膏\nAmount: ¥19.9\nAddress: 家", first.body)
-        assertEquals("After this, 2 more are waiting for you", first.queueLine)
+        val first = CapsuleCards.content(card("a", s, CapsuleKind.NeedTakeover, "需要你：付款", behind = 2)) as CardContent.Takeover
+        assertEquals("需要你：付款", first.need)
+        assertEquals("请输入支付密码\n商品:牙膏\n金额:¥19.9\n地址:家", first.body)
+        assertEquals("处理好这件后，还有 2 件等你", first.queueLine)
         assertTrue(first.canTakeOver)
         val queued = CapsuleCards.content(card("b", s, CapsuleKind.NeedTakeover, ahead = 1)) as CardContent.Takeover
         assertEquals(CapsuleCards.QUEUED_AHEAD, queued.queueLine)
@@ -134,19 +134,19 @@ class CapsuleCardModelTest {
 
     @Test fun confirmUsesTheChatCardCopy() {
         val s = TaskState.WaitingConfirmation(ConfirmationRequest(IrrevAction.order, "店", "两支牙膏", "¥19.9", "com.shop"))
-        val ex = Exchange("g", emptyList(), ExchangeStatus.NeedsConfirmation("Needs your OK: 下单", "在 购物\nAmount: ¥19.9", 42), live = true)
-        assertEquals(CardContent.Confirm("Needs your OK: 下单", "在 购物\nAmount: ¥19.9", 42), CapsuleCards.content(card("a", s, CapsuleKind.NeedConfirm, exchange = ex)))
+        val ex = Exchange("g", emptyList(), ExchangeStatus.NeedsConfirmation("要你同意:下单", "在 购物\n金额:¥19.9", 42), live = true)
+        assertEquals(CardContent.Confirm("要你同意:下单", "在 购物\n金额:¥19.9", 42), CapsuleCards.content(card("a", s, CapsuleKind.NeedConfirm, exchange = ex)))
         // 还没有这一问一答时也能同意:编号和对话页、通知用的同一个
         val raw = CapsuleCards.content(card("a", s, CapsuleKind.NeedConfirm)) as CardContent.Confirm
         assertEquals(ConfirmationNotifier.requestKey(s), raw.key)
-        assertTrue(raw.body.contains("Amount: ¥19.9"))
+        assertTrue(raw.body.contains("金额:¥19.9"))
     }
 
     @Test fun questionHeldAndResults() {
-        assertEquals(CardContent.Question("要哪个？", listOf("Large", "Small")), CapsuleCards.content(card("a", TaskState.WaitingInput(" 要哪个？ ", listOf("Large", "", "Small")))))
+        assertEquals(CardContent.Question("要哪个？", listOf("大", "小")), CapsuleCards.content(card("a", TaskState.WaitingInput(" 要哪个？ ", listOf("大", "", "小")))))
         assertEquals(CardContent.Question("几点？", emptyList()), CapsuleCards.content(card("a", TaskState.WaitingInput("几点？"))))
-        assertEquals(CardContent.Held("Queued", true), CapsuleCards.content(card("a", TaskState.Held(GateReason("q", "Queued", resumable = true)))))
-        assertEquals(CardContent.Held("On hold", false), CapsuleCards.content(card("a", TaskState.Held(GateReason("q")))))
+        assertEquals(CardContent.Held("排队中", true), CapsuleCards.content(card("a", TaskState.Held(GateReason("q", "排队中", resumable = true)))))
+        assertEquals(CardContent.Held("先等等", false), CapsuleCards.content(card("a", TaskState.Held(GateReason("q")))))
         assertEquals(CardContent.Result(CapsuleKind.Done), CapsuleCards.content(card("a", TaskState.Succeeded("下单了"))))
         assertEquals(CardContent.Result(CapsuleKind.Failed), CapsuleCards.content(card("a", TaskState.Failed("没找到", FailKind.GaveUp))))
         assertEquals(CardContent.Result(CapsuleKind.Cancelled), CapsuleCards.content(card("a", TaskState.Cancelled)))
@@ -154,10 +154,10 @@ class CapsuleCardModelTest {
 
     @Test fun workingStepsAreCappedKeepingTheNewest() {
         val ex = Exchange("g", (1..80).map { StepRow(1, "第 $it 步", "", StepState.Ok) }, ExchangeStatus.Working, live = true)
-        val steps = CapsuleCards.steps(ex, "Thinking of the next step")
+        val steps = CapsuleCards.steps(ex, "在想下一步")
         assertEquals(CapsuleCards.STEPS, steps.size)
         assertEquals("第 32 步", steps.first())
-        assertEquals("Thinking of the next step", steps.last())
+        assertEquals("在想下一步", steps.last())
     }
 
     @Test fun screenOnlyBesideWorkTakeoverAndHeld() {
@@ -178,7 +178,7 @@ class CapsuleCardModelTest {
         assertEquals(CardInputKind.Continue, inputOf(TaskState.Succeeded("好了"), CapsuleKind.Done))
         assertEquals(CardInputKind.Continue, inputOf(TaskState.Failed("x", FailKind.Model), CapsuleKind.Failed))
         // 要你接管、要你同意时先处理那件事,不给输入框
-        assertNull(inputOf(TaskState.WaitingTakeover("login", "Sign-in"), CapsuleKind.NeedTakeover))
+        assertNull(inputOf(TaskState.WaitingTakeover("login", "登录"), CapsuleKind.NeedTakeover))
         val confirm = TaskState.WaitingConfirmation(ConfirmationRequest(IrrevAction.send, "张三", "明天见", null, "com.chat"))
         assertNull(inputOf(confirm, CapsuleKind.NeedConfirm))
         assertEquals(CardInput(CapsuleCards.HINT_START, CardInputKind.Start), CapsuleCards.input(CardView.Chat(null)))

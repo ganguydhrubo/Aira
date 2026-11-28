@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings.ui
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 /**

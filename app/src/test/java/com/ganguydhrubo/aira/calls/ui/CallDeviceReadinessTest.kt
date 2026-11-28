@@ -5,10 +5,10 @@ import com.ganguydhrubo.aira.calls.CallConfig
 import com.ganguydhrubo.aira.calls.CallNotifications
 import com.ganguydhrubo.aira.calls.CallRuntimeState
 import com.ganguydhrubo.aira.calls.CallStandbyService
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class CallDeviceReadinessTest {

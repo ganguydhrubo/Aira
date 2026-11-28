@@ -4,10 +4,10 @@ import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.chat.ui.ScreenCopy
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 /** 双击还是单击、截屏预览发进哪个对话、带屏幕的话在列表里怎么称呼。 */
@@ -72,7 +72,7 @@ class ScreenSendTest {
 
     @Test fun screenGoesToTheConversationTheCardShows() {
         val running = run("a", "c1", TaskState.Running(1, ""), CapsuleKind.Running, onScreen = true)
-        val done = run("b", "c2", TaskState.Succeeded("OK"), CapsuleKind.Done)
+        val done = run("b", "c2", TaskState.Succeeded("好"), CapsuleKind.Done)
         assertEquals("c1", CapsuleCards.conversationOf(CapsuleCards.of(listOf(running), null)!!))
         assertEquals("c2", CapsuleCards.conversationOf(CapsuleCards.of(listOf(done), null)!!))
         // 空闲卡片:接着最近的对话;选了新对话时由调用方新开
@@ -88,7 +88,7 @@ class ScreenSendTest {
     @Test fun inputKindDecidesHowTheScreenIsSent() {
         val running = run("a", "c1", TaskState.Running(1, ""), CapsuleKind.Running, onScreen = true)
         assertEquals(CardInputKind.Steer, CapsuleCards.input(CapsuleCards.of(listOf(running), null)!!)!!.kind)
-        val asking = run("b", "c2", TaskState.WaitingInput("记一笔吗?", listOf("记一笔", "None")), CapsuleKind.NeedAnswer)
+        val asking = run("b", "c2", TaskState.WaitingInput("记一笔吗?", listOf("记一笔", "不用")), CapsuleKind.NeedAnswer)
         assertEquals(CardInputKind.Answer, CapsuleCards.input(CapsuleCards.of(listOf(asking), null)!!)!!.kind)
         assertEquals(CardInputKind.Start, CapsuleCards.input(CardView.Chat(null))!!.kind)
     }

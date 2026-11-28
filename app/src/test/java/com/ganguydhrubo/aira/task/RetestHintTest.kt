@@ -4,7 +4,7 @@ import com.ganguydhrubo.aira.core.agent.FailKind
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.settings.ProviderConfig
 import com.ganguydhrubo.aira.settings.Provider
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class RetestHintTest {

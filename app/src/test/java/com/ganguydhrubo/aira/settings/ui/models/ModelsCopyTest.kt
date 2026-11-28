@@ -12,9 +12,9 @@ import com.ganguydhrubo.aira.settings.ProviderConfig
 import com.ganguydhrubo.aira.settings.ProviderPresets
 import com.ganguydhrubo.aira.settings.RoleChoice
 import com.ganguydhrubo.aira.settings.RoleChoices
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 /** 模型页的文字:用途卡、服务商一行、删除提示,以及列表排序。 */
@@ -24,7 +24,7 @@ class ModelsCopyTest {
     private val caps = Capabilities(toolCalls = true, vision = false, contextTokens = 64_000, reasoning = false)
     private val ds = Provider("p1", "DeepSeek", ProviderConfig.Kind.OpenAiCompat, "https://api.deepseek.com",
         listOf(ListedModel("deepseek-chat"), ListedModel("deepseek-reasoner"), ListedModel("deepseek-coder")))
-    private val qw = Provider("p2", "Qwen (Alibaba Cloud)", ProviderConfig.Kind.OpenAiCompat, "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    private val qw = Provider("p2", "通义千问", ProviderConfig.Kind.OpenAiCompat, "https://dashscope.aliyuncs.com/compatible-mode/v1",
         listOf(ListedModel("qwen-vl", vision = true)))
     private val main = ProviderConfig("c1", ds.kind, ds.baseUrl, "deepseek-reasoner", caps, ds.name, ds.id)
     private val vl = ProviderConfig("c2", qw.kind, qw.baseUrl, "qwen-vl", caps, qw.name, qw.id)
@@ -38,7 +38,7 @@ class ModelsCopyTest {
         assertEquals(listOf("deepseek-reasoner", "deepseek-chat", "deepseek-coder"), u.sortedOptions(ds).map { it.id })
         assertEquals(listOf(ModelRole.Main, ModelRole.Vision, ModelRole.Light), u.rolesOf(ds.id, "deepseek-reasoner"))
         assertTrue(u.picked(ModelRole.Main, ds.id, "deepseek-reasoner"))
-        assertFalse("Use main model不算明确选了它", u.picked(ModelRole.Vision, ds.id, "deepseek-reasoner"))
+        assertFalse("用主模型不算明确选了它", u.picked(ModelRole.Vision, ds.id, "deepseek-reasoner"))
     }
 
     @Test fun pickerFixedChoicesPerRole() {
@@ -52,7 +52,7 @@ class ModelsCopyTest {
         val u = ui(RoleChoices(mainGroup = "g"), groups = listOf(g))
         val line = ModelsCopy.roleLine(u, ModelRole.Main)
         assertEquals("主力组", line.title)
-        assertEquals("2 models", line.subtitle)
+        assertEquals("2 个模型", line.subtitle)
     }
 
     @Test fun providerNameAddsNicknameThroughOneFormat() {
@@ -61,6 +61,6 @@ class ModelsCopyTest {
         val cf = Provider("p3", "Cloudflare Workers AI", ProviderConfig.Kind.OpenAiCompat,
             "https://api.cloudflare.com/client/v4/accounts/abcd1234efgh5678/ai/v1")
         assertEquals("Cloudflare Workers AI（abcd…5678）", ModelsCopy.providerName(cf))
-        assertEquals("Cloudflare Workers AI（个人）", ModelsCopy.providerName(cf.copy(nickname = "Person")))
+        assertEquals("Cloudflare Workers AI（个人）", ModelsCopy.providerName(cf.copy(nickname = "个人")))
     }
 }

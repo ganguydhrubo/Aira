@@ -7,10 +7,10 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 /** 当前界面是网页时,接管把同一个网页标签拿到眼前,不挪 App 任务。 */

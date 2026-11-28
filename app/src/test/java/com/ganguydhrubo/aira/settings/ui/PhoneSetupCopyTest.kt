@@ -10,17 +10,17 @@ import com.ganguydhrubo.aira.core.device.shell.RootGrant
 import com.ganguydhrubo.aira.core.device.shell.SetupStep
 import com.ganguydhrubo.aira.core.device.shell.SetupSuspect
 import com.ganguydhrubo.aira.settings.Problem
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class PhoneSetupCopyTest {
     @get:Rule val texts = ChineseTexts()
 
     /** 给用户看的字里不出现这些技术说法(系统设置里本来就有的选项名除外,见下)。 */
-    private val jargon = listOf("shell", "Port", "mDNS", "TLS", "Binder", "uid", "进程")
+    private val jargon = listOf("shell", "端口", "mDNS", "TLS", "Binder", "uid", "进程")
 
     private fun allText(): List<String> = buildList {
         add(PhoneSetupCopy.INTRO)
@@ -128,7 +128,7 @@ class PhoneSetupCopyTest {
         val portAllowed = PhoneSetupCopy.failure(BuiltinShellFailure.ConnectFailed).body
         allText().forEach { t ->
             assertTrue("empty copy", t.isNotBlank())
-            jargon.forEach { j -> if (!(j == "Port" && t == portAllowed)) assertFalse("「$j」 in: $t", t.contains(j, ignoreCase = true)) }
+            jargon.forEach { j -> if (!(j == "端口" && t == portAllowed)) assertFalse("「$j」 in: $t", t.contains(j, ignoreCase = true)) }
             // 只有系统里那个选项名本身带 adb
             if (t.contains("adb")) assertTrue(t, t.contains("「停用 adb 授权超时功能」"))
         }
@@ -138,30 +138,30 @@ class PhoneSetupCopyTest {
     fun failuresAreDistinctAndActionable() {
         val titles = BuiltinShellFailure.entries.map { PhoneSetupCopy.failure(it).title }
         assertEquals(titles.size, titles.toSet().size)
-        assertEquals("Pair again", PhoneSetupCopy.fixLabel(BuiltinShellStatus.Failed(BuiltinShellFailure.WrongCode).fix))
-        assertEquals("Retry", PhoneSetupCopy.fixLabel(BuiltinShellStatus.Failed(BuiltinShellFailure.HelperStartFailed).fix))
+        assertEquals("重新配对", PhoneSetupCopy.fixLabel(BuiltinShellStatus.Failed(BuiltinShellFailure.WrongCode).fix))
+        assertEquals("重试", PhoneSetupCopy.fixLabel(BuiltinShellStatus.Failed(BuiltinShellFailure.HelperStartFailed).fix))
     }
 
     /** USB 命令起的助手停了:设置页、横幅都直说停了、再运行命令;不往无线调试引(有的手机根本没有)。 */
     @Test
     fun usbHelperStoppedSaysHowToStartItAgain() {
         val stopped = BuiltinShellStatus.Failed(BuiltinShellFailure.UsbHelperStopped)
-        assertEquals("Phone helper stopped", PhoneSetupCopy.failure(BuiltinShellFailure.UsbHelperStopped).title)
+        assertEquals("手机助手已停止", PhoneSetupCopy.failure(BuiltinShellFailure.UsbHelperStopped).title)
         val line = PhoneSetupCopy.statusLine(stopped)
         assertTrue(line, line.contains("USB 启动命令") && line.contains("再运行一次"))
-        assertFalse(line, line.contains("Wireless debugging"))
+        assertFalse(line, line.contains("无线调试"))
         assertEquals(BuiltinShellFix.RunUsbCommand, stopped.fix)
-        assertEquals("Copy", PhoneSetupCopy.fixLabel(stopped.fix))
+        assertEquals("复制", PhoneSetupCopy.fixLabel(stopped.fix))
         // 本来就是用命令起的:卡片说「再运行一次」,不说「打不开无线调试」
         val (againTitle, againBody) = PhoneSetupCopy.usbCard(HelperRestart.UsbCommand)
-        assertEquals("Run the start command again", againTitle)
+        assertEquals("再运行一次启动命令", againTitle)
         assertTrue(againBody.contains("重启后"))
         assertEquals(PhoneSetupCopy.USB_TITLE to PhoneSetupCopy.USB_BODY, PhoneSetupCopy.usbCard(HelperRestart.None))
         val banner = StatusCopy.banner(Problem.PhoneHelper(stopped))
-        assertEquals("Phone helper stopped", banner.title)
+        assertEquals("手机助手已停止", banner.title)
         assertEquals(line, banner.detail)
-        assertEquals("Can’t use Wireless debugging on this phone? Start from a computer instead", PhoneSetupCopy.USB_TITLE)
-        assertEquals("Can’t find Wireless debugging?", PhoneSetupCopy.USB_ASK)
+        assertEquals("这台手机打不开无线调试？改用电脑启动", PhoneSetupCopy.USB_TITLE)
+        assertEquals("找不到无线调试？", PhoneSetupCopy.USB_ASK)
         assertTrue(PhoneSetupCopy.USB_BODY.contains("数据线"))
         assertTrue(PhoneSetupCopy.USB_BODY.contains("重启后"))
     }
@@ -170,16 +170,16 @@ class PhoneSetupCopyTest {
     @Test
     fun rootStartStatusSaysWhyAndWhatToDo() {
         val denied = BuiltinShellStatus.Failed(BuiltinShellFailure.RootDenied)
-        assertEquals("Root access was denied", PhoneSetupCopy.failure(BuiltinShellFailure.RootDenied).title)
-        assertTrue(PhoneSetupCopy.statusLine(denied).contains("Retry"))
+        assertEquals("root 授权被拒绝了", PhoneSetupCopy.failure(BuiltinShellFailure.RootDenied).title)
+        assertTrue(PhoneSetupCopy.statusLine(denied).contains("重试"))
         assertTrue(PhoneSetupCopy.canReconnect(denied))
         val banner = StatusCopy.banner(Problem.PhoneHelper(denied))
-        assertEquals("Root access was denied", banner.title)
+        assertEquals("root 授权被拒绝了", banner.title)
         assertEquals(PhoneSetupCopy.RECONNECT, banner.link)
         val gone = BuiltinShellStatus.Failed(BuiltinShellFailure.RootUnavailable)
         assertTrue(PhoneSetupCopy.statusLine(gone).contains("找不到 su"))
         assertFalse(PhoneSetupCopy.canReconnect(gone))
-        assertEquals("Phone helper not running; starting it with root…", PhoneSetupCopy.statusLine(BuiltinShellStatus.Connecting, rootStart = true))
+        assertEquals("手机助手没在运行,正在用 root 启动…", PhoneSetupCopy.statusLine(BuiltinShellStatus.Connecting, rootStart = true))
         assertEquals(PhoneSetupCopy.statusLine(BuiltinShellStatus.Connecting), PhoneSetupCopy.statusLine(BuiltinShellStatus.Connecting, rootStart = false))
         // 经 root 起的不靠 Wi-Fi:USB 调试关着也不提醒断 Wi-Fi 会停
         assertEquals(PhoneSetupCopy.statusLine(BuiltinShellStatus.Running), PhoneSetupCopy.statusLine(BuiltinShellStatus.Running, usbDebugging = false, rootStart = true))
@@ -190,20 +190,20 @@ class PhoneSetupCopyTest {
     fun rootLinesFollowAuthorization() {
         assertEquals(PhoneSetupCopy.ROOT_PENDING, PhoneSetupCopy.rootStartLine(RootGrant.Pending))
         assertTrue(PhoneSetupCopy.rootStartLine(RootGrant.Unknown).contains("点这里授权"))
-        assertTrue(PhoneSetupCopy.rootStartLine(RootGrant.Granted).contains("Granted"))
+        assertTrue(PhoneSetupCopy.rootStartLine(RootGrant.Granted).contains("已授权"))
         assertTrue(PhoneSetupCopy.rootStartLine(RootGrant.Denied).contains("再问一次"))
         assertTrue(PhoneSetupCopy.rootStartLine(RootGrant.NoAnswer).contains("再问一次"))
-        assertTrue(PhoneSetupCopy.rootStatusLine(RootGrant.Unknown).contains("su"))
-        assertTrue(PhoneSetupCopy.rootStatusLine(RootGrant.Granted).contains("Granted"))
+        assertTrue(PhoneSetupCopy.rootStatusLine(RootGrant.Unknown).contains("检测到 su"))
+        assertTrue(PhoneSetupCopy.rootStatusLine(RootGrant.Granted).contains("已授权"))
         assertFalse(PhoneSetupCopy.rootStatusLine(RootGrant.Denied).contains("再问一次"))
         assertTrue(PhoneSetupCopy.rootCommandsLine(false, RootGrant.Unknown).contains("默认关闭"))
-        assertTrue(PhoneSetupCopy.rootCommandsLine(true, RootGrant.Granted).contains("On"))
+        assertTrue(PhoneSetupCopy.rootCommandsLine(true, RootGrant.Granted).contains("已开启"))
         assertTrue(PhoneSetupCopy.rootCommandsLine(false, RootGrant.Denied).contains("保持关闭"))
-        assertTrue(PhoneSetupCopy.rootEntryLine(false).contains("Off"))
-        assertTrue(PhoneSetupCopy.rootEntryLine(true).contains("On"))
+        assertTrue(PhoneSetupCopy.rootEntryLine(false).contains("已关闭"))
+        assertTrue(PhoneSetupCopy.rootEntryLine(true).contains("已开启"))
         assertTrue(PhoneSetupCopy.ROOT_COMMANDS_WARNING.contains("其他 App 的数据"))
-        assertEquals("Allow Aira to run root commands", PhoneSetupCopy.ROOT_COMMANDS)
-        assertEquals("Start the phone helper with root", PhoneSetupCopy.ROOT_START)
+        assertEquals("允许 Aira 执行 root 命令", PhoneSetupCopy.ROOT_COMMANDS)
+        assertEquals("用 root 启动手机助手", PhoneSetupCopy.ROOT_START)
     }
 
     /** USB 启动不承诺拔线后一定能用:成功页、设置页和重跑卡片都给出通用恢复办法。 */
@@ -237,7 +237,7 @@ class PhoneSetupCopyTest {
             val banner = StatusCopy.banner(Problem.PhoneHelper(st))
             assertEquals(PhoneSetupCopy.failure(reason).title, banner.title)
             assertEquals(PhoneSetupCopy.failure(reason).body, banner.detail)
-            assertEquals("Fix", banner.link)
+            assertEquals("去处理", banner.link)
         }
 
         listOf(
@@ -254,7 +254,7 @@ class PhoneSetupCopyTest {
         }
 
         val notRunning = PhoneSetupCopy.failure(BuiltinShellFailure.ShizukuNotRunning)
-        assertTrue(notRunning.title, notRunning.title.contains("Not running"))
+        assertTrue(notRunning.title, notRunning.title.contains("未运行"))
         assertTrue(notRunning.body, notRunning.body.contains("手机重启后"))
 
         assertTrue(PhoneSetupCopy.statusLine(BuiltinShellStatus.Connecting, shizukuStart = true).contains("Shizuku"))

@@ -4,10 +4,10 @@ import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.agent.RunProgress
 import com.ganguydhrubo.aira.core.agent.TaskState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import com.ganguydhrubo.aira.settings.AccessibilityState
 import com.ganguydhrubo.aira.settings.Problem
 import org.junit.Test
@@ -35,9 +35,9 @@ class StatusCopyTest {
 
     @Test
     fun unavailableAccessibilityDistinguishesEnabledFromOff() {
-        assertEquals("Aira’s accessibility service is off. Turn on Aira under Accessibility in system settings.", StatusCopy.accessibilityUnavailable(enabled = false))
+        assertEquals("Aira 的无障碍服务没有开启:请在系统设置的无障碍里打开 Aira。", StatusCopy.accessibilityUnavailable(enabled = false))
         val enabled = StatusCopy.accessibilityUnavailable(enabled = true)
-        assertTrue(enabled.contains("On"))
+        assertTrue(enabled.contains("已开启"))
         assertTrue(enabled.contains("关闭后重新开启"))
         assertTrue(enabled.contains("允许受限制的设置"))
         assertFalse(enabled.contains("没有开启"))
@@ -69,23 +69,23 @@ class StatusCopyTest {
 
     @Test
     fun paymentLinesOnePerField() {
-        assertEquals("Item: 拿铁 大杯\nAmount: ¥18\nAddress: 公司前台", StatusCopy.paymentLines("拿铁 大杯", "¥18", "公司前台"))
-        assertEquals("Amount: ¥18", StatusCopy.paymentLines(null, "¥18", " "))
+        assertEquals("商品:拿铁 大杯\n金额:¥18\n地址:公司前台", StatusCopy.paymentLines("拿铁 大杯", "¥18", "公司前台"))
+        assertEquals("金额:¥18", StatusCopy.paymentLines(null, "¥18", " "))
         assertNull(StatusCopy.paymentLines(null, null, null))
     }
 
     // 照着记住的路线做、一次做几步时,卡片上写明在干什么
     @Test
     fun replayAndBatchCopy() {
-        assertEquals("Replaying a known route (step 2/5)", StatusCopy.progress(RunProgress.Replay(2, 5)))
-        assertEquals("Running 3 步", StatusCopy.progress(RunProgress.Batch(3)))
+        assertEquals("按以往的做法快速执行中(第 2/5 步)", StatusCopy.progress(RunProgress.Replay(2, 5)))
+        assertEquals("一次执行 3 步", StatusCopy.progress(RunProgress.Batch(3)))
         assertEquals("已收集 · 12/36 · 2026-10-31", StatusCopy.progress(RunProgress.Task("已收集", 12, 36, "2026-10-31")))
 
         val ex = Exchange("查电量", emptyList(), ExchangeStatus.Working, live = true)
         val replaying = ChatViewModel.reduce(ex, TaskState.Running(0, "按以往的做法操作", progress = RunProgress.Replay(2, 5)))
-        assertEquals("Replaying a known route (step 2/5)", liveLine(replaying))
+        assertEquals("按以往的做法快速执行中(第 2/5 步)", liveLine(replaying))
         val batching = ChatViewModel.reduce(replaying, TaskState.Running(1, "一起做", "do_steps", RunProgress.Batch(3)))
-        assertEquals("Running 3 步", liveLine(batching))
+        assertEquals("一次执行 3 步", liveLine(batching))
         // 步骤列表只列实际做过的事
         assertEquals(emptyList<StepRow>(), batching.steps)
     }
@@ -94,13 +94,13 @@ class StatusCopyTest {
     fun headsUpCopyForEachCombination() {
         val both = Problem.AttentionLowered(attention = true, result = true)
         val b = StatusCopy.banner(both)
-        assertEquals("「Needs you” notifications won’t pop up", b.title)
+        assertEquals("「需要你处理」的通知不会弹出", b.title)
         assertEquals(
-            "When you need to take over or approve, these notifications now land quietly in the shade and are easy to miss. 「Task result”. Tap “去Open ” and turn on “Pop on screen”.\n" +
-                "Settings › Apps › Aira › Notifications › Needs you › Pop on screen (some phones call it “Banner” or “Floating notification”)",
+            "要你接手或同意时，这类通知现在只安静地进通知栏，容易错过。「任务结果」的通知也一样。点「去打开」，打开「在屏幕上弹出」。\n" +
+                "系统设置 › 应用 › Aira › 通知 › 需要你处理 › 在屏幕上弹出（有的系统叫「横幅」「悬浮通知」）",
             b.detail,
         )
-        assertEquals("Turn on", b.link)
+        assertEquals("去打开", b.link)
         assertEquals(Fix.OpenAttentionChannel, StatusCopy.directFix(both))
         assertEquals(Fix.OpenAttentionChannel, StatusCopy.explain(both, "14").fix)
 
@@ -108,11 +108,11 @@ class StatusCopyTest {
         assertFalse(attentionOnly.detail.contains("也一样"))
 
         val resultOnly = Problem.AttentionLowered(attention = false, result = true)
-        assertEquals("「Task result” notifications won’t pop up", StatusCopy.banner(resultOnly).title)
-        assertTrue(StatusCopy.banner(resultOnly).detail.contains("通知 › Task result › 在屏幕上弹出"))
+        assertEquals("「任务结果」的通知不会弹出", StatusCopy.banner(resultOnly).title)
+        assertTrue(StatusCopy.banner(resultOnly).detail.contains("通知 › 任务结果 › 在屏幕上弹出"))
         assertEquals(Fix.OpenResultChannel, StatusCopy.directFix(resultOnly))
         val e = StatusCopy.explain(resultOnly, "14")
-        assertEquals("Turn on", e.action)
+        assertEquals("去打开", e.action)
         assertEquals(Fix.OpenResultChannel, e.fix)
     }
 }

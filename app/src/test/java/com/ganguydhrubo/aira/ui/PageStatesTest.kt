@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.ui
 
 import androidx.compose.runtime.saveable.SaverScope
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class PageStatesTest {

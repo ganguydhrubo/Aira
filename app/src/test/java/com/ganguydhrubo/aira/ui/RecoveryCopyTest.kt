@@ -6,9 +6,9 @@ import com.ganguydhrubo.aira.core.device.shell.AutoOnBlock
 import com.ganguydhrubo.aira.core.device.shell.HelperRestart
 import com.ganguydhrubo.aira.core.device.shell.RecoveryCapability
 import com.ganguydhrubo.aira.core.device.shell.RecoveryConsent
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Test
 import com.ganguydhrubo.aira.settings.ui.RecoveryCopy
 

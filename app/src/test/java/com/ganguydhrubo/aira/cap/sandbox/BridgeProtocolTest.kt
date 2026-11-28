@@ -8,9 +8,9 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 import java.io.ByteArrayInputStream
 
@@ -93,7 +93,7 @@ class BridgeProtocolTest {
     @Test fun phoneRequestUsesCurrentTaskHandler() = runBlocking {
         val params = buildJsonObject {
             put("tool", "query")
-            put("args", buildJsonObject { put("text", "Settings") })
+            put("args", buildJsonObject { put("text", "设置") })
         }
         val calls = mutableListOf<Pair<String, JsonObject>>()
         val ok = BridgeProtocol.handle(req("phone", params), token,
@@ -105,7 +105,7 @@ class BridgeProtocolTest {
         assertEquals("true", ok.s("ok"))
         assertEquals("1", ok.s("matches"))
         assertEquals("query", calls.single().first)
-        assertEquals("Settings", calls.single().second["text"]!!.jsonPrimitive.content)
+        assertEquals("设置", calls.single().second["text"]!!.jsonPrimitive.content)
 
         val denied = BridgeProtocol.handle(req("phone", params, tok = "wrong"), token,
             progress = { true }, share = { _, _ -> "" }, info = { JsonObject(emptyMap()) },

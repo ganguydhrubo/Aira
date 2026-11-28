@@ -10,11 +10,11 @@ import com.ganguydhrubo.aira.core.search.WebSearchResult
 import com.ganguydhrubo.aira.core.search.YouSearch
 import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
 import java.util.Base64
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 class WebSearchSettingsTest {

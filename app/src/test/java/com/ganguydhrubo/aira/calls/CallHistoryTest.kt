@@ -8,6 +8,10 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class CallHistoryTest {
@@ -29,7 +33,7 @@ class CallHistoryTest {
 
     private fun record(id: Int) = CallRecord(
         id = id.toString(), number = null, direction = CallDirection.INCOMING,
-        startedAtMs = id.toLong(), endedAtMs = id + 1L, result = "Call ended",
+        startedAtMs = id.toLong(), endedAtMs = id + 1L, result = "通话已结束",
         transcript = listOf(CallTranscriptLine("caller", "留言。\n请于明日联系。"), CallTranscriptLine("assistant", "我会转告。")),
     )
 
@@ -109,7 +113,7 @@ class CallHistoryTest {
             actions = listOf(CallFollowUp("回复来电", CallFollowUp.Status.PENDING)),
         ))
         assertEquals(original, Json.decodeFromString<CallRecord>(Json.encodeToString(original)))
-        assertEquals(CallFollowUp.Status.UNKNOWN, CallFollowUp("Unknown").status)
+        assertEquals(CallFollowUp.Status.UNKNOWN, CallFollowUp("待确认").status)
     }
 
     @Test fun editedDraftSurvivesReopenAndFailedSavePreservesOriginal() = runBlocking {
@@ -184,11 +188,11 @@ class CallHistoryTest {
         val task = CallTaskBrief("问清服务时间", listOf("周末开门吗？"), "门店", "不预约").validatedSnapshot()
         val report = CallAudioReport(3, 3, CallAudioReport.Turn.TRANSCRIPT_RECEIVED, 2880, 1920, 1920,
             inputFramesAfterLastReply = 50, inputSignalFramesAfterLastReply = 20, recognitionFailures = 1)
-        val attempted = record(1).copy(direction = CallDirection.OUTGOING, result = "Call ended", task = task, audioReport = report)
+        val attempted = record(1).copy(direction = CallDirection.OUTGOING, result = "通话已结束", task = task, audioReport = report)
         val decoded = Json.decodeFromString<CallRecord>(Json.encodeToString(attempted))
         assertEquals(task, decoded.task)
         assertEquals(report, decoded.audioReport)
-        assertEquals("Call ended", decoded.result)
+        assertEquals("通话已结束", decoded.result)
         assertFalse(decoded.handled)
         assertFalse(decoded.toString().contains(task.goal))
 

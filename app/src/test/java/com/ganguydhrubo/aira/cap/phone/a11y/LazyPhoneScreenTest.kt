@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.screen.uistate.ScreenPort
 import com.ganguydhrubo.aira.core.screen.uistate.SystemAction
 import com.ganguydhrubo.aira.core.screen.uistate.SystemActionResult
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 import java.lang.reflect.Proxy
 
@@ -23,7 +23,7 @@ class LazyPhoneScreenTest {
 
     private val screen = LazyPhoneScreen(1080, 2400, listApps = { listOf("a.b" to "A") }) {
         attempts++
-        if (!available) throw PhoneUnavailable("Phone control助手Not running")
+        if (!available) throw PhoneUnavailable("手机操作助手没在运行")
         real
     }
 
@@ -51,7 +51,7 @@ class LazyPhoneScreenTest {
     }
 
     @Test fun launchingAnAppConnectsOrSaysWhy() = runTest {
-        assertEquals(ActionResult.Failed(LazyPhoneScreen.PHONE_UNAVAILABLE, "Phone control助手Not running"), screen.openApp("a.b"))
+        assertEquals(ActionResult.Failed(LazyPhoneScreen.PHONE_UNAVAILABLE, "手机操作助手没在运行"), screen.openApp("a.b"))
         assertFalse(screen.acquired)
         available = true
         assertTrue(screen.openApp("a.b") is ActionResult.Ok)

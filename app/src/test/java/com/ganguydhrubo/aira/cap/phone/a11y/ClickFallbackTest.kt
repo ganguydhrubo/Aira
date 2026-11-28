@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.cap.phone.a11y
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class ClickFallbackTest {
@@ -25,17 +25,17 @@ class ClickFallbackTest {
     }
 
     @Test fun outwardButtonsAreNotRetriedOnSecondChannel() {
-        assertTrue(ClickFallback.mayBeOutward("Send", null))
+        assertTrue(ClickFallback.mayBeOutward("发送", null))
         assertTrue(ClickFallback.mayBeOutward("立即支付", null))
-        assertTrue(ClickFallback.mayBeOutward("Delete", null))
-        assertTrue(ClickFallback.mayBeOutward("Confirm", null))
+        assertTrue(ClickFallback.mayBeOutward("删除", null))
+        assertTrue(ClickFallback.mayBeOutward("确认", null))
         assertTrue(ClickFallback.mayBeOutward("Submit", null))
         assertTrue(ClickFallback.mayBeOutward(null, "com.app:id/btn_send"))
         assertTrue(ClickFallback.mayBeOutward(null, "com.app:id/confirmButton"))
 
-        assertFalse(ClickFallback.mayBeOutward("Search", "com.github.android:id/search"))
+        assertFalse(ClickFallback.mayBeOutward("搜索", "com.github.android:id/search"))
         assertFalse(ClickFallback.mayBeOutward("Repositories", null))
-        assertFalse(ClickFallback.mayBeOutward("Settings", "com.app:id/settings_tab"))
+        assertFalse(ClickFallback.mayBeOutward("设置", "com.app:id/settings_tab"))
 
         // 可点控件的名字长也照样认:点之前的不可逆判定不看总长,没名字的容器拿的是子节点的字连起来的
         assertTrue(ClickFallback.mayBeOutward("Send message to Alice Johnson", null))
@@ -44,7 +44,7 @@ class ClickFallbackTest {
         assertFalse(ClickFallback.mayBeOutward("Post-processing runs on every frame before it is shown", null, clickable = false))
         assertFalse(ClickFallback.mayBeOutward("关注我们的公众号,每周推送最新的开源项目和工具教程", null))
 
-        val sendBtn = ClickFallback.Candidate("send", 800, 2100, 1040, 2220, label = "Send")
+        val sendBtn = ClickFallback.Candidate("send", 800, 2100, 1040, 2220, label = "发送")
         assertNull(ClickFallback.pickTarget(900, 2160, w, h, listOf(sendBtn)))
     }
 
@@ -53,13 +53,13 @@ class ClickFallbackTest {
         assertTrue(ClickFallback.mayBeOutward("收藏", null))
         assertTrue(ClickFallback.mayBeOutward("已关注", null))
         assertTrue(ClickFallback.mayBeOutward("点赞(12)", null))
-        assertTrue(ClickFallback.mayBeOutward("Turn sound off", null))
-        assertTrue(ClickFallback.mayBeOutward("Answer", null))
+        assertTrue(ClickFallback.mayBeOutward("静音", null))
+        assertTrue(ClickFallback.mayBeOutward("接听", null))
         assertTrue(ClickFallback.mayBeOutward("Follow", null))
         assertTrue(ClickFallback.mayBeOutward(null, "com.app:id/btn_follow"))
         assertTrue(ClickFallback.mayBeOutward(null, "com.app:id/likeButton"))
 
-        assertFalse(ClickFallback.mayBeOutward("Refresh", "com.app:id/refresh"))
+        assertFalse(ClickFallback.mayBeOutward("刷新", "com.app:id/refresh"))
         assertFalse(ClickFallback.mayBeOutward("Repositories", null))
     }
 }

@@ -3,11 +3,11 @@ package com.ganguydhrubo.aira.task
 import com.ganguydhrubo.aira.core.run.RunId
 import com.ganguydhrubo.aira.core.run.ChannelPeer
 import com.ganguydhrubo.aira.core.run.RunPhase
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 class TaskRegistryTest {
@@ -119,10 +119,10 @@ class TaskRegistryTest {
     }
 
     @Test fun channelMessageIsExecutedOnlyOnceAndKeepsItsReplyAddress() {
-        val peer = ChannelPeer("telegram", "owner", "thread")
-        val first = registry.tryStart("thread", "Tasks", queueInConversation = true,
+        val peer = ChannelPeer("wechat", "owner", "thread")
+        val first = registry.tryStart("thread", "任务", queueInConversation = true,
             channelPeer = peer, channelMessageId = "message-1")
-        val duplicate = registry.tryStart("thread", "Tasks", queueInConversation = true,
+        val duplicate = registry.tryStart("thread", "任务", queueInConversation = true,
             channelPeer = peer, channelMessageId = "message-1")
         assertTrue(first is StartResult.Started)
         assertSame(StartResult.DuplicateChannelMessage, duplicate)
@@ -133,7 +133,7 @@ class TaskRegistryTest {
     }
 
     @Test fun consecutiveChannelMessagesQueueInOrderWithoutMergingOrRepeatingRedeliveries() {
-        val peer = ChannelPeer("telegram", "owner", "thread")
+        val peer = ChannelPeer("wechat", "owner", "thread")
         val first = registry.tryStart("thread", "相同的话", queueInConversation = true,
             channelPeer = peer, channelMessageId = "message-1")
         val second = registry.tryStart("thread", "相同的话", queueInConversation = true,

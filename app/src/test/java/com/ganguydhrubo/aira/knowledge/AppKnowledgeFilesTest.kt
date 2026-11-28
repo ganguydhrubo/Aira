@@ -3,10 +3,10 @@ package com.ganguydhrubo.aira.knowledge
 import com.ganguydhrubo.aira.core.learn.knowledge.AppKnowledgeDraft
 import com.ganguydhrubo.aira.core.learn.knowledge.AppKnowledgeStage
 import com.ganguydhrubo.aira.core.learn.knowledge.LearnedNote
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -14,7 +14,7 @@ import java.io.File
 
 class AppKnowledgeFilesTest {
     @get:Rule val tmp = TemporaryFolder()
-    private val facts = "- 首页顶部有入口。\n- 「我的」页里有设置。"
+    private val facts = "- 首页顶部有搜索入口。\n- 「我的」页里有设置。"
     private fun draft(id: String, md: String = facts, lesson: Boolean = false, revises: String? = null) =
         AppKnowledgeDraft(id, "qq", "com.tencent.mobileqq", md, "run-$id", AppKnowledgeStage.Draft, 1, lesson = lesson, revises = revises)
 

@@ -5,8 +5,8 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 /** 外观改了(设置页或任务里)界面当场跟着换,不靠重建界面。 */

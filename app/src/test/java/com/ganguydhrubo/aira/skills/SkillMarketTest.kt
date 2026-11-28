@@ -6,10 +6,14 @@ import okhttp3.Protocol
 import okhttp3.Response
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class SkillMarketTest {
-    private val text = "---\nname: test\ndisplay: 示例\ndescription: 示例说明\n---\n## Entry\n示例。\n"
+    private val text = "---\nname: test\ndisplay: 示例\ndescription: 示例说明\n---\n## 入口\n示例。\n"
     private val hash = PersonalSkills.fingerprint(text)
     private val entry = """{"name":"test","display":"示例","description":"示例说明","sha256":"$hash"}"""
     private fun index(rows: String = entry) = """{"version":1,"skills":[$rows]}"""

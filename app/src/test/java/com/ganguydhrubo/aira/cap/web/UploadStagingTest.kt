@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.cap.web
 
 import com.ganguydhrubo.aira.cap.sandbox.JVM_GATE
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

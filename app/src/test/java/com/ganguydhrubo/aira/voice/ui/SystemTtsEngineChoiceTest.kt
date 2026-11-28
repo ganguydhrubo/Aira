@@ -22,10 +22,10 @@ import com.ganguydhrubo.aira.voice.model.VoiceModelError
 import com.ganguydhrubo.aira.voice.model.adapters.AndroidSystemTtsAdapter
 import com.ganguydhrubo.aira.voice.model.voiceTestEnvironment
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 import java.io.File
 import java.util.Locale

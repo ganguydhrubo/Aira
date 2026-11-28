@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.voice.ui
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 /** 按着说话时字太多:去掉前面说完的整句,最新的字一直看得见。这里按字数量「放不放得下」,界面上按真实排版量行数。 */
@@ -8,7 +8,7 @@ class VoiceCopyFitTest {
     private fun fits(max: Int): (String, String) -> Boolean = { s, t -> (s + t).length <= max }
 
     @Test fun shortTextIsUntouched() {
-        assertEquals("你好。" to "Open", VoiceCopy.fitHeard("你好。", "Open", fits(20)))
+        assertEquals("你好。" to "打开", VoiceCopy.fitHeard("你好。", "打开", fits(20)))
         assertEquals("" to "", VoiceCopy.fitHeard("", "", fits(0)))
     }
 

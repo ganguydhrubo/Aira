@@ -2,10 +2,10 @@ package com.ganguydhrubo.aira.task
 
 import com.ganguydhrubo.aira.core.run.RunPhase
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 class FollowUpDrainTest {

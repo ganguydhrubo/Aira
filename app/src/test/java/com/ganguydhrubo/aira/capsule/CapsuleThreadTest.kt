@@ -11,8 +11,8 @@ import com.ganguydhrubo.aira.task.SteerNote
 import com.ganguydhrubo.aira.task.SteerState
 import com.ganguydhrubo.aira.chat.ui.Exchange
 import com.ganguydhrubo.aira.chat.ui.ExchangeStatus
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 class CapsuleThreadTest {
@@ -46,9 +46,9 @@ class CapsuleThreadTest {
 
     @Test fun appTurnCollapsesToOneLineThenItsAnswer() {
         val past = listOf(
-            PastTurn(turn("买牙膏", "下单了，共 ¥19.9", runId = "r1"), places = listOf("Shopping")),
-            PastTurn(turn("查车票", "没有余票", status = "failed", runId = "r2"), places = listOf("12306", "Browser", "Maps")),
-            PastTurn(turn("发消息", "Cancelled", status = "cancelled"), places = listOf("聊天")),
+            PastTurn(turn("买牙膏", "下单了，共 ¥19.9", runId = "r1"), places = listOf("购物")),
+            PastTurn(turn("查车票", "没有余票", status = "failed", runId = "r2"), places = listOf("12306", "浏览器", "地图")),
+            PastTurn(turn("发消息", "已取消", status = "cancelled"), places = listOf("聊天")),
         )
         assertEquals(listOf(
             "你:买牙膏", "注:✓ 购物 · 办好了", "答:下单了，共 ¥19.9",
@@ -60,7 +60,7 @@ class CapsuleThreadTest {
     @Test fun plainChatFailuresSayItAndSteersAreBubbles() {
         val past = listOf(
             PastTurn(turn("算一下", "模型没回", status = "failed")),
-            PastTurn(turn("写首诗", "Cancelled", status = "cancelled", steers = listOf("短一点"))),
+            PastTurn(turn("写首诗", "已取消", status = "cancelled", steers = listOf("短一点"))),
         )
         assertEquals(listOf("你:算一下", "注:没办成", "答:模型没回", "你:写首诗", "你:短一点", "注:已停止"), texts(CapsuleThreads.build(past, 10, emptyList())))
     }
@@ -85,18 +85,18 @@ class CapsuleThreadTest {
 
     @Test fun stoppedTurnShowsItsSummaryUnderTheNote() {
         val past = listOf(
-            PastTurn(turn("看设置", "停止前看完了网络、蓝牙;显示、声音还没看。", status = "cancelled", runId = "r1"), places = listOf("Settings")),
-            PastTurn(turn("写首诗", "Cancelled", status = "cancelled", runId = "r2")),
+            PastTurn(turn("看设置", "停止前看完了网络、蓝牙;显示、声音还没看。", status = "cancelled", runId = "r1"), places = listOf("设置")),
+            PastTurn(turn("写首诗", "已取消", status = "cancelled", runId = "r2")),
         )
         assertEquals(listOf(
             "你:看设置", "注:设置 · 已停止", "答:停止前看完了网络、蓝牙;显示、声音还没看。",
-            "你:写首诗", "注:已停止", "注:Wrapping up what was done…",
+            "你:写首诗", "注:已停止", "注:正在整理已做的事…",
         ), texts(CapsuleThreads.build(past, 10, emptyList(), summarizing = setOf("r2"))))
         // 写不成:只留那一行
         assertEquals(listOf("你:写首诗", "注:已停止"), texts(CapsuleThreads.build(past.drop(1), 10, emptyList())))
         // 还没记进对话的那一件也一样
         val r = live("a", TaskState.Cancelled, CapsuleKind.Cancelled, runId = "r3")
-        assertEquals(listOf("你:问题a", "注:已停止", "注:Wrapping up what was done…"),
+        assertEquals(listOf("你:问题a", "注:已停止", "注:正在整理已做的事…"),
             texts(CapsuleThreads.build(emptyList(), 10, listOf(r), summarizing = setOf("r3"))))
     }
 
@@ -108,19 +108,19 @@ class CapsuleThreadTest {
     @Test fun placesAreAppsAndSitesInOrder() {
         fun act(target: String?) = RunEvent.Activity(0, 1, "act", "tap", target)
         val acts = listOf(act("com.shop.app"), act("网站 example.com"), act("com.shop.app"), act("ls -l"), act(null), act("/workspace/a.txt"))
-        assertEquals(listOf("Shopping", "example.com"), CapsuleThreads.places(acts) { if (it == "com.shop.app") "Shopping" else it })
+        assertEquals(listOf("购物", "example.com"), CapsuleThreads.places(acts) { if (it == "com.shop.app") "购物" else it })
     }
 
     // ---------- 进行中的那一件 ----------
 
     @Test fun streamingAnswerGrowsAfterTheQuestion() {
         val r = live("a", TaskState.Running(1, "n"), CapsuleKind.Running, runId = "ra", draft = "**今天**晴")
-        val t = CapsuleThreads.build(listOf(PastTurn(turn("早", "Good morning", runId = "r0"))), 10, listOf(r))
+        val t = CapsuleThreads.build(listOf(PastTurn(turn("早", "早上好", runId = "r0"))), 10, listOf(r))
         assertEquals(listOf("你:早", "答:早上好", "你:问题a", "答:**今天**晴"), texts(t))
         assertTrue((t.items.last() as ThreadItem.Answer).streaming)
         // 还没写出字:说此刻在做什么
-        val thinking = live("a", TaskState.Running(1, "n"), CapsuleKind.Running, line = "Thinking of the next step")
-        assertEquals(listOf("你:问题a", "注:Thinking of the next step"), texts(CapsuleThreads.build(emptyList(), 10, listOf(thinking))))
+        val thinking = live("a", TaskState.Running(1, "n"), CapsuleKind.Running, line = "在想下一步")
+        assertEquals(listOf("你:问题a", "注:在想下一步"), texts(CapsuleThreads.build(emptyList(), 10, listOf(thinking))))
     }
 
     @Test fun liveWaitsShowTheQuestionAndAppLine() {
@@ -128,10 +128,10 @@ class CapsuleThreadTest {
         assertEquals(listOf("你:问题a", "答:要大的还是小的？"), texts(CapsuleThreads.build(emptyList(), 10, listOf(ask))))
         val inApp = live("b", TaskState.Running(2, "n"), CapsuleKind.Running, draft = "在看")
         assertEquals(listOf("你:问题b", "注:购物 · 在干活", "答:在看"),
-            texts(CapsuleThreads.build(emptyList(), 10, listOf(inApp)) { listOf("Shopping") }))
+            texts(CapsuleThreads.build(emptyList(), 10, listOf(inApp)) { listOf("购物") }))
         val done = live("c", TaskState.Succeeded("好了"), CapsuleKind.Done)
         assertEquals(listOf("你:问题c", "注:✓ 购物 · 办好了", "答:好了"),
-            texts(CapsuleThreads.build(emptyList(), 10, listOf(done)) { listOf("Shopping") }))
+            texts(CapsuleThreads.build(emptyList(), 10, listOf(done)) { listOf("购物") }))
     }
 
     @Test fun liveTailSkipsWhatIsAlreadyRecorded() {
@@ -190,7 +190,7 @@ class CapsuleThreadTest {
         val t = CapsuleThreads.build(emptyList(), 10, listOf(run))
         val users = t.items.filterIsInstance<ThreadItem.User>()
         assertEquals(listOf("问题a", "改成后天", "顺便订午饭"), users.map { it.text })
-        assertEquals(listOf(null, "Added to the current task", "Got it — the next step will adjust the current task"), users.map { it.note })
+        assertEquals(listOf(null, "已加入当前任务", "已收到，下一步调整当前任务"), users.map { it.note })
         assertEquals("你:顺便订午饭", texts(t)[t.anchor])
         assertEquals(t.items.size, t.items.map { it.key }.toSet().size)
     }
@@ -212,7 +212,7 @@ class CapsuleThreadTest {
         assertEquals(listOf("你:查天气", "断:今天晴,最高", "你:改成查明天", "你:顺便看看后天", "答:明天多云"),
             texts(CapsuleThreads.build(past, 10, emptyList())))
 
-        val base = live("a", TaskState.Running(2, "n"), CapsuleKind.Running, draft = "Tomorrow")
+        val base = live("a", TaskState.Running(2, "n"), CapsuleKind.Running, draft = "明天")
         val run = base.copy(run = base.run.copy(steers = listOf(SteerNote("s1", "改成查明天", SteerState.Joined, interrupted = "今天晴,最高"))))
         val t = CapsuleThreads.build(emptyList(), 10, listOf(run))
         assertEquals(listOf("你:问题a", "断:今天晴,最高", "你:改成查明天", "答:明天"), texts(t))

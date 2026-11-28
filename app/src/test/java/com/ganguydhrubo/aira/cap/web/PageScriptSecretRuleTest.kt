@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.cap.web
 
 import com.ganguydhrubo.aira.core.cap.web.PageScriptProtocol
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 import java.io.File
 

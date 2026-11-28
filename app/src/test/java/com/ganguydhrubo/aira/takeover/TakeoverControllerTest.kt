@@ -11,10 +11,10 @@ import com.ganguydhrubo.aira.task.restoreTargetApp
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class TakeoverControllerTest {
@@ -406,10 +406,10 @@ class TakeoverControllerTest {
         takeover.onState(waiting)
         takeover.handOver()
         assertEquals("login.app", port.watching)
-        port.activity = HandoverActivity(3, "Sign-in")
+        port.activity = HandoverActivity(3, "登录")
         testScheduler.advanceTimeBy(42_000)
         assertTrue(takeover.handBack())
-        assertEquals(HandBack(HandBackOutcome.complete, durationMs = 42_000, inputCount = 3, stoppedAt = "Sign-in"), port.results.single())
+        assertEquals(HandBack(HandBackOutcome.complete, durationMs = 42_000, inputCount = 3, stoppedAt = "登录"), port.results.single())
         assertNull(port.watching)
     }
 

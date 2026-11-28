@@ -3,8 +3,8 @@ package com.ganguydhrubo.aira.cap.web
 import com.ganguydhrubo.aira.core.net.NetProxy
 import com.ganguydhrubo.aira.core.net.ProxyAddress
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 /** 内置浏览器怎么用网络代理:支持才设、带账号密码的 SOCKS 用不了;只替当前的 HTTP 代理答账号密码。 */

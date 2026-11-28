@@ -3,11 +3,11 @@ package com.ganguydhrubo.aira.voice
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 /** 百炼实时语音识别的 run-task 协议;消息样例照官方文档的格式。 */
@@ -66,15 +66,15 @@ class BailianProtocolTest {
     @Test fun sentencesReplaceByIdAndAreKeptWhenTheyEnd() {
         val p = BailianProtocol("fun-asr-realtime")
         assertEquals(LiveAsrUpdate.Started, p.read("""{"header":{"task_id":"t","event":"task-started","attributes":{}},"payload":{}}"""))
-        assertEquals(LiveAsrUpdate.Text("", "OK"), p.read(result(1, "OK", end = false)))
+        assertEquals(LiveAsrUpdate.Text("", "好"), p.read(result(1, "好", end = false)))
         assertEquals(LiveAsrUpdate.Text("", "好，我知道"), p.read(result(1, "好，我知道", end = false)))
         assertEquals(LiveAsrUpdate.Text("好，我知道了。", ""), p.read(result(1, "好，我知道了。", end = true)))
         // 心跳不改文字
         assertEquals(LiveAsrUpdate.None, p.read(result(0, "", end = false, heartbeat = true)))
-        assertEquals(LiveAsrUpdate.Text("好，我知道了。", "Tomorrow"), p.read(result(2, "Tomorrow", end = false)))
+        assertEquals(LiveAsrUpdate.Text("好，我知道了。", "明天"), p.read(result(2, "明天", end = false)))
         assertEquals(LiveAsrUpdate.Text("好，我知道了。明天见。", ""), p.read(result(2, "明天见。", end = true)))
         // 定下的句子不被迟到的中间结果改回去
-        assertEquals(LiveAsrUpdate.None, p.read(result(1, "OK", end = false)))
+        assertEquals(LiveAsrUpdate.None, p.read(result(1, "好", end = false)))
         assertEquals(
             LiveAsrUpdate.Ended("好，我知道了。明天见。"),
             p.read("""{"header":{"task_id":"t","event":"task-finished","attributes":{}},"payload":{"output":{},"usage":null}}"""),

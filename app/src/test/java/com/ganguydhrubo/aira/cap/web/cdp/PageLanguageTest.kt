@@ -4,10 +4,10 @@ import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonArray
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 class PageLanguageTest {

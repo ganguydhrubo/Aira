@@ -12,10 +12,10 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -55,7 +55,7 @@ class RunTimelineViewModelTest {
 
     /** 任务还在跑、还没有结束事件时算「进行中」:页面据此每秒重读,跑完就停。 */
     @Test fun anUnfinishedRunOfALiveTaskReadsAsRunning() {
-        val h = store.open("Open 设置")
+        val h = store.open("打开设置")
         store.append(h.runId, RunEvent.ModelReply(clock + 1_000, 1, "", null, null, 500, 10, 0, 900, repliedAtMs = clock + 1_000))
         val live = RunTimelineViewModel(store, h.runId, alive = { it == h.runId }).load() as TimelineUi.Ready
         assertTrue("没结束就算在跑", live.header.running)
@@ -66,7 +66,7 @@ class RunTimelineViewModelTest {
 
     /** 没有结束记录、任务也已经不在了(进程被杀、记录没写完):算已结束,不一直按秒重读。 */
     @Test fun anUnfinishedRunWhoseTaskIsGoneIsNotRunning() {
-        val h = store.open("Open 设置")
+        val h = store.open("打开设置")
         store.append(h.runId, RunEvent.ModelReply(clock + 1_000, 1, "", null, null, 500, 10, 0, 900, repliedAtMs = clock + 1_000))
         val gone = RunTimelineViewModel(store, h.runId, alive = { false }).load() as TimelineUi.Ready
         assertFalse(gone.header.running)
@@ -151,7 +151,7 @@ class RunTimelineViewModelTest {
             event(RunEvent.Criteria(clock, listOf("看到电量百分比"), emptyList()))
             event(RunEvent.ModelReply(clock, 1, long, "phone_launch_app", """{"package":"com.android.settings"}""", 10, 1, null))
             event(RunEvent.ToolResult(clock, 1, "phone_launch_app", """{"ok":true}""", true, null))
-            event(RunEvent.ModelReply(clock, 2, "Take a look", "phone_observe", "{}", 10, 1, null))
+            event(RunEvent.ModelReply(clock, 2, "看看", "phone_observe", "{}", 10, 1, null))
             event(RunEvent.ToolResult(clock, 2, "phone_observe", """{"ok":true,"elements":[]}""", null, 1))
             media(1, byteArrayOf(1, 2, 3))
             event(RunEvent.Media(clock, 1, 2, "com.android.settings"))
@@ -166,23 +166,23 @@ class RunTimelineViewModelTest {
         assertEquals(listOf(1, 2, 3, 4), ui.steps.map { it.step })
         val (launch, look, tap, stale) = ui.steps
         assertEquals(long, launch.said)
-        assertEquals("Opening apps", launch.tool)
+        assertEquals("打开 App", launch.tool)
         assertEquals("com.android.settings", launch.detail)
-        assertEquals("Worked", launch.result)
-        assertEquals("Look at screen", look.tool)
+        assertEquals("生效", launch.result)
+        assertEquals("看屏幕", look.tool)
         assertEquals(1, look.screenshotId)
         assertTrue(store.screen(id, 1)!!.isFile)
-        assertEquals("No change", tap.result)
-        assertEquals("Error: Screen changed; needs a fresh look", stale.result)
+        assertEquals("没变化", tap.result)
+        assertEquals("出错:界面已经变了,要重新看屏幕", stale.result)
         assertNull(launch.screenshotId)
 
         val h = ui.header
         assertEquals("看电量", h.goal)
         assertEquals(listOf("看到电量百分比"), h.criteria)
-        assertEquals("Done", h.outcome)
+        assertEquals("办成了", h.outcome)
         assertEquals("1 分 5 秒", h.duration)
         assertEquals(4, h.modelCalls)
-        assertEquals("Not checked", h.verdict)
+        assertEquals("没有核查", h.verdict)
     }
 
     @Test fun rejectedLightReplyCountsAsCallButNotStep() {
@@ -216,7 +216,7 @@ class RunTimelineViewModelTest {
         assertEquals(2_000L, timing.toolMs)
         assertEquals(500L, timing.retryMs)
         assertEquals(6_000L, timing.totalMs)
-        assertEquals("约 6.0 秒 · model 4.0 秒 · action 2.0 秒 · incl. retries 500 ms",
+        assertEquals("约 6.0 秒 · 模型 4.0 秒 · 操作 2.0 秒 · 含重试 500 毫秒",
             RunTimelineViewModel.timingLabel(timing))
     }
 
@@ -225,13 +225,13 @@ class RunTimelineViewModelTest {
             event(RunEvent.ToolResult(clock, 1, "phone_tap", """{"ok":true}""", true, null,
                 durationMs = 850, source = "replay"))
         }
-        assertEquals("action 850 ms", RunTimelineViewModel.timingLabel(ready(replay).steps.single().timing))
+        assertEquals("操作 850 毫秒", RunTimelineViewModel.timingLabel(ready(replay).steps.single().timing))
 
         val legacy = run("旧记录") {
             event(RunEvent.ModelReply(clock, 1, "", "phone_tap", "{}", null, null, null))
             event(RunEvent.ToolResult(clock, 1, "phone_tap", """{"ok":true}""", true, null))
         }
-        assertEquals("Time not recorded", RunTimelineViewModel.timingLabel(ready(legacy).steps.single().timing))
+        assertEquals("耗时未记录", RunTimelineViewModel.timingLabel(ready(legacy).steps.single().timing))
         assertNull(ready(legacy).steps.single().timing.totalMs)
     }
 
@@ -262,7 +262,7 @@ class RunTimelineViewModelTest {
         assertEquals(2, rows.size)
         assertEquals("observe", rows[0].kind)
         assertEquals("mcp", rows[1].kind)
-        assertEquals("Called Team notes MCP", rows[1].label)
+        assertEquals("已调用 Team notes MCP", rows[1].label)
     }
 
     @Test fun showsVerifierAndGuardTags() {
@@ -293,21 +293,21 @@ class RunTimelineViewModelTest {
             event(RunEvent.TaskEnded(clock, "failed", "已安全停止"))
         }
         val ui = ready(id)
-        assertEquals(listOf(Tag("Guard warning:Screen isn’t changing", TagTone.Warn)), ui.steps[0].tags)
-        assertEquals(listOf(Tag("Guard stopped:Repeating the same action", TagTone.Bad)), ui.steps[1].tags)
-        assertEquals(listOf(Tag("Check failed", TagTone.Bad)), ui.steps.single { it.step == 3 }.tags)
+        assertEquals(listOf(Tag("守卫提醒:画面一直没变化", TagTone.Warn)), ui.steps[0].tags)
+        assertEquals(listOf(Tag("守卫停止:同一个操作反复做", TagTone.Bad)), ui.steps[1].tags)
+        assertEquals(listOf(Tag("核查没通过", TagTone.Bad)), ui.steps.single { it.step == 3 }.tags)
         val four = ui.steps.single { it.step == 4 }
-        assertEquals(listOf(Tag("Guard warning:Actions keep failing", TagTone.Warn), Tag("Guard warning", TagTone.Warn)), four.tags)
-        assertEquals("Error", ui.steps.single { it.step == 5 }.result)
+        assertEquals(listOf(Tag("守卫提醒:操作连续失败", TagTone.Warn), Tag("守卫提醒", TagTone.Warn)), four.tags)
+        assertEquals("出错了", ui.steps.single { it.step == 5 }.result)
         // 按规矩没收的不算出错:不带「出错」(界面按这个前缀把一步标成失败),说没收和原因;工具用界面上的名字
         val declined = ui.steps.single { it.step == 6 }
-        assertEquals("Not written: not your own words", declined.result)
-        assertEquals("Write to memory", declined.tool)
+        assertEquals("不是你亲口说的,没有写入", declined.result)
+        assertEquals("写入记忆", declined.tool)
         // 同一个错误码,结果里没写不计入失败的(存技能)照旧算出错
-        assertEquals("Error", ui.steps.single { it.step == 7 }.result)
+        assertEquals("出错了", ui.steps.single { it.step == 7 }.result)
         assertFalse(ui.toString().contains("brand_new") || ui.toString().contains("some_new_code"))
-        assertEquals("Check failed", ui.header.verdict)
-        assertEquals("Not finished", ui.header.outcome)
+        assertEquals("核查没通过", ui.header.verdict)
+        assertEquals("没有完成", ui.header.outcome)
     }
 
     @Test fun missingRunShowsExpired() {
@@ -332,6 +332,6 @@ class RunTimelineViewModelTest {
         assertEquals(Redactor.MASK, ui.steps.single().detail)
         assertTrue(ui.steps.single().said.contains(Redactor.MASK))
         assertTrue(ui.header.goal.contains(Redactor.MASK))
-        assertEquals("Didn’t end", ui.header.outcome)
+        assertEquals("没有结束", ui.header.outcome)
     }
 }

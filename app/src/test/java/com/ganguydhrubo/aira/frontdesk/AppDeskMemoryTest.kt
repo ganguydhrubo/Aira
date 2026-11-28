@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.learn.memory.MemoryKind
 import com.ganguydhrubo.aira.core.learn.memory.MemorySource
 import com.ganguydhrubo.aira.core.learn.memory.MemoryStatus
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 

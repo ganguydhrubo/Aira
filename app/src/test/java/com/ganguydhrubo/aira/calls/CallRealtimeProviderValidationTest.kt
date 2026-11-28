@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.calls
 
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 class CallRealtimeProviderValidationTest {

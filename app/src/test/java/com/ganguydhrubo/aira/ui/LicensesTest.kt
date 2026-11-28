@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.ui
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 import java.io.File
 import com.ganguydhrubo.aira.about.ui.Licenses
@@ -41,6 +41,6 @@ class LicensesTest {
         val entries = Licenses.runtimePackages(manifest.readText())
         assertTrue(entries.size > 40)
         listOf("busybox", "musl", "python3", "nodejs", "py3-pillow", "py3-pypdf").forEach { n -> assertTrue(n, entries.any { it.name == n }) }
-        entries.forEach { assertTrue(it.name, it.license.isNotBlank() && it.note.startsWith("Version ")) }
+        entries.forEach { assertTrue(it.name, it.license.isNotBlank() && it.note.startsWith("版本 ")) }
     }
 }

@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.cap.phone.shell
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 /** 外壳侧再查一次链接:和 :core 分发器同一组用例,绕过分发器直接调 startView 的也拦得住。 */

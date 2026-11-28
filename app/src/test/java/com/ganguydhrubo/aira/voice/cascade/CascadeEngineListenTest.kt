@@ -7,8 +7,8 @@ import com.ganguydhrubo.aira.voice.model.VoiceCatalogStore
 import com.ganguydhrubo.aira.voice.model.adapters.testPackEntry
 import com.ganguydhrubo.aira.voice.model.voiceTestEnvironment
 import com.ganguydhrubo.aira.voice.ondevice.OnDeviceCatalog
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class CascadeEngineListenTest {

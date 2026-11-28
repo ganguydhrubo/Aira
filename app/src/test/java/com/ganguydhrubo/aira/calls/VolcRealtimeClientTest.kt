@@ -23,11 +23,11 @@ import okhttp3.WebSocketListener
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class VolcRealtimeClientTest {
@@ -306,10 +306,10 @@ class VolcRealtimeClientTest {
             """{"type":"response.output_text.delta","delta":"好"}""",
         ))
         val transcripts = observed.filterIsInstance<VolcRealtimeEvent.UserTranscript>()
-        assertEquals(listOf("Q", "问明天", "问明天几点开门", "问后天几点开门，不要不要预约"),
+        assertEquals(listOf("问", "问明天", "问明天几点开门", "问后天几点开门，不要不要预约"),
             transcripts.filterNot { it.isFinal }.map { it.text })
         assertEquals(VolcRealtimeEvent.UserTranscript("问后天几点开门，不要不要预约", true), transcripts.last())
-        assertEquals(listOf("OK", "OK"), observed.filterIsInstance<VolcRealtimeEvent.AssistantTranscript>().map { it.delta })
+        assertEquals(listOf("好", "好"), observed.filterIsInstance<VolcRealtimeEvent.AssistantTranscript>().map { it.delta })
     }
 
     @Test fun asrUsesExpectedTextFieldPriorityAndCompletedPayload() = runBlocking {

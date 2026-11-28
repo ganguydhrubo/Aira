@@ -6,8 +6,8 @@ import com.ganguydhrubo.aira.core.frontdesk.DeskReport
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -18,54 +18,54 @@ class VoiceCallCopyTest {
 
     @Test
     fun `每类错误各占一条文案`() {
-        assertEquals("The voice credentials were rejected — check the setup", voiceCallErrorText(VoiceCallError.Auth))
-        assertEquals("Connection timed out — try again", voiceCallErrorText(VoiceCallError.ConnectTimeout))
-        assertEquals("The connection dropped", voiceCallErrorText(VoiceCallError.Disconnected))
-        assertEquals("Too many requests — try again shortly", voiceCallErrorText(VoiceCallError.RateLimited))
-        assertEquals("The voice service ran into an error", voiceCallErrorText(VoiceCallError.Provider))
-        assertEquals("No sound from the microphone", voiceCallErrorText(VoiceCallError.MicSilent))
-        assertEquals("Another app is using the audio channel", voiceCallErrorText(VoiceCallError.AudioFocus))
-        assertEquals("Playback failed", voiceCallErrorText(VoiceCallError.Playback))
-        assertEquals("A phone call is in progress — try again after it ends", voiceCallErrorText(VoiceCallError.Busy))
+        assertEquals("实时语音凭据没过，去配置里检查", voiceCallErrorText(VoiceCallError.Auth))
+        assertEquals("连接超时，再试一次", voiceCallErrorText(VoiceCallError.ConnectTimeout))
+        assertEquals("连接断开了", voiceCallErrorText(VoiceCallError.Disconnected))
+        assertEquals("请求太密，稍后再试", voiceCallErrorText(VoiceCallError.RateLimited))
+        assertEquals("实时语音服务出错了", voiceCallErrorText(VoiceCallError.Provider))
+        assertEquals("麦克风收不到声音", voiceCallErrorText(VoiceCallError.MicSilent))
+        assertEquals("声音通道正被别的应用占用", voiceCallErrorText(VoiceCallError.AudioFocus))
+        assertEquals("播放出错了", voiceCallErrorText(VoiceCallError.Playback))
+        assertEquals("正在打电话，结束后再试", voiceCallErrorText(VoiceCallError.Busy))
         assertEquals(VoiceCallError.entries.size, VoiceCallError.entries.map(::voiceCallErrorText).distinct().size)
     }
 
     @Test
     fun `每种结束原因各占一条文案`() {
-        assertEquals("Call ended", voiceCallEndText(EndReason.Hangup))
-        assertEquals("Ended from the notification", voiceCallEndText(EndReason.Notification))
-        assertEquals("A phone call came in — call ended", voiceCallEndText(EndReason.IncomingCall))
-        assertEquals("5 min — call ended", voiceCallEndText(EndReason.Idle, idleMinutes = 5))
-        assertEquals("5 min — call ended", voiceCallStatusText(VoiceCallState.Ended(EndReason.Idle, idleMinutes = 5)))
-        assertEquals("Return to Aira to continue", voiceCallEndText(EndReason.Background))
+        assertEquals("通话已结束", voiceCallEndText(EndReason.Hangup))
+        assertEquals("已从通知挂断", voiceCallEndText(EndReason.Notification))
+        assertEquals("有电话进来，通话结束", voiceCallEndText(EndReason.IncomingCall))
+        assertEquals("5 分钟没有动静，通话已结束", voiceCallEndText(EndReason.Idle, idleMinutes = 5))
+        assertEquals("5 分钟没有动静，通话已结束", voiceCallStatusText(VoiceCallState.Ended(EndReason.Idle, idleMinutes = 5)))
+        assertEquals("请回到 Aira 再继续", voiceCallEndText(EndReason.Background))
         assertEquals(EndReason.entries.size, EndReason.entries.map { voiceCallEndText(it, 5) }.distinct().size)
     }
 
     @Test
     fun `进行中的状态词`() {
-        assertEquals("Connecting…", voiceCallStatusText(VoiceCallState.Connecting))
-        assertEquals("Checking the microphone…", voiceCallStatusText(VoiceCallState.MicCheck))
-        assertEquals("Connected", voiceCallStatusText(VoiceCallState.Active(1_000L)))
+        assertEquals("正在连接…", voiceCallStatusText(VoiceCallState.Connecting))
+        assertEquals("正在检查麦克风…", voiceCallStatusText(VoiceCallState.MicCheck))
+        assertEquals("已连接", voiceCallStatusText(VoiceCallState.Active(1_000L)))
         // 终态的状态词就是结束/错误文案
-        assertEquals("Call ended", voiceCallStatusText(VoiceCallState.Ended(EndReason.Hangup)))
-        assertEquals("Connection timed out — try again", voiceCallStatusText(VoiceCallState.Failed(VoiceCallError.ConnectTimeout, 1)))
+        assertEquals("通话已结束", voiceCallStatusText(VoiceCallState.Ended(EndReason.Hangup)))
+        assertEquals("连接超时，再试一次", voiceCallStatusText(VoiceCallState.Failed(VoiceCallError.ConnectTimeout, 1)))
     }
 
     @Test
     fun `前台汇报说成一句话,正文截到上限`() {
-        assertEquals("订日料: Done: 七点两位", deskReportSpeech(DeskReport(DeskEvent.Succeeded("t1", "七点两位"), "订日料")))
-        assertEquals("订日料: Asking you: 几点？", deskReportSpeech(DeskReport(DeskEvent.NeedsAnswer("t1", "几点？", null), "订日料")))
+        assertEquals("订日料那件，办好了：七点两位", deskReportSpeech(DeskReport(DeskEvent.Succeeded("t1", "七点两位"), "订日料")))
+        assertEquals("订日料那件，在问你：几点？", deskReportSpeech(DeskReport(DeskEvent.NeedsAnswer("t1", "几点？", null), "订日料")))
         val long = deskReportSpeech(DeskReport(DeskEvent.Succeeded("t1", "字".repeat(DESK_RESULT_MAX_CHARS)), "订日料"))
-        assertTrue(long.length <= "订日料: ".length + DESK_RESULT_MAX_CHARS)
+        assertTrue(long.length <= "订日料那件，".length + DESK_RESULT_MAX_CHARS)
     }
 
     @Test
     fun `打字派单的结果回到本地`() {
         fun result(status: String) = buildJsonObject { put("status", status) }
-        assertEquals("Working", typedDeskResult(result("started")))
-        assertEquals("Working", typedDeskResult(result("queued")))
-        assertEquals("Working", typedDeskResult(result("already_dispatched")))
-        assertEquals("Didn’t work out", typedDeskResult(result("failed")))
-        assertEquals("Didn’t work out", typedDeskResult(result("rejected")))
+        assertEquals("正在处理", typedDeskResult(result("started")))
+        assertEquals("正在处理", typedDeskResult(result("queued")))
+        assertEquals("正在处理", typedDeskResult(result("already_dispatched")))
+        assertEquals("没办成", typedDeskResult(result("failed")))
+        assertEquals("没办成", typedDeskResult(result("rejected")))
     }
 }

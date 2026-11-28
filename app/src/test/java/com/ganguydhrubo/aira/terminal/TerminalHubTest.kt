@@ -17,11 +17,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test

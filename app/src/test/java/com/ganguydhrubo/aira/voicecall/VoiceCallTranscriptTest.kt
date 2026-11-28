@@ -12,9 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -136,7 +136,7 @@ class VoiceCallTranscriptTest {
     fun `重复结束不重复写`() = runTest {
         val h = Harness()
         h.transcript.onUser("第一句")
-        h.transcript.onAssistant("A")
+        h.transcript.onAssistant("答")
         h.transcript.close()
         h.transcript.close()
         assertEquals(1, h.appended.size)
@@ -146,7 +146,7 @@ class VoiceCallTranscriptTest {
     fun `没有发起会话时不写`() = runTest {
         val h = Harness(conversationId = null)
         h.transcript.onUser("第一句")
-        h.transcript.onAssistant("A")
+        h.transcript.onAssistant("答")
         h.transcript.close()
         assertTrue(h.appended.isEmpty())
     }

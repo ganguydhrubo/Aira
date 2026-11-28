@@ -7,9 +7,9 @@ import com.ganguydhrubo.aira.core.frontdesk.DeskEvent
 import com.ganguydhrubo.aira.core.frontdesk.DeskReport
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -24,14 +24,14 @@ class DeskNotifierTest {
         val notices = mutableListOf<DeskNotice>()
         val notifier = DeskNotifier(store) { notices += it }
 
-        notifier.record("p", DeskReport(DeskEvent.Succeeded("c1", "订好了Tomorrow 8 点的票"), "订票"))
+        notifier.record("p", DeskReport(DeskEvent.Succeeded("c1", "订好了明早 8 点的票"), "订票"))
 
         val last = store.turns("p").last()
         assertEquals(DeskNotifier.STATUS, last.status)
         assertEquals("", last.userText)
         assertEquals(listOf("c1"), last.deskTasks)
         // 办好了写后台给的结果原文,不加任务名、不截断
-        assertEquals("订好了Tomorrow 8 点的票", last.outcome)
+        assertEquals("订好了明早 8 点的票", last.outcome)
         val notice = notices.single()
         assertEquals("p", notice.conversationId)
         assertEquals("订票", notice.title)
@@ -61,8 +61,8 @@ class DeskNotifierTest {
     // 每种事件都有一句非空的话(包括排队位置)。
     @Test fun everyEventHasCopy() {
         val events = listOf(
-            DeskEvent.Started("c"), DeskEvent.Queued("c", 2), DeskEvent.Progress("c", "Open 日历"),
-            DeskEvent.NeedsAnswer("c", "哪天?", listOf("Today", "Tomorrow")),
+            DeskEvent.Started("c"), DeskEvent.Queued("c", 2), DeskEvent.Progress("c", "打开日历"),
+            DeskEvent.NeedsAnswer("c", "哪天?", listOf("今天", "明天")),
             DeskEvent.NeedsAction("c", ActionKind.Confirm),
             DeskEvent.NeedsAction("c", ActionKind.Takeover),
             DeskEvent.NeedsAction("c", ActionKind.Prerequisite),
@@ -81,7 +81,7 @@ class DeskNotifierTest {
         val notifier = DeskNotifier(store) { notices += it }
         notifier.record("p", DeskReport(DeskEvent.Queued("c1", 1), "查天气"))
         notifier.record("p", DeskReport(DeskEvent.Started("c1"), "查天气"))
-        notifier.record("p", DeskReport(DeskEvent.Progress("c1", "Open 天气"), "查天气"))
+        notifier.record("p", DeskReport(DeskEvent.Progress("c1", "打开天气"), "查天气"))
         assertTrue(store.turns("p").isEmpty())
         assertTrue(notices.isEmpty())
     }

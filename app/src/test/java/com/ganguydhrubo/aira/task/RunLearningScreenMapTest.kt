@@ -9,9 +9,9 @@ import com.ganguydhrubo.aira.core.screen.map.ScreenMapStore
 import com.ganguydhrubo.aira.settings.MemorySwitches
 import com.ganguydhrubo.aira.core.assembly.knownTools
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Test
 
 /** 内存里的屏图仓库,可配置 save 抛错。 */
@@ -45,12 +45,12 @@ class RunLearningScreenMapTest {
 
     @Test fun growsGraphFromRunEvents() {
         val store = MemStore()
-        learn(store, listOf(tapEvent(listOf("首页"), listOf("Settings"))))
+        learn(store, listOf(tapEvent(listOf("首页"), listOf("设置"))))
         val g = store.load("p.a")!!
         assertEquals(2, g.nodes.size)
         // 认得出两屏各带骨架锚点
         assertNotNull(g.nodes.values.firstOrNull { it.anchors.containsKey("首页") })
-        assertNotNull(g.nodes.values.firstOrNull { it.anchors.containsKey("Settings") })
+        assertNotNull(g.nodes.values.firstOrNull { it.anchors.containsKey("设置") })
     }
 
     @Test fun emptyEventsNoGraphNoThrow() {
@@ -62,7 +62,7 @@ class RunLearningScreenMapTest {
     @Test fun writeFailureDoesNotThrow() {
         val store = MemStore().apply { failSave = true }
         // 不抛、结局照旧(learn 返回 notes)
-        val notes = learn(store, listOf(tapEvent(listOf("首页"), listOf("Settings"))))
+        val notes = learn(store, listOf(tapEvent(listOf("首页"), listOf("设置"))))
         assertEquals("run-1", notes.runId)
     }
 }

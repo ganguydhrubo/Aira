@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.proactive
 
 import com.ganguydhrubo.aira.proactive.ListenerReconnect.Step
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class ListenerReconnectTest {

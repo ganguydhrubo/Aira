@@ -4,9 +4,9 @@ import android.content.SharedPreferences
 import com.ganguydhrubo.aira.core.device.shell.RecoveryCapability
 import com.ganguydhrubo.aira.core.device.shell.RecoveryConsent
 import com.ganguydhrubo.aira.core.device.shell.RestoreOutcome
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class RecoverySettingsTest {

@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.chat.ui
 
 import com.ganguydhrubo.aira.cap.web.KeptPage
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Rule
 import org.junit.Test
 

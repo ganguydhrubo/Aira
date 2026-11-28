@@ -14,9 +14,9 @@ import com.ganguydhrubo.aira.settings.RoleChoices
 import com.ganguydhrubo.aira.settings.connect
 import com.ganguydhrubo.aira.settings.ensureConfig
 import com.ganguydhrubo.aira.settings.saveGroup
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -32,7 +32,7 @@ class CurrentModelAllowanceTest {
     private fun config(id: String, providerId: String, name: String = "", model: String = "$id-model") =
         ProviderConfig(id = id, kind = ProviderConfig.Kind.OpenAiCompat, baseUrl = "https://$providerId.example.com", model = model, capabilities = caps(), name = name, providerId = providerId)
 
-    private val providers = listOf(provider("p1", "DeepSeek"), provider("p2", "Kimi"), provider("p3", "Zhipu GLM"))
+    private val providers = listOf(provider("p1", "DeepSeek"), provider("p2", "Kimi"), provider("p3", "智谱"))
 
     @Test fun concreteModelShowsItsModelIdAndOnlyItsProvider() {
         // 显示口径跟设置里模型行一致:用模型标识;name 不看(use() 建的配置 name 就是服务商名)

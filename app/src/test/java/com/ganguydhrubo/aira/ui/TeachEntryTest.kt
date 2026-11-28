@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.ui
 
 import com.ganguydhrubo.aira.core.learn.teach.TeachPhase
 import com.ganguydhrubo.aira.core.learn.teach.TeachSession
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 import com.ganguydhrubo.aira.teach.ui.showDone
 

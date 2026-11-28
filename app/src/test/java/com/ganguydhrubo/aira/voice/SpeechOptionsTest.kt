@@ -4,10 +4,10 @@ import com.ganguydhrubo.aira.core.model.ListedModel
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.settings.Provider
 import com.ganguydhrubo.aira.settings.ProviderConfig
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -54,14 +54,14 @@ class SpeechOptionsTest {
 
     @Test fun autoWithSystemShowsPhoneAndOffline() {
         val s = SpeechOptions.summary(SpeechChoice.Auto, SystemCapability(available = true, onDevice = true), listOf(openAi))
-        assertEquals("Built into the phone", s.title)
-        assertEquals("Works offline", s.sub)
+        assertEquals("手机自带", s.title)
+        assertEquals("可离线", s.sub)
         assertTrue(s.subOk)
     }
 
     @Test fun autoWithoutSystemIsUnset() {
         val s = SpeechOptions.summary(SpeechChoice.Auto, SystemCapability(false, false), listOf(openAi))
-        assertEquals("Not set", s.title)
+        assertEquals("未设置", s.title)
         assertNull(s.sub)
     }
 
@@ -69,8 +69,8 @@ class SpeechOptionsTest {
         val silent = SystemCapability(available = true, onDevice = true, responsive = false)
         for (choice in listOf(SpeechChoice.Auto, SpeechChoice.System)) {
             val s = SpeechOptions.summary(choice, silent, listOf(openAi))
-            assertEquals("Built into the phone", s.title)
-            assertEquals("Not responding", s.sub)
+            assertEquals("手机自带", s.title)
+            assertEquals("没有响应", s.sub)
             assertFalse(s.subOk)
         }
     }
@@ -78,7 +78,7 @@ class SpeechOptionsTest {
     @Test fun missingProviderIsUnset() {
         val choice = SpeechChoice.Provider("gone", "whisper-1", TranscribeMethod.AudioTranscriptions)
         val s = SpeechOptions.summary(choice, SystemCapability(true, true), listOf(openAi))
-        assertEquals("Not set", s.title)
+        assertEquals("未设置", s.title)
     }
 
     @Test fun providerChoiceShowsModelAndProviderName() {
@@ -89,6 +89,6 @@ class SpeechOptionsTest {
     }
 
     @Test fun offShowsNone() {
-        assertEquals("None", SpeechOptions.summary(SpeechChoice.Off, SystemCapability(true, true), emptyList()).title)
+        assertEquals("不用", SpeechOptions.summary(SpeechChoice.Off, SystemCapability(true, true), emptyList()).title)
     }
 }

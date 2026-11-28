@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.chat
 
 import com.ganguydhrubo.aira.core.agent.Turn
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -55,7 +55,7 @@ class AutoArchiveTest {
         val store = ConversationStore(dir)
         val now = System.currentTimeMillis()
         listOf("old", "fresh", "running", "pinned", "current").forEach {
-            store.append(it, Turn("第 $it 个", "OK", "succeeded", atMs = if (it == "fresh") now else now - 40 * day))
+            store.append(it, Turn("第 $it 个", "好", "succeeded", atMs = if (it == "fresh") now else now - 40 * day))
         }
         store.setPinned("pinned", pinned = true)
         val old = now - 40 * day
@@ -79,7 +79,7 @@ class AutoArchiveTest {
         val dir = tmp.newFolder()
         val store = ConversationStore(dir)
         val now = System.currentTimeMillis()
-        store.append("a", Turn("旧对话", "OK", "succeeded", atMs = now - 40 * day))
+        store.append("a", Turn("旧对话", "好", "succeeded", atMs = now - 40 * day))
         File(dir, "a.json").setLastModified(now - 40 * day)
         store.setArchived("a", true, at = now - 2 * day)
         assertTrue(store.setArchived("a", false, at = now))
@@ -93,7 +93,7 @@ class AutoArchiveTest {
         val store = ConversationStore(dir)
         val now = System.currentTimeMillis()
         listOf("restored", "updated", "backdated", "pinned", "current", "deleted", "old").forEach {
-            store.append(it, Turn("旧消息", "OK", "succeeded", atMs = now - 40 * day))
+            store.append(it, Turn("旧消息", "好", "succeeded", atMs = now - 40 * day))
             assertTrue(File(dir, "$it.json").setLastModified(now - 40 * day))
         }
         val cutoff = AutoArchive.cutoff(30, now)
@@ -102,8 +102,8 @@ class AutoArchiveTest {
 
         store.setArchived("restored", true, at = now - day)
         store.setArchived("restored", false, at = now)
-        store.append("updated", Turn("新消息", "OK", "succeeded"))
-        store.append("backdated", Turn("补存的消息", "OK", "succeeded", atMs = now - 40 * day))
+        store.append("updated", Turn("新消息", "好", "succeeded"))
+        store.append("backdated", Turn("补存的消息", "好", "succeeded", atMs = now - 40 * day))
         store.setPinned("pinned", true)
         store.setCurrent(CurrentChat.Open("current"))
         store.delete("deleted")
@@ -123,7 +123,7 @@ class AutoArchiveTest {
         val dir = tmp.newFolder()
         val now = System.currentTimeMillis()
         val store = ConversationStore(dir)
-        store.append("old", Turn("旧消息", "OK", "succeeded", atMs = now - 40 * day))
+        store.append("old", Turn("旧消息", "好", "succeeded", atMs = now - 40 * day))
         val active = mutableListOf<String>()
         val runningSnapshot = active.toList()
         active.add("old") // 模拟任务在快照之后开始，并尚未追加结果。
@@ -156,10 +156,10 @@ class AutoArchiveTest {
             }
             file.readText()
         })
-        store.append("old", Turn("旧消息", "OK", "succeeded", atMs = now - 40 * day))
+        store.append("old", Turn("旧消息", "好", "succeeded", atMs = now - 40 * day))
         blockRead.set(true)
         val archive = Thread { runCatching { AutoArchive.run(store, 30, now = now) }.onFailure(failure::set) }
-        val append = Thread { runCatching { store.append("old", Turn("新消息", "OK", "succeeded")) }.onFailure(failure::set) }
+        val append = Thread { runCatching { store.append("old", Turn("新消息", "好", "succeeded")) }.onFailure(failure::set) }
         archive.start()
         try {
             assertTrue(entered.await(10, TimeUnit.SECONDS))
@@ -182,7 +182,7 @@ class AutoArchiveTest {
         val now = System.currentTimeMillis()
         var reads = 0
         val store = ConversationStore(dir, readConversation = { file -> reads++; file.readText() })
-        store.append("fresh", Turn("新消息", "OK", "succeeded", runId = "run", atMs = now))
+        store.append("fresh", Turn("新消息", "好", "succeeded", runId = "run", atMs = now))
 
         assertEquals(0, AutoArchive.run(store, 30, now = now))
         assertEquals(1, reads)
@@ -200,7 +200,7 @@ class AutoArchiveTest {
         val dir = tmp.newFolder()
         val now = System.currentTimeMillis()
         val store = ConversationStore(dir)
-        store.append("legacy", Turn("旧格式", "OK", "succeeded", atMs = now))
+        store.append("legacy", Turn("旧格式", "好", "succeeded", atMs = now))
         val legacy = File(dir, "legacy.json")
         legacy.writeText(legacy.readText().replace(Regex(",\\\"atMs\\\":\\d+"), ""))
         assertTrue(legacy.setLastModified(now))
@@ -213,14 +213,14 @@ class AutoArchiveTest {
         val dir = tmp.newFolder()
         val now = System.currentTimeMillis()
         val store = ConversationStore(dir)
-        store.append("old", Turn("旧消息", "OK", "succeeded", runId = "run", atMs = now - 40 * day))
+        store.append("old", Turn("旧消息", "好", "succeeded", runId = "run", atMs = now - 40 * day))
         store.updateTurn("old", "run") { it.copy(outcome = "后台补写") }
         assertTrue(store.branch("old", "branch", 0))
-        store.append("legacy", Turn("旧格式", "OK", "succeeded", atMs = now - 40 * day))
+        store.append("legacy", Turn("旧格式", "好", "succeeded", atMs = now - 40 * day))
         val legacy = File(dir, "legacy.json")
         legacy.writeText(legacy.readText().replace(Regex(",\\\"atMs\\\":\\d+"), ""))
         assertTrue(legacy.setLastModified(now - 40 * day))
-        store.append("fresh", Turn("新消息", "OK", "succeeded", atMs = now))
+        store.append("fresh", Turn("新消息", "好", "succeeded", atMs = now))
 
         assertEquals(3, AutoArchive.run(store, days = 30, now = now))
         listOf("old", "branch", "legacy").forEach { assertEquals(now, store.archivedAt(it)) }
@@ -231,7 +231,7 @@ class AutoArchiveTest {
     @Test fun runDoesNothingWhenOff() {
         val dir = tmp.newFolder()
         val store = ConversationStore(dir)
-        store.append("old", Turn("很久以前", "OK", "succeeded"))
+        store.append("old", Turn("很久以前", "好", "succeeded"))
         File(dir, "old.json").setLastModified(System.currentTimeMillis() - 400 * day)
 
         assertEquals(0, AutoArchive.run(store, days = 0))

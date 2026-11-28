@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.cap.root
 
 import com.ganguydhrubo.aira.core.cap.root.RootRun
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class RootCommandsTest {

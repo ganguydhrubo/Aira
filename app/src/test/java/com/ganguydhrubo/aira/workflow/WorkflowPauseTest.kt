@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.workflow
 
 import com.ganguydhrubo.aira.core.run.PauseFlag
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test

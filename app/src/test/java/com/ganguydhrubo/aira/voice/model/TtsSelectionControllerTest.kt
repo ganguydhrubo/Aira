@@ -7,11 +7,11 @@ import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.settings.ProviderConfig
 import com.ganguydhrubo.aira.settings.ProviderStore
 import com.ganguydhrubo.aira.settings.connect
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

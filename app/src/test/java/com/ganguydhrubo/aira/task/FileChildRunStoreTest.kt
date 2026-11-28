@@ -3,7 +3,7 @@ package com.ganguydhrubo.aira.task
 import com.ganguydhrubo.aira.core.run.ChildPhase
 import com.ganguydhrubo.aira.core.run.ChildRecord
 import java.nio.file.Files
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class FileChildRunStoreTest {

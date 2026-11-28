@@ -11,6 +11,10 @@ import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Assume.assumeTrue
 import org.junit.Rule
 import org.junit.Test

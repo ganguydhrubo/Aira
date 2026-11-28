@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.browser
 
 import com.ganguydhrubo.aira.chat.ConversationSummary
 import com.ganguydhrubo.aira.chat.PageOrigin
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class PageConversationsTest {

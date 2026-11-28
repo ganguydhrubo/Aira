@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.browser
 
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class BrowserFileRequestsTest {

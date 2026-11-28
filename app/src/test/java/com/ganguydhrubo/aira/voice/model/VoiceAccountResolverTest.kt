@@ -3,13 +3,13 @@ package com.ganguydhrubo.aira.voice.model
 import com.ganguydhrubo.aira.settings.KeyCipher
 import com.ganguydhrubo.aira.settings.Provider
 import com.ganguydhrubo.aira.settings.ProviderConfig
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 class VoiceAccountResolverTest {

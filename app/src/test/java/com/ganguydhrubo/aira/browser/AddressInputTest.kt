@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.browser
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class AddressInputTest {

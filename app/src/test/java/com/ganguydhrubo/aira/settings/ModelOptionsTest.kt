@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.model.ListedModel
 import com.ganguydhrubo.aira.core.model.ModelEndpoint
 import com.ganguydhrubo.aira.core.model.ModelProtocol
 import com.ganguydhrubo.aira.core.model.PromptCaching
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class ModelOptionsTest {
@@ -66,7 +66,7 @@ class ModelOptionsTest {
             ListedModel("moonshot-v1"),
         )
         val options = ModelOptions.merge(listed, base)
-        val qwen = ProviderPresets.all.single { it.label == "Qwen (Alibaba Cloud)" }.familyTokens
+        val qwen = ProviderPresets.all.single { it.label == "通义千问" }.familyTokens
         assertEquals(listOf("qwen"), qwen)
         assertEquals(
             listOf("qwen-plus", "qwen-max", "Other/Chat", "antdigital/Ling-3.1-flash", "moonshot-v1"),

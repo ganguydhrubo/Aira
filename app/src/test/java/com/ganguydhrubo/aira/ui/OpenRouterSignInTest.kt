@@ -29,11 +29,11 @@ import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -138,8 +138,8 @@ class OpenRouterSignInTest {
         val vm = ModelSetupViewModel(s, scope, io = Dispatchers.IO, browser = browser, signIns = ChatGptSignIns(scope))
         val ui = vm.signInAndWait(AccountProvider.OpenRouter)
         assertEquals(AccountProvider.OpenRouter, ui.accountSignIn.provider)
-        assertEquals("Sign-in was cancelled.", ui.accountSignIn.failure)
-        assertEquals(listOf<String?>("Sign-in was cancelled."), browser.pages)
+        assertEquals("已取消登录。", ui.accountSignIn.failure)
+        assertEquals(listOf<String?>("已取消登录。"), browser.pages)
         assertTrue(s.providers.value.isEmpty())
         assertEquals(0, server.requestCount)
     }

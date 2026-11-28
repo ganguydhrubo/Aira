@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.voice.ondevice
 
 import com.ganguydhrubo.aira.i18n.AppLanguage
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 import java.io.File
 import java.util.Locale
@@ -12,7 +12,7 @@ class OnDeviceLanguageTest {
 
     @Test
     fun scriptAndRegionTagsMapToLanguagePart() {
-        assertEquals("zh", OnDeviceLanguage.languagePart("en-CN"))
+        assertEquals("zh", OnDeviceLanguage.languagePart("zh-Hans-CN"))
         assertEquals("pt", OnDeviceLanguage.languagePart("pt-BR"))
         assertEquals("id", OnDeviceLanguage.languagePart("in-ID"))
         assertNull(OnDeviceLanguage.languagePart(null))

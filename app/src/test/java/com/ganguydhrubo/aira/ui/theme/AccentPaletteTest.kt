@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.ui.theme
 import androidx.compose.ui.graphics.Color
 import com.ganguydhrubo.aira.settings.ThemeAccent
 import kotlin.math.pow
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 
 /** 强调色只换强调色那三项;每种颜色上的字不比默认蓝色难认,放在页面上也看得清。 */

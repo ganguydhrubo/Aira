@@ -3,10 +3,10 @@ package com.ganguydhrubo.aira.settings
 import com.ganguydhrubo.aira.core.model.ImageAspect
 import com.ganguydhrubo.aira.core.model.ListedModel
 import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

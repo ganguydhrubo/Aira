@@ -3,8 +3,8 @@ package com.ganguydhrubo.aira.task.ui
 import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.run.record.RunMetrics
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 class RunMetricsCopyTest {
@@ -16,7 +16,7 @@ class RunMetricsCopyTest {
         assertEquals("45 秒", RunMetricsCopy.duration(45_000))
         assertEquals("1 分 0 秒", RunMetricsCopy.duration(59_960))
         assertEquals("2 分 13 秒", RunMetricsCopy.duration(133_000))
-        assertEquals("1 h 5 分", RunMetricsCopy.duration(3_900_000))
+        assertEquals("1 小时 5 分", RunMetricsCopy.duration(3_900_000))
     }
 
     @Test fun breakdownShowsSharesTokensAndSteps() {
@@ -28,12 +28,12 @@ class RunMetricsCopyTest {
         assertEquals("2 秒 · 20%", rows[RunMetricsCopy.OBSERVE])
         assertEquals("1 秒 · 10%", rows[RunMetricsCopy.ACT])
         assertEquals("2 秒 · 20%", rows[RunMetricsCopy.OTHER])
-        assertEquals("0.5 秒", rows["Of which retry waits"])
-        assertEquals("1.23 万", rows["Input tokens"])
-        assertEquals("1 万", rows["Cache hits"])
-        assertEquals("4 步", rows["Steps"])
-        assertEquals("3 / 2 次", rows["Reads / actions"])
-        assertTrue(rows.getValue("All logical model calls").startsWith("5 次"))
-        assertEquals("6 次", rows["All HTTP requests"])
+        assertEquals("0.5 秒", rows["其中重试等待"])
+        assertEquals("1.23 万", rows["输入 Token"])
+        assertEquals("1 万", rows["缓存命中"])
+        assertEquals("4 步", rows["步数"])
+        assertEquals("3 次 / 2 次", rows["读屏 / 操作"])
+        assertTrue(rows.getValue("全部逻辑调用").startsWith("5 次"))
+        assertEquals("6 次", rows["全部 HTTP 请求"])
     }
 }

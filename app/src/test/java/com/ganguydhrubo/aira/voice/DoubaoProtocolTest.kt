@@ -6,6 +6,10 @@ import java.util.zip.GZIPInputStream
 import java.util.zip.GZIPOutputStream
 import kotlinx.serialization.json.*
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 /** Independent server fixtures following the official binary protocol examples. No credentials/audio recordings. */

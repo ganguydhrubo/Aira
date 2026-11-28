@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.chat
 
 import com.ganguydhrubo.aira.core.agent.Turn
 import com.ganguydhrubo.aira.core.remote.RemoteCompanion
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -60,7 +60,7 @@ class RemoteConversationReaderTest {
 
     @Test fun clipsLongFieldsAndMarksTheTurn() {
         val id = store.newConversation()
-        store.append(id, Turn("Q".repeat(RemoteCompanion.MAX_USER_TEXT + 10), "A".repeat(RemoteCompanion.MAX_OUTCOME + 10), "succeeded", note = "注"))
+        store.append(id, Turn("问".repeat(RemoteCompanion.MAX_USER_TEXT + 10), "答".repeat(RemoteCompanion.MAX_OUTCOME + 10), "succeeded", note = "注"))
         val turn = reader.conversation(id, 0, 10)!!.turns.single()
         assertTrue(turn.truncated)
         assertTrue(turn.userText.endsWith("…"))

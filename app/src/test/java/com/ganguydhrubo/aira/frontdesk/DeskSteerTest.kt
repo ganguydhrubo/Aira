@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.frontdesk
 
 import com.ganguydhrubo.aira.task.SteerNote
 import com.ganguydhrubo.aira.task.SteerState
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 /**

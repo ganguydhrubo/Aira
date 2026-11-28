@@ -28,11 +28,11 @@ import com.ganguydhrubo.aira.settings.removeProvider
 import com.ganguydhrubo.aira.settings.saveGroup
 import com.ganguydhrubo.aira.settings.setMainFallback
 import com.ganguydhrubo.aira.settings.setFallback
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

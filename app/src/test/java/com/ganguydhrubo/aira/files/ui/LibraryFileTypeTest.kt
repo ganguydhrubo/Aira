@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.files.ui
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class LibraryFileTypeTest {

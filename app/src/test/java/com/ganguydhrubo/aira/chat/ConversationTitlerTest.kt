@@ -10,10 +10,10 @@ import com.ganguydhrubo.aira.core.model.StopReason
 import com.ganguydhrubo.aira.core.model.ToolSpec
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -61,7 +61,7 @@ class ConversationTitlerTest {
     @Test fun pageContextIsNotPartOfTheTitleInput() = runBlocking {
         val m = Titler("挑耳机")
         val first = com.ganguydhrubo.aira.core.agent.AttachedPage.compose(
-            com.ganguydhrubo.aira.core.agent.AttachedPage.Page("https://shop.example.com/s", "Search results"), "挑一个评价最好的")
+            com.ganguydhrubo.aira.core.agent.AttachedPage.Page("https://shop.example.com/s", "搜索结果"), "挑一个评价最好的")
         assertEquals("挑耳机", ConversationTitler.generate(listOf(m), first))
         assertTrue(text(m).contains("挑一个评价最好的"))
         assertFalse(text(m).contains("shop.example.com"))
@@ -158,7 +158,7 @@ class ConversationTitlerTest {
         assertFalse(a.setTitle(id, "  "))
         assertTrue(a.setTitle(id, "附近的川菜"))
         assertFalse(a.setTitle(id, "改一下"))
-        a.append(id, Turn("帮我看看附近评分最高的川菜", "OK", "succeeded"))
+        a.append(id, Turn("帮我看看附近评分最高的川菜", "好", "succeeded"))
         val b = ConversationStore(dir)
         assertEquals("附近的川菜", b.title(id))
         assertEquals("附近的川菜", b.list().single().title)

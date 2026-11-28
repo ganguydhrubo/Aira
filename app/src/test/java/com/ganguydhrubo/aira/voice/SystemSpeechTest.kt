@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.voice
 
 import android.speech.SpeechRecognizer
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class SystemSpeechTest {
@@ -49,6 +49,7 @@ class SystemSpeechTest {
         assertEquals("es-MX", SystemSpeech.speechTag(com.ganguydhrubo.aira.i18n.AppLanguage.Spanish, java.util.Locale.forLanguageTag("es-MX")))
         assertEquals("id-ID", SystemSpeech.speechTag(com.ganguydhrubo.aira.i18n.AppLanguage.Indonesian, java.util.Locale.forLanguageTag("in-ID")))
         assertEquals("pt", SystemSpeech.isoCode("pt-BR"))
+        assertEquals("zh", SystemSpeech.isoCode("zh-TW"))
         assertEquals("en", SystemSpeech.isoCode("en-US"))
     }
 
@@ -79,7 +80,7 @@ class SystemSpeechTest {
     @Test
     fun systemLanguageDropsScriptAndExtensions() {
         val system = com.ganguydhrubo.aira.i18n.AppLanguage.System
-        assertEquals("zh-CN", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("en-CN")))
+        assertEquals("zh-CN", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("zh-Hans-CN")))
         assertEquals("zh-TW", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("zh-Hant-TW")))
         assertEquals("sr-RS", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("sr-Latn-RS")))
         assertEquals("de-DE", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("de-DE-u-co-phonebk")))

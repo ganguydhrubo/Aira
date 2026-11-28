@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.settings
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import com.ganguydhrubo.aira.core.prompt.PersonaStyle
 import org.junit.Rule
 import org.junit.Test
@@ -51,7 +51,7 @@ class PersonaStoreTest {
         val dir = tmp.newFolder("p")
         val s = store(dir)
         val style = PersonaStyle(base = PersonaStyle.Base.Crisp, emoji = PersonaStyle.Level.Less)
-        val p = s.add("Crisp", "", "", style).getOrThrow()
+        val p = s.add("干练", "", "", style).getOrThrow()
         assertEquals(style, store(dir).get(p.id)?.style)
         assertTrue(File(dir, "personas.json").readText().contains("\"base\": \"crisp\""))
         val renamed = s.update(p.copy(name = "更干练")).getOrThrow()
@@ -129,19 +129,19 @@ class PersonaStoreTest {
         val dir = tmp.newFolder("p")
         val s = store(dir)
         // 点了本来就选着的「默认」:什么都不留
-        s.editActive("My style") { it.copy(style = it.style.copy(base = PersonaStyle.Base.Default)) }.getOrThrow()
+        s.editActive("我的风格") { it.copy(style = it.style.copy(base = PersonaStyle.Base.Default)) }.getOrThrow()
         assertTrue(s.personas.value.isEmpty())
         assertNull(s.activeId.value)
         assertFalse(File(dir, "personas.json").exists())
 
-        val first = s.editActive("My style") { it.copy(style = it.style.copy(base = PersonaStyle.Base.Crisp)) }.getOrThrow()
-        assertEquals("My style", first.name)
+        val first = s.editActive("我的风格") { it.copy(style = it.style.copy(base = PersonaStyle.Base.Crisp)) }.getOrThrow()
+        assertEquals("我的风格", first.name)
         assertEquals(first.id, store(dir).activeId.value)
         assertEquals(1, first.revision)
 
         val second = s.editActive("不会用到") { it.copy(style = it.style.copy(emoji = PersonaStyle.Level.Less)) }.getOrThrow()
         assertEquals(first.id, second.id)
-        assertEquals("My style", second.name)
+        assertEquals("我的风格", second.name)
         assertEquals(2, second.revision)
         assertEquals(PersonaStyle(base = PersonaStyle.Base.Crisp, emoji = PersonaStyle.Level.Less), store(dir).active()?.style)
         assertEquals(1, s.personas.value.size)
@@ -158,9 +158,9 @@ class PersonaStoreTest {
         val s = store(dir)
         val old = s.add("Crisp", "", "", PersonaStyle(base = PersonaStyle.Base.Crisp)).getOrThrow()
         assertNull(s.activeId.value)
-        val created = s.editActive("My style") { it.copy(style = it.style.copy(base = PersonaStyle.Base.Playful)) }.getOrThrow()
+        val created = s.editActive("我的风格") { it.copy(style = it.style.copy(base = PersonaStyle.Base.Playful)) }.getOrThrow()
         assertNotEquals(old.id, created.id)
-        assertEquals("My style", created.name)
+        assertEquals("我的风格", created.name)
         assertEquals(created.id, store(dir).activeId.value)
         assertEquals(old, store(dir).get(old.id))
         assertEquals(2, s.personas.value.size)
@@ -170,7 +170,7 @@ class PersonaStoreTest {
     @Test fun nicknameIsStoredAndValidated() {
         val dir = tmp.newFolder("p")
         val s = store(dir)
-        val p = s.editActive("My style") { it.copy(nickname = "Kaguya") }.getOrThrow()
+        val p = s.editActive("我的风格") { it.copy(nickname = "Kaguya") }.getOrThrow()
         assertEquals("Kaguya", store(dir).active()?.nickname)
         assertEquals("Kaguya", p.assistant)
         assertFalse(p.changesNothing)
@@ -187,7 +187,7 @@ class PersonaStoreTest {
     @Test fun defaultNicknameChangesNothing() {
         val dir = tmp.newFolder("p")
         val s = store(dir)
-        s.editActive("My style") { it.copy(nickname = " Aira ") }.getOrThrow()
+        s.editActive("我的风格") { it.copy(nickname = " Aira ") }.getOrThrow()
         assertTrue(s.personas.value.isEmpty())
         File(dir, "personas.json").writeText("""{"version":1,"personas":[{"id":"a","name":"A","prompt":"x"}]}""")
         assertEquals("Aira", store(dir).get("a")?.assistant)
@@ -208,7 +208,7 @@ class PersonaStoreTest {
         assertTrue(s.rename(a.id, "x".repeat(41)).isFailure)
         assertEquals("上班", s.get(a.id)?.name)
         val copy = s.duplicate(a.id) { "$it 副本" }.getOrThrow()
-        assertEquals("上班 copy", copy.name)
+        assertEquals("上班 副本", copy.name)
         assertEquals(renamed.id, s.activeId.value)
         val long = s.create("y".repeat(40)).getOrThrow()
         assertEquals(40, s.duplicate(long.id) { "$it 副本" }.getOrThrow().name.length)
@@ -221,7 +221,7 @@ class PersonaStoreTest {
         assertTrue(s.add("more", "", "x").isFailure)
         assertTrue(s.create("more").isFailure)
         assertTrue(s.duplicate(s.personas.value.first().id).isFailure)
-        assertTrue(s.editActive("My style") { it.copy(prompt = "短一点") }.isFailure)
+        assertTrue(s.editActive("我的风格") { it.copy(prompt = "短一点") }.isFailure)
         assertEquals(PersonaStore.MAX_PERSONAS, s.personas.value.size)
     }
 

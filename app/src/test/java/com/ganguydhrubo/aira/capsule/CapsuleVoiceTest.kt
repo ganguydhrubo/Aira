@@ -7,7 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
@@ -70,10 +70,10 @@ class CapsuleVoiceTest {
     }
 
     @Test fun sentNoteSaysWhatHappenedWithTheFirstWords() {
-        assertEquals("Told the task: 要下午三点以后的，二等座…", CapsuleVoice.sent(CardInputKind.Steer, "要下午三点以后的，二等座靠窗"))
-        assertEquals("Answered: 明天上午", CapsuleVoice.sent(CardInputKind.Answer, "明天上午"))
-        assertEquals("Sent: 查一下天气", CapsuleVoice.sent(CardInputKind.Continue, "查一下天气"))
-        assertEquals("Sent: 查一下天气", CapsuleVoice.sent(CardInputKind.Start, "查一下天气"))
+        assertEquals("已插话：要下午三点以后的，二等座…", CapsuleVoice.sent(CardInputKind.Steer, "要下午三点以后的，二等座靠窗"))
+        assertEquals("已回答：明天上午", CapsuleVoice.sent(CardInputKind.Answer, "明天上午"))
+        assertEquals("已发出：查一下天气", CapsuleVoice.sent(CardInputKind.Continue, "查一下天气"))
+        assertEquals("已发出：查一下天气", CapsuleVoice.sent(CardInputKind.Start, "查一下天气"))
     }
 
     // 松开后引擎一直不给结果:到时限一定要收尾,面板不能永远停在「转文字…」

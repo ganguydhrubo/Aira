@@ -2,6 +2,10 @@ package com.ganguydhrubo.aira.cap.phone.shell
 
 import android.media.AudioDeviceInfo
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 /** Protect the already-working startup paths while auditing the 1.1.5 change. */

@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.model.usage.TokenBudgetLimits
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class FeatureFlagsTokenBudgetTest {

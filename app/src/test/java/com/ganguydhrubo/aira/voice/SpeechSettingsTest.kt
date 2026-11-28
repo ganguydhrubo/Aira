@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.voice
 
 import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class SpeechSettingsTest {

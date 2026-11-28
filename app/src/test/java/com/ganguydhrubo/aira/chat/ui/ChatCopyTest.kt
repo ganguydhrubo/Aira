@@ -5,10 +5,10 @@ import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.chat.BranchOrigin
 import com.ganguydhrubo.aira.chat.ConversationSummary
 import com.ganguydhrubo.aira.core.model.usage.DeepSeekCost
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -41,7 +41,7 @@ class ChatCopyTest {
 
     /** 分支标题:源标题后面加后缀,总长不超过 24 字;截的是源标题,后缀留着,emoji 不截半个。 */
     @Test fun branchTitleKeepsTheSuffixWhenTruncating() {
-        val suffix = " · branch"
+        val suffix = " · 分支"
         val long = "一二三四五六七八九十一二三四五六七八九十一二三四五"
         val title = ChatCopy.branchTitle(long, suffix)
         assertTrue(title.endsWith(suffix))
@@ -57,7 +57,7 @@ class ChatCopyTest {
         assertEquals("查车次", ChatCopy.title(listOf(first, first.copy(goal = "再查"))))
         assertEquals("", ChatCopy.title(emptyList()))
         // 只发了附件:不拿路径当标题
-        assertEquals("Photo", ChatCopy.title(listOf(first.copy(goal = "附件:/workspace/inbox/a.jpg(1 KB)"))))
+        assertEquals("照片", ChatCopy.title(listOf(first.copy(goal = "附件:/workspace/inbox/a.jpg(1 KB)"))))
         assertEquals("a.pdf", ChatCopy.plainTitle("附件:/workspace/inbox/a.pdf(1 KB)"))
         assertEquals(ScreenCopy.TAG, ChatCopy.plainTitle("[[screen:s1]]"))
         // 在浏览器页上对着一页问的:页面说明不当标题
@@ -76,14 +76,14 @@ class ChatCopyTest {
             ConversationSummary("b", "明天的高铁票", at(2026, 10, 26)),
             ConversationSummary("c", "PDF 要点整理", at(2026, 10, 26)),
         )
-        val current = CurrentConversation("a", running = true, title = "附近的川菜", subtitle = "Working in 外卖")
+        val current = CurrentConversation("a", running = true, title = "附近的川菜", subtitle = "正在操作外卖")
         val s = drawerSections(
             all, current, others = listOf("c", "d"), otherTitle = { if (it == "d") "第二个任务" else null },
             canSwitch = true, now = now, zone = zone,
         )
         assertEquals(listOf("a", "c", "d"), s.running.map { it.id })
         assertEquals(listOf("附近的川菜", "PDF 要点整理", "第二个任务"), s.running.map { it.title })
-        assertEquals("Working in 外卖", s.running.first().subtitle)
+        assertEquals("正在操作外卖", s.running.first().subtitle)
         assertTrue(s.running.first().current)
         assertEquals(listOf("b"), s.recent.map { it.id })
         assertEquals("", s.recent.single().subtitle)
@@ -113,7 +113,7 @@ class ChatCopyTest {
 
     /** 在浏览器页上对着一页开始的对话:侧栏那一条带着网站(画成「网页」小标签和网站名),进行中、最近两段都是。 */
     @Test fun drawerMarksConversationsStartedFromAPage() {
-        val page = com.ganguydhrubo.aira.chat.PageOrigin("https://shop.example.com/s?k=1", "shop.example.com", "Search")
+        val page = com.ganguydhrubo.aira.chat.PageOrigin("https://shop.example.com/s?k=1", "shop.example.com", "搜索")
         val all = listOf(ConversationSummary("a", "一", 0L, page = page), ConversationSummary("b", "二", 0L), ConversationSummary("c", "三", 0L, page = page))
         val s = drawerSections(all, CurrentConversation("x", false, "", ""), others = listOf("c"), { null }, canSwitch = true, now = 0L, zone = zone)
         assertEquals(listOf("shop.example.com", null), s.recent.map { it.site })
@@ -135,8 +135,8 @@ class ChatCopyTest {
         assertEquals(listOf(true, false), s.recent.map { it.enabled })
         assertEquals(listOf(true, false), s.recent.map { it.current })
         // 当前对话还没存进列表时(刚发出第一句)也列在进行中
-        val fresh = drawerSections(emptyList(), CurrentConversation(null, true, "", "Working"), emptyList(), { null }, false, 0L, zone)
-        assertEquals("New chat", fresh.running.single().title)
+        val fresh = drawerSections(emptyList(), CurrentConversation(null, true, "", "正在处理"), emptyList(), { null }, false, 0L, zone)
+        assertEquals("新对话", fresh.running.single().title)
         assertTrue(fresh.running.single().enabled)
     }
 
@@ -169,7 +169,7 @@ class ChatCopyTest {
             running = listOf(DrawerConversation("a", "一", "", running = true, current = true, enabled = true)),
             recent = listOf(
                 DrawerConversation("b", "二", "", running = false, current = false, enabled = true),
-                DrawerConversation(null, "New chat", "", running = false, current = false, enabled = true),
+                DrawerConversation(null, "新对话", "", running = false, current = false, enabled = true),
             ),
         )
         val archived = listOf(DrawerConversation("c", "三", "", running = false, current = false, enabled = true, archived = true))
@@ -219,21 +219,21 @@ class ChatCopyTest {
     /** 一行写清归档了多久:当天是「今天归档」,其余是「归档于 N 天前」。 */
     @Test fun archivedAgoSaysTodayOrDays() {
         val now = at(2026, 11, 12, 15)
-        assertEquals("Archived today", archivedAgo(at(2026, 11, 12, 9), now, zone))
-        assertEquals("Archived 3 days ago", archivedAgo(at(2026, 11, 9, 15), now, zone))
-        assertEquals("Archived 40 days ago", archivedAgo(at(2026, 10, 3, 15), now, zone))
-        assertEquals("This week", archivePeriodLabel(ArchivePeriod.ThisWeek))
-        assertEquals("This month", archivePeriodLabel(ArchivePeriod.ThisMonth))
-        assertEquals("Earlier", archivePeriodLabel(ArchivePeriod.Earlier))
+        assertEquals("今天归档", archivedAgo(at(2026, 11, 12, 9), now, zone))
+        assertEquals("归档于 3 天前", archivedAgo(at(2026, 11, 9, 15), now, zone))
+        assertEquals("归档于 40 天前", archivedAgo(at(2026, 10, 3, 15), now, zone))
+        assertEquals("本周", archivePeriodLabel(ArchivePeriod.ThisWeek))
+        assertEquals("本月", archivePeriodLabel(ArchivePeriod.ThisMonth))
+        assertEquals("更早", archivePeriodLabel(ArchivePeriod.Earlier))
     }
 
     @Test fun greetingFollowsTheTimeOfDay() {
-        assertEquals("Good morning", ChatCopy.greeting(7))
-        assertEquals("Good afternoon", ChatCopy.greeting(12))
-        assertEquals("Good afternoon", ChatCopy.greeting(15))
-        assertEquals("Good evening", ChatCopy.greeting(20))
-        assertEquals("Up late", ChatCopy.greeting(2))
-        assertEquals("Up late", ChatCopy.greeting(23))
+        assertEquals("早上好", ChatCopy.greeting(7))
+        assertEquals("中午好", ChatCopy.greeting(12))
+        assertEquals("下午好", ChatCopy.greeting(15))
+        assertEquals("晚上好", ChatCopy.greeting(20))
+        assertEquals("夜深了", ChatCopy.greeting(2))
+        assertEquals("夜深了", ChatCopy.greeting(23))
     }
 
     @Test fun clockLabel() {
@@ -246,29 +246,29 @@ class ChatCopyTest {
 
     @Test fun subtitleSaysWhatIsGoingOn() {
         val working = Exchange("x", emptyList(), ExchangeStatus.Working, live = true)
-        assertEquals("Working" to ChatCopy.Tone.Accent, ChatCopy.subtitle(working, null))
-        assertEquals("Working in 设置" to ChatCopy.Tone.Accent, ChatCopy.subtitle(working, "Settings"))
-        assertEquals("Waiting for you" to ChatCopy.Tone.Warn, ChatCopy.subtitle(working.copy(status = ExchangeStatus.NeedsInput("?", null)), null))
-        assertEquals("Waiting for you" to ChatCopy.Tone.Warn, ChatCopy.subtitle(working.copy(status = ExchangeStatus.Paused("why")), null))
-        assertEquals("Waiting for you to unlock" to ChatCopy.Tone.Warn, ChatCopy.subtitle(working.copy(status = ExchangeStatus.WaitingUnlock), null))
-        assertNull(ChatCopy.subtitle(working.copy(status = ExchangeStatus.Done("OK", null)), "Settings"))
+        assertEquals("正在处理" to ChatCopy.Tone.Accent, ChatCopy.subtitle(working, null))
+        assertEquals("正在操作设置" to ChatCopy.Tone.Accent, ChatCopy.subtitle(working, "设置"))
+        assertEquals("等你处理" to ChatCopy.Tone.Warn, ChatCopy.subtitle(working.copy(status = ExchangeStatus.NeedsInput("?", null)), null))
+        assertEquals("等你处理" to ChatCopy.Tone.Warn, ChatCopy.subtitle(working.copy(status = ExchangeStatus.Paused("why")), null))
+        assertEquals("等你解锁手机" to ChatCopy.Tone.Warn, ChatCopy.subtitle(working.copy(status = ExchangeStatus.WaitingUnlock), null))
+        assertNull(ChatCopy.subtitle(working.copy(status = ExchangeStatus.Done("好", null)), "设置"))
         assertNull(ChatCopy.subtitle(null, null))
     }
 
     @Test fun progressLineSaysPausedWhileWaitingForYou() {
         val ex = Exchange("x", emptyList(), ExchangeStatus.Working, live = true, line = "按评分排序")
         assertEquals("按评分排序", ChatCopy.progressLine(ex))
-        assertEquals("Paused", ChatCopy.progressLine(ex.copy(status = ExchangeStatus.NeedsTakeover("login", "Sign-in"))))
-        assertEquals("Paused", ChatCopy.progressLine(ex.copy(status = ExchangeStatus.NeedsConfirmation("t", "b", 1))))
-        assertEquals("Paused", ChatCopy.progressLine(ex.copy(status = ExchangeStatus.WaitingUnlock)))
-        assertEquals("Working", ChatCopy.progressLine(ex.copy(line = "", waitingForModel = true)))
+        assertEquals("已暂停", ChatCopy.progressLine(ex.copy(status = ExchangeStatus.NeedsTakeover("login", "登录"))))
+        assertEquals("已暂停", ChatCopy.progressLine(ex.copy(status = ExchangeStatus.NeedsConfirmation("t", "b", 1))))
+        assertEquals("已暂停", ChatCopy.progressLine(ex.copy(status = ExchangeStatus.WaitingUnlock)))
+        assertEquals("正在处理", ChatCopy.progressLine(ex.copy(line = "", waitingForModel = true)))
     }
 
     @Test fun placeholderFollowsTheComposer() {
         assertEquals(ChatCopy.EMPTY_PROMPT, ChatCopy.placeholder(ComposerMode.Idle, hasHistory = false))
-        assertEquals("Say something more…", ChatCopy.placeholder(ComposerMode.Idle, hasHistory = true))
-        assertEquals("Answer Aira’s question", ChatCopy.placeholder(ComposerMode.Answer, hasHistory = true))
-        assertEquals("Add or change details…", ChatCopy.placeholder(ComposerMode.Busy, hasHistory = true))
+        assertEquals("继续说点什么…", ChatCopy.placeholder(ComposerMode.Idle, hasHistory = true))
+        assertEquals("回答 Aira 的问题", ChatCopy.placeholder(ComposerMode.Answer, hasHistory = true))
+        assertEquals("补充或改要求…", ChatCopy.placeholder(ComposerMode.Busy, hasHistory = true))
     }
 
     @Test fun drawerSectionsGroupsProjectChatsAndIncludesThemInSelectableIds() {

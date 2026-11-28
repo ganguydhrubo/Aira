@@ -2,6 +2,10 @@ package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.device.CredentialKind
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

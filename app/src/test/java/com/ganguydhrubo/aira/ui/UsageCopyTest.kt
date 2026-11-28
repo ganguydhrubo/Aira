@@ -11,7 +11,7 @@ import com.ganguydhrubo.aira.core.model.usage.UsageQuery
 import com.ganguydhrubo.aira.core.model.usage.UsageRange
 import com.ganguydhrubo.aira.core.model.usage.UsageRow
 import com.ganguydhrubo.aira.core.model.usage.UsageSnapshot
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 import java.time.Instant
 import java.time.LocalDate

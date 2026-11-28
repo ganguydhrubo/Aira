@@ -35,9 +35,9 @@ import com.ganguydhrubo.aira.voice.model.voiceTestEnvironment
 import com.ganguydhrubo.aira.voice.model.voiceTestProvider
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.jsonPrimitive
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class TaskRunTranscribeTest {

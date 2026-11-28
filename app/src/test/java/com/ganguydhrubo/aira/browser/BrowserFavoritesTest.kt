@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.browser
 
 import com.ganguydhrubo.aira.cap.web.SiteEntry
 import com.ganguydhrubo.aira.cap.web.SiteRegistry
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

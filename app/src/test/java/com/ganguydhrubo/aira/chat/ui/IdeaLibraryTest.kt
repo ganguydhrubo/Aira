@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 import java.util.Locale
 import kotlin.random.Random

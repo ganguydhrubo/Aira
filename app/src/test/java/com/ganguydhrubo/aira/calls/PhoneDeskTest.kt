@@ -12,10 +12,10 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class PhoneDeskTest {
@@ -94,7 +94,7 @@ class PhoneDeskTest {
         assertEquals("asked", desk.execute(DeskTools.ASK_OWNER, args("第一个问题")).status())
         assertEquals("busy", desk.execute(DeskTools.ASK_OWNER, args("第二个问题")).status())
         assertEquals(listOf("第一个问题"), ask.questions)
-        ask.reply("OK")
+        ask.reply("好")
         // 回了以后可以再问
         assertEquals("asked", desk.execute(DeskTools.ASK_OWNER, args("第三个问题")).status())
     }
@@ -172,11 +172,11 @@ class PhoneDeskTest {
         val unrelayed = mutableListOf<String>()
         val desk = PhoneDesk({ null }, ask, cues::cue) { unrelayed += it }
         desk.execute(DeskTools.ASK_OWNER, args("要包间吗"))
-        ask.reply("No thanks")
+        ask.reply("不要")
         assertTrue(cues.sent.isEmpty())
         assertTrue(unrelayed.isEmpty())
         desk.close()
-        assertEquals(listOf("No thanks"), unrelayed)
+        assertEquals(listOf("不要"), unrelayed)
     }
 
     @Test fun withoutCuesTheModelIsToldToCollectTheReplyAndReAskingCollectsIt() = runBlocking {
@@ -233,13 +233,13 @@ class PhoneDeskTest {
     @Test fun ownerTaskStateIsRenderedForTheDeskContext() = runBlocking {
         val state = MutableStateFlow<TaskState>(TaskState.Running(step = 3, note = "phone_call_dial"))
         val desk = PhoneDesk({ state }, FakeAsk())
-        assertEquals(PhoneDesk.OWNER_TASK_PREFIX + "Running", desk.ownerTaskLine())
+        assertEquals(PhoneDesk.OWNER_TASK_PREFIX + "进行中", desk.ownerTaskLine())
         state.value = TaskState.WaitingInput("哪天?")
         assertEquals(PhoneDesk.OWNER_TASK_PREFIX + "等主人处理", desk.ownerTaskLine())
         // 请示的结果里也带着,协议推不了状态时模型照样知道
         assertEquals(PhoneDesk.OWNER_TASK_PREFIX + "等主人处理", desk.execute(DeskTools.ASK_OWNER, args("x")).text("owner_task"))
         state.value = TaskState.Cancelled
-        assertEquals(PhoneDesk.OWNER_TASK_PREFIX + "Cancelled", desk.ownerTaskLine())
+        assertEquals(PhoneDesk.OWNER_TASK_PREFIX + "已取消", desk.ownerTaskLine())
         assertNull(PhoneDesk({ null }, FakeAsk()).ownerTaskLine())
     }
 
@@ -257,7 +257,7 @@ class PhoneDeskTest {
         withTimeout(1_000) { while (cues.context.isEmpty()) yield() }
         val line = cues.context.single()
         assertTrue(line.startsWith(PhoneDesk.CUE_MARK))
-        assertTrue(line.contains(PhoneDesk.OWNER_TASK_PREFIX + "Done"))
+        assertTrue(line.contains(PhoneDesk.OWNER_TASK_PREFIX + "已完成"))
         // 状态只当背景,不触发模型开口
         assertTrue(cues.sent.isEmpty())
         desk.close()

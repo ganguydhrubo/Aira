@@ -2,11 +2,11 @@ package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.model.chatgpt.ChatGptAuth
 import com.ganguydhrubo.aira.core.model.usage.AllowanceSource
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class AllowanceRouteTest {
@@ -14,7 +14,7 @@ class AllowanceRouteTest {
         val sources = mapOf(
             "DeepSeek" to AllowanceSource.DeepSeek,
             "Kimi" to AllowanceSource.Kimi,
-            "SiliconFlow" to AllowanceSource.SiliconFlow,
+            "硅基流动" to AllowanceSource.SiliconFlow,
             "OpenRouter" to AllowanceSource.OpenRouter,
         )
         for (preset in ProviderPresets.all.filter { it.baseUrl.isNotEmpty() }) {

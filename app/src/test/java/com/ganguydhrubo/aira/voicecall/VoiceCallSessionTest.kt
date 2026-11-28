@@ -31,9 +31,9 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -691,12 +691,12 @@ class VoiceCallSessionTest {
         h = harness(backgroundScope, clockNanos = { currentTime * 1_000_000L }, nowMillis = { currentTime }, connect = { h.rt }, onDeskCall = { id, _, args -> requests += id to args.words() })
         runCurrent()
         reachActive(h, this)
-        h.rt.emit(VolcRealtimeEvent.UserTranscript("Open 微信", isFinal = true))
-        h.rt.emit(requestCall("c1", "Open 微信"))
+        h.rt.emit(VolcRealtimeEvent.UserTranscript("打开微信", isFinal = true))
+        h.rt.emit(requestCall("c1", "打开微信"))
         runCurrent()
-        assertEquals(listOf("c1" to "Open 微信"), requests)
+        assertEquals(listOf("c1" to "打开微信"), requests)
         assertTrue(h.rt.toolResults.isEmpty())
-        assertEquals(listOf("Open 微信" to true), h.userTranscripts)
+        assertEquals(listOf("打开微信" to true), h.userTranscripts)
     }
 
     @Test fun `one utterance authorizes several desk calls until the user speaks again`() = runTest {
@@ -724,7 +724,7 @@ class VoiceCallSessionTest {
         h = harness(backgroundScope, clockNanos = { currentTime * 1_000_000L }, nowMillis = { currentTime }, connect = { h.rt }, onDeskCall = { id, _, args -> requests += id to args.words() })
         runCurrent()
         reachActive(h, this)
-        h.rt.emit(requestCall("c1", "Open 微信"))
+        h.rt.emit(requestCall("c1", "打开微信"))
         runCurrent()
         assertTrue(requests.isEmpty())
         val (callId, result) = h.rt.toolResults.single()
@@ -739,11 +739,11 @@ class VoiceCallSessionTest {
         h = harness(backgroundScope, clockNanos = { currentTime * 1_000_000L }, nowMillis = { currentTime }, connect = { h.rt }, onDeskCall = { id, _, args -> requests += id to args.words() })
         runCurrent()
         reachActive(h, this)
-        h.rt.emit(VolcRealtimeEvent.UserTranscript("Open 微信", isFinal = false))
-        h.rt.emit(requestCall("c1", "Open 微信"))
+        h.rt.emit(VolcRealtimeEvent.UserTranscript("打开微信", isFinal = false))
+        h.rt.emit(requestCall("c1", "打开微信"))
         runCurrent()
-        h.rt.emit(VolcRealtimeEvent.UserTranscript("Open 微信", isFinal = true, isCompleteFinal = false))
-        h.rt.emit(requestCall("c2", "Open 微信"))
+        h.rt.emit(VolcRealtimeEvent.UserTranscript("打开微信", isFinal = true, isCompleteFinal = false))
+        h.rt.emit(requestCall("c2", "打开微信"))
         runCurrent()
         assertTrue(requests.isEmpty())
         assertEquals(2, h.rt.toolResults.size)
@@ -786,10 +786,10 @@ class VoiceCallSessionTest {
         h = harness(backgroundScope, clockNanos = { currentTime * 1_000_000L }, nowMillis = { currentTime }, connect = { h.rt }, onDeskCall = { id, _, args -> requests += id to args.words() })
         runCurrent()
         reachActive(h, this)
-        h.rt.emit(VolcRealtimeEvent.UserTranscript("Open 微信", isFinal = true))
-        h.rt.emit(requestCall("c9", "Open 微信"))
+        h.rt.emit(VolcRealtimeEvent.UserTranscript("打开微信", isFinal = true))
+        h.rt.emit(requestCall("c9", "打开微信"))
         runCurrent()
-        assertEquals(listOf("c9" to "Open 微信"), requests)
+        assertEquals(listOf("c9" to "打开微信"), requests)
         h.rt.emit(VolcRealtimeEvent.Failed(VolcRealtimeException(VolcRealtimeException.Kind.NETWORK)))
         runCurrent()
         assertEquals(VoiceCallState.Failed(VoiceCallError.Disconnected, 1), h.session.state.value)
@@ -802,10 +802,10 @@ class VoiceCallSessionTest {
         assertEquals(1, h.rt.greetings.size)
         assertEquals(2, h.audio.written.count { it.contentEquals(VoiceCallTone.connectTonePcm()) })
         // 重连后同一 callId 重放依旧拒绝
-        h.rt.emit(VolcRealtimeEvent.UserTranscript("Open 微信", isFinal = true))
-        h.rt.emit(requestCall("c9", "Open 微信"))
+        h.rt.emit(VolcRealtimeEvent.UserTranscript("打开微信", isFinal = true))
+        h.rt.emit(requestCall("c9", "打开微信"))
         runCurrent()
-        assertEquals(listOf("c9" to "Open 微信"), requests)
+        assertEquals(listOf("c9" to "打开微信"), requests)
         assertEquals("rejected", h.rt.toolResults.single().second.getValue("status").jsonPrimitive.content)
     }
 

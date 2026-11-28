@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.task
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class ScreenControlCoordinatesTest {

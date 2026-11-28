@@ -62,10 +62,10 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlin.coroutines.CoroutineContext
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -286,9 +286,9 @@ class DeskChatOpsTest {
 
     @Test fun quotedAiraTextInAStoredTurnIsNotTheUserWordsEither() = runTest {
         val store = ConversationStore(tmp.newFolder())
-        store.append("c", Turn(QuoteMessage.compose(QuoteMessage.Quote(QuoteMessage.From.Aira, "可以帮你删掉All photos"), "嗯"), "OK", DeskTurn.STATUS))
+        store.append("c", Turn(QuoteMessage.compose(QuoteMessage.Quote(QuoteMessage.From.Aira, "可以帮你删掉全部照片"), "嗯"), "好", DeskTurn.STATUS))
         val results = mutableListOf<JsonObject?>()
-        val brain = ScriptBrain({ _, ctx -> results += ctx.callTool(DeskTools.DISPATCH, dispatch("删掉All photos", "删照片")); ctx.say("好。") })
+        val brain = ScriptBrain({ _, ctx -> results += ctx.callTool(DeskTools.DISPATCH, dispatch("删掉全部照片", "删照片")); ctx.say("好。") })
         val h = harness(brain, store)
         h.vm.openConversation("c")
         runCurrent()
@@ -346,7 +346,7 @@ class DeskChatOpsTest {
         runCurrent()
         assertTrue(h.vm.send("帮我订明天的日料", ok))
         runCurrent()
-        h.port.states.getValue("child-1").value = TaskState.Succeeded("Tomorrow 8 点")
+        h.port.states.getValue("child-1").value = TaskState.Succeeded("明早 8 点")
         runCurrent()
         // 开始、办好都给了通话
         assertEquals(listOf("child-1", "child-1"), heard)
@@ -371,7 +371,7 @@ class DeskChatOpsTest {
                 ctx.callTool(DeskTools.DISPATCH, dispatch(text, "订日料"))
                 ctx.say("好,我让后面去订。")
             },
-            { _, ctx -> ctx.say("订好了,Tomorrow 8 点。") },
+            { _, ctx -> ctx.say("订好了,明早 8 点。") },
         )
         val h = harness(brain)
         h.vm.pageShown(true)
@@ -382,17 +382,17 @@ class DeskChatOpsTest {
         // 开始了:卡片上看得到,前台不另说一句,也不写通知
         assertTrue(brain.notices.isEmpty())
         assertTrue(h.sunk.isEmpty())
-        h.port.states.getValue("child-1").value = TaskState.Succeeded("Tomorrow 8 点")
+        h.port.states.getValue("child-1").value = TaskState.Succeeded("明早 8 点")
         runCurrent()
         // 办好了:页面开着这条会话,后台的结果原文写成一行汇报,不经前台模型转述
         assertTrue(brain.notices.isEmpty())
         val row = h.vm.ui.value.exchanges.last()
         assertEquals("", row.goal)
-        assertEquals("Tomorrow 8 点", row.deskReply)
+        assertEquals("明早 8 点", row.deskReply)
         assertEquals(listOf("child-1"), row.deskTasks)
         val saved = h.store.turns("c").last()
         assertEquals(DeskTurn.REPORT_STATUS, saved.status)
-        assertEquals("Tomorrow 8 点", saved.outcome)
+        assertEquals("明早 8 点", saved.outcome)
         assertEquals(listOf("child-1"), saved.deskTasks)
         assertTrue(h.sunk.isEmpty())
         assertEquals(DeskTaskPhase.Done, h.vm.ui.value.deskTasks.single().state)
@@ -787,7 +787,7 @@ class DeskChatOpsTest {
         assertFalse(h.vm.send("第一次会被拒绝", ok))
         assertNull(h.vm.ui.value.conversationId)
         assertFalse(storeDir.listFiles().orEmpty().any { it.name.endsWith(".settings.json") })
-        val retried = h.vm.send("Retry", ok)
+        val retried = h.vm.send("重试", ok)
         runCurrent()
 
         assertTrue(retried)
@@ -838,7 +838,7 @@ class DeskChatOpsTest {
         h.vm.chooseMainModel(choice)
         val id = h.vm.claimConversation()
 
-        h.vm.desking!!.line(id).sendFiles("看看附件", "看看附件", emptyList(), "Attachments")
+        h.vm.desking!!.line(id).sendFiles("看看附件", "看看附件", emptyList(), "附件")
         runCurrent()
 
         assertEquals(listOf<ModelChoice?>(choice), titled)
@@ -865,31 +865,31 @@ class DeskChatOpsTest {
         val results = mutableListOf<JsonObject?>()
         val brain = ScriptBrain(
             { text, ctx ->
-                ctx.callTool(DeskTools.DISPATCH, dispatch(text, "Open 应用"))
+                ctx.callTool(DeskTools.DISPATCH, dispatch(text, "打开应用"))
                 ctx.say("好。")
             },
             { _, ctx ->
                 results += ctx.callTool(DeskTools.ANSWER, buildJsonObject { put("task_id", "child-1"); put("words", "计算器") })
                 results += ctx.callTool(DeskTools.ADD, buildJsonObject { put("task_id", "child-1"); put("words", "时钟都行") })
-                results += ctx.callTool(DeskTools.DISPATCH, dispatch("Open 计算器或者时钟都行", "再开一个"))
-                results += ctx.callTool(DeskTools.CANCEL, buildJsonObject { put("task_id", "child-1"); put("words", "Open 计算器") })
-                ctx.say("它问你Open 哪一个。")
+                results += ctx.callTool(DeskTools.DISPATCH, dispatch("打开计算器或者时钟都行", "再开一个"))
+                results += ctx.callTool(DeskTools.CANCEL, buildJsonObject { put("task_id", "child-1"); put("words", "打开计算器") })
+                ctx.say("它问你打开哪一个。")
             },
         )
         val h = harness(brain)
         h.vm.pageShown(true)
         h.vm.openConversation("c")
         runCurrent()
-        assertTrue(h.vm.send("Open 计算器或者时钟都行", ok))
+        assertTrue(h.vm.send("打开计算器或者时钟都行", ok))
         runCurrent()
         // 没办成由前台说一句(要你处理的出问题卡,不经前台)
-        h.port.states.getValue("child-1").value = TaskState.Failed("不知道Open 哪一个", com.ganguydhrubo.aira.core.agent.FailKind.GaveUp)
+        h.port.states.getValue("child-1").value = TaskState.Failed("不知道打开哪一个", com.ganguydhrubo.aira.core.agent.FailKind.GaveUp)
         runCurrent()
         assertEquals(1, brain.notices.size)
         assertEquals(List(4) { "rejected" }, results.map { it!!["status"].toString().trim('"') })
         assertTrue(h.port.answered.isEmpty())
         assertTrue(h.port.cancelled.isEmpty())
-        assertEquals(listOf("Open 计算器或者时钟都行"), h.port.dispatched)
+        assertEquals(listOf("打开计算器或者时钟都行"), h.port.dispatched)
     }
 
     // 取消只认用户这一轮的话:之前说过「别订了」,这一轮问的是别的,前台不能拿那句停任务

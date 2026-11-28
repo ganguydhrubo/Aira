@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 /** 侧栏长按菜单的摆放:下面放得下放下面,放不下放上面,都放不下把那一行往上挪。可用范围 100..1000,行高 50,菜单 150,间隔 8。 */

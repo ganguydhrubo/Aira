@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.calls
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class CallVoiceStageTest {
@@ -33,6 +33,6 @@ class CallVoiceStageTest {
     }
 
     @Test fun `text deltas do not move the stage`() {
-        assertEquals(CallVoiceStage.Thinking, run(VolcRealtimeEvent.UserSpeechEnded, VolcRealtimeEvent.AssistantTranscript("OK")))
+        assertEquals(CallVoiceStage.Thinking, run(VolcRealtimeEvent.UserSpeechEnded, VolcRealtimeEvent.AssistantTranscript("好")))
     }
 }

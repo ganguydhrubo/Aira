@@ -4,7 +4,7 @@ import com.ganguydhrubo.aira.voicecall.RouteDevice.Bluetooth
 import com.ganguydhrubo.aira.voicecall.RouteDevice.Earpiece
 import com.ganguydhrubo.aira.voicecall.RouteDevice.Speaker
 import com.ganguydhrubo.aira.voicecall.RouteDevice.Wired
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 /**

@@ -4,8 +4,9 @@ import com.ganguydhrubo.aira.core.assembly.knownTools
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.i18n.UiText
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import com.ganguydhrubo.aira.i18n.tr
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -21,7 +22,8 @@ class ToolLabelsTest {
         assertTrue(declared.size > 40)
         for ((name, label) in declared) {
             assertTrue("$name: $label", label in ToolLabels.TOOL_LABELS)
-            assertEquals(name, label, labels.label(name))
+            // the declared (Chinese) label is shown through its UI text, now English
+            assertEquals(name, tr(ToolLabels.TOOL_LABELS.getValue(label)), labels.label(name))
         }
         UiText.source = ResFileTexts.english
         assertEquals("Tap", labels.label("tap"))

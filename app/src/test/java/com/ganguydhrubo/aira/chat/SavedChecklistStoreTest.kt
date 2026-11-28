@@ -3,6 +3,10 @@ package com.ganguydhrubo.aira.chat
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.settings.KeyCipher
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -42,12 +46,12 @@ class SavedChecklistStoreTest {
         assertNull(storage.save("id", 0, "原清单", "原内容"))
         val before = file.readBytes()
         fail = true
-        assertEquals(ChecklistError.SaveFailed, storage.save("id", 1, "Update", "新内容"))
+        assertEquals(ChecklistError.SaveFailed, storage.save("id", 1, "更新", "新内容"))
         assertEquals(ChecklistError.SaveFailed, storage.delete("id", 1))
         assertArrayEquals(before, file.readBytes())
         assertEquals("原内容", storage.items.value.single().current.body)
         fail = false
-        assertNull(storage.save("id", 1, "Update", "新内容"))
+        assertNull(storage.save("id", 1, "更新", "新内容"))
         assertEquals(2, storage.items.value.single().current.version)
     }
 
@@ -78,14 +82,14 @@ class SavedChecklistStoreTest {
 
     @Test fun boundsAndHistoryLimitKeepTheNewestVersions() {
         val store = store()
-        assertEquals(ChecklistError.Blank, store.save("id", 0, " ", "Content"))
-        assertEquals(ChecklistError.TooLong, store.save("id", 0, "Title", "字".repeat(SavedChecklistStore.CONTENT_MAX + 1)))
+        assertEquals(ChecklistError.Blank, store.save("id", 0, " ", "内容"))
+        assertEquals(ChecklistError.TooLong, store.save("id", 0, "标题", "字".repeat(SavedChecklistStore.CONTENT_MAX + 1)))
         repeat(12) { assertNull(store.save("id", it, "清单", "第${it + 1}版")) }
         assertEquals((12 downTo 3).toList(), store.items.value.single().revisions.map { it.version })
         assertNull(store.save("id", 12, "清单", "第12版"))
         assertEquals(12, store.items.value.single().current.version)
-        repeat(SavedChecklistStore.MAX_LISTS - 1) { assertNull(store.save("other-$it", 0, "Other", "Content")) }
-        assertEquals(ChecklistError.Full, store.save("extra", 0, "Other", "Content"))
+        repeat(SavedChecklistStore.MAX_LISTS - 1) { assertNull(store.save("other-$it", 0, "其他", "内容")) }
+        assertEquals(ChecklistError.Full, store.save("extra", 0, "其他", "内容"))
     }
 
     @Test fun lineChangesPreserveDuplicatesAndDistinguishReordering() {

@@ -2,10 +2,10 @@ package com.ganguydhrubo.aira.cap.phone.a11y
 
 import com.ganguydhrubo.aira.cap.phone.display.FrameMath
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class StillFrameReadTest {

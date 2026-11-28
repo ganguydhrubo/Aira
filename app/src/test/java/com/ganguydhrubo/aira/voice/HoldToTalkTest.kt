@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.voice
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class HoldToTalkTest {
@@ -187,7 +187,7 @@ class HoldToTalkTest {
         pressed()
         now = 2_000
         hold.release()
-        hold.onEvent(SpeechEvent.Final("OK"))
+        hold.onEvent(SpeechEvent.Final("好"))
         hold.reset()
         assertEquals(HoldToTalk.State.Idle, hold.state.value)
     }
@@ -271,10 +271,10 @@ class HoldToTalkTest {
     fun earlyFinalAppliedWhenTimeRunsOut() {
         pressed()
         now = 2_000
-        hold.onEvent(SpeechEvent.Final("OK"))
+        hold.onEvent(SpeechEvent.Final("好"))
         now = 60_000
         hold.tick()
-        assertEquals(HoldToTalk.State.Done("OK"), hold.state.value)
+        assertEquals(HoldToTalk.State.Done("好"), hold.state.value)
     }
 
     @Test

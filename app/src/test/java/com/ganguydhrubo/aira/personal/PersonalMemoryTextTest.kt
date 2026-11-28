@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.learn.memory.MemoryItem
 import com.ganguydhrubo.aira.core.learn.memory.MemoryKind
 import com.ganguydhrubo.aira.core.learn.memory.MemorySource
 import com.ganguydhrubo.aira.core.learn.memory.MemoryStatus
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class PersonalMemoryTextTest {

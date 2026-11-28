@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.browser
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class CustomSearchEngineTest {

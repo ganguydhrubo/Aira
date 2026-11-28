@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.calls
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class CallStopReasonTest {
@@ -19,7 +19,7 @@ class CallStopReasonTest {
         val stop = CallStopReason()
         val mediaFailure = "AI 音频连接失败，电话由系统处理"
         assertTrue(stop.record(mediaFailure))
-        assertFalse(stop.record("Call ended"))
+        assertFalse(stop.record("通话已结束"))
         assertEquals(mediaFailure, stop.value)
     }
 

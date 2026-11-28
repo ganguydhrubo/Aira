@@ -10,6 +10,10 @@ import okhttp3.*
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class OpenAiCallProtocolTest {
@@ -95,7 +99,7 @@ class OpenAiCallProtocolTest {
                 assertEquals("response.create", respond["type"]!!.jsonPrimitive.content)
                 assertFalse(respond.toString().contains("verbatim"))
                 // 只当背景:加一条 system 文字项,不请它开口(下一条就是音频)
-                assertTrue(session.sendContext("[提示] Task completed"))
+                assertTrue(session.sendContext("[提示] 任务已完成"))
                 assertEquals("system", messages.receive()["item"]!!.jsonObject["role"]!!.jsonPrimitive.content)
                 assertTrue(session.sendPcm16(ByteArray(640)))
                 assertEquals(960, Base64.getDecoder().decode(messages.receive()["audio"]!!.jsonPrimitive.content).size)

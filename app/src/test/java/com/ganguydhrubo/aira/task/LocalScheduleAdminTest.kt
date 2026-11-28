@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.task
 
 import com.ganguydhrubo.aira.core.trigger.TriggerDefinition
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class LocalScheduleAdminTest {

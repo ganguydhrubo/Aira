@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.selfcheck
 
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 /** 自检按返回:输入法弹着时按的那几下是收起输入法,不算在次数里;总下数有上限。 */

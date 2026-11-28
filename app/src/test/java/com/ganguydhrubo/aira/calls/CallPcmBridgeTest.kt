@@ -34,11 +34,11 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okio.ByteString
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -321,8 +321,8 @@ class CallPcmBridgeTest {
     @Test fun `a silent opener does not mistake absent playback for a dead bridge`() {
         assertFalse(callAudioHasStarted("", downBytes = 0, upBytes = 0))
         assertTrue(callAudioHasStarted("", downBytes = 640, upBytes = 0))
-        assertFalse(callAudioHasStarted("Greeting", downBytes = 640, upBytes = 0))
-        assertTrue(callAudioHasStarted("Greeting", downBytes = 640, upBytes = 960))
+        assertFalse(callAudioHasStarted("开场白", downBytes = 640, upBytes = 0))
+        assertTrue(callAudioHasStarted("开场白", downBytes = 640, upBytes = 960))
     }
 
     private class BlockingCapture : InputStream() {

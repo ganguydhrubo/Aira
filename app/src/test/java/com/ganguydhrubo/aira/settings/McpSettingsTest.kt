@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.settings
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Rule
 import org.junit.Test

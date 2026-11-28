@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.device
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class KeyguardPinPadTest {

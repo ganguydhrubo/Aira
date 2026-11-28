@@ -3,8 +3,8 @@ package com.ganguydhrubo.aira.memory
 import com.ganguydhrubo.aira.core.learn.memory.ProfileEntry
 import com.ganguydhrubo.aira.core.learn.memory.ProfileStatus
 import com.ganguydhrubo.aira.settings.KeyCipher
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

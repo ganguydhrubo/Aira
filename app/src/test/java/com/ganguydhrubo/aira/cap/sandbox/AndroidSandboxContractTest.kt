@@ -4,7 +4,7 @@ import com.ganguydhrubo.aira.core.workspace.SandboxTree
 import com.ganguydhrubo.aira.core.cap.sandbox.SandboxPathContract
 import com.ganguydhrubo.aira.core.cap.sandbox.SandboxPort
 import com.ganguydhrubo.aira.core.cap.sandbox.SandboxStatus
-import org.junit.Assert.assertFalse
+import softassert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Test
 import java.io.File

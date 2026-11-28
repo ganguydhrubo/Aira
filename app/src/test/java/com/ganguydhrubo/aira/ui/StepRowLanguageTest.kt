@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.ui
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.i18n.UiText
 import com.ganguydhrubo.aira.i18n.UiTexts
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import com.ganguydhrubo.aira.chat.ui.StepRow
@@ -26,8 +26,8 @@ class StepRowLanguageTest {
 
     @Test
     fun testShouldHideChineseReasonInNonChineseLocale() {
-        assertTrue(StepRow.shouldHideRawReason("点击按钮查找Contacts Ved", isChineseLocale = false))
-        assertTrue(StepRow.shouldHideRawReason("在框输入“ved”", isChineseLocale = false))
+        assertTrue(StepRow.shouldHideRawReason("点击搜索按钮查找联系人 Ved", isChineseLocale = false))
+        assertTrue(StepRow.shouldHideRawReason("在搜索框输入“ved”", isChineseLocale = false))
     }
 
     @Test
@@ -39,7 +39,7 @@ class StepRowLanguageTest {
 
     @Test
     fun testShouldKeepChineseReasonInChineseLocale() {
-        assertFalse(StepRow.shouldHideRawReason("点击按钮查找Contacts Ved", isChineseLocale = true))
+        assertFalse(StepRow.shouldHideRawReason("点击搜索按钮查找联系人 Ved", isChineseLocale = true))
     }
 
     @Test

@@ -20,10 +20,10 @@ import kotlinx.coroutines.withTimeout
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -123,7 +123,7 @@ class ModelSetupNetworkTest {
         assertEquals(setOf("gpt-y"), store.provider(saved.id)?.verifiedModels)
         vm.pickAndWait(ModelRole.Main, saved.id, "gpt-x")
         assertTrue(vm.state.value.manualPick[saved.id] is ListState.Failed)
-        assertEquals("没 via 不换", "gpt-y", store.configFor(ModelRole.Main)?.model)
+        assertEquals("没通过不换", "gpt-y", store.configFor(ModelRole.Main)?.model)
 
         val requests = List(server.requestCount) { server.takeRequest() }
         assertEquals(listOf("GET /models", "POST /responses", "POST /responses"), requests.map { "${it.method} ${it.path}" })

@@ -2,15 +2,15 @@ package com.ganguydhrubo.aira.capsule
 
 import com.ganguydhrubo.aira.core.screen.user.CapturedScreen
 import com.ganguydhrubo.aira.core.screen.user.UserScreen
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
 
 /** 胶囊卡片的输入框:收起时没发出的字留着,说的话接在后面。 */
 class CardInputUiTest {
-    private val screen = PendingScreen(CapturedScreen(null, UserScreen("", 0L, "com.android.settings", "Settings")), null)
+    private val screen = PendingScreen(CapturedScreen(null, UserScreen("", 0L, "com.android.settings", "设置")), null)
 
     @Test fun collapsingKeepsTheDraftButClosesTheFieldAndDropsTheScreen() {
         val ui = CardInputUi(open = true, draft = "帮我把这段", screen = screen).collapsed()

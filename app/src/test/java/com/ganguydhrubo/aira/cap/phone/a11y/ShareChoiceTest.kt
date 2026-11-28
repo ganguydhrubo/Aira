@@ -2,6 +2,10 @@ package com.ganguydhrubo.aira.cap.phone.a11y
 
 import com.ganguydhrubo.aira.settings.AppAccessStore
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.core.safety.gate.ConfirmationRequest
 import com.ganguydhrubo.aira.core.safety.gate.IrrevAction
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class EvalHooksTest {

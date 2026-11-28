@@ -4,10 +4,10 @@ import com.ganguydhrubo.aira.core.screen.uistate.ScreenSnapshot
 import com.ganguydhrubo.aira.core.screen.uistate.UiElement
 import com.ganguydhrubo.aira.core.screen.uistate.UiTreeNode
 import com.ganguydhrubo.aira.core.screen.uistate.UiWindowTree
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 /** 自检读屏按窗口归属认控件,不把合并节点和最上层窗口的包名混为一谈。 */

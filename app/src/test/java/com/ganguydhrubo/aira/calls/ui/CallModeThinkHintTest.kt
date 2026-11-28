@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.calls.ui
 
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.voice.model.ThinkModel
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class CallModeThinkHintTest {

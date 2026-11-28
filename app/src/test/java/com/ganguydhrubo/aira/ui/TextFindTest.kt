@@ -1,12 +1,12 @@
 package com.ganguydhrubo.aira.ui
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class TextFindTest {
     @Test fun findsEveryOccurrenceIgnoringCase() {
         assertEquals(listOf(0..2, 4..6, 8..10), findRanges("Foo foo FOO", "foo"))
-        assertEquals(listOf(1..2), findRanges("在文件里查找", "Files"))
+        assertEquals(listOf(1..2), findRanges("在文件里查找", "文件"))
     }
 
     @Test fun adjacentOccurrencesStaySeparate() {

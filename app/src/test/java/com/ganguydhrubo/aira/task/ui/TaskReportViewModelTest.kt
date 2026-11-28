@@ -5,6 +5,10 @@ import com.ganguydhrubo.aira.core.run.record.RunEvent
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.record.RunStore
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -23,7 +27,7 @@ class TaskReportViewModelTest {
         h.close()
         val report = TaskReportViewModel(store, h.runId).load()!!
         assertEquals(answer, report.answer)
-        assertEquals("Only partly done", report.header.outcome)
+        assertEquals("只办成了一部分", report.header.outcome)
         assertTrue(report.playback.isEmpty())
         assertEquals(241, TaskReportViewModel.excerpt(answer).length)
         assertEquals("简短回答", TaskReportViewModel.excerpt("简短回答"))
@@ -62,7 +66,7 @@ class TaskReportViewModelTest {
         h.event(RunEvent.TaskEnded(2, "failed", "请求受限")); h.close()
         val r = TaskReportViewModel(store, h.runId).load()!!
         assertEquals("请求受限", r.answer)
-        assertNotEquals("Done", r.header.outcome)
+        assertNotEquals("办成了", r.header.outcome)
         assertNull(TaskReportViewModel(store, h.runId).screen(12))
     }
     @Test fun launchWithoutBeforeFrameAndUnavailableFilesNeverCreateBlankPlaybackItems() {
@@ -70,12 +74,12 @@ class TaskReportViewModelTest {
         h.media(2, byteArrayOf(1)); h.media(4, byteArrayOf(2))
         h.event(RunEvent.TaskPlayback(1, 1, "phone_launch_app", "a", null, 2))
         h.event(RunEvent.TaskPlayback(2, 2, "phone_tap", "b", 3, 4, PlaybackMark("tap", 500, 500)))
-        h.event(RunEvent.TaskEnded(3, "succeeded", "Done")); h.close()
+        h.event(RunEvent.TaskEnded(3, "succeeded", "完成")); h.close()
         val r = TaskReportViewModel(store, h.runId).load()!!
         assertEquals(listOf(2, 4), r.frames.map { it.frame.screenshotId })
         assertEquals(1, r.missingFrames) // null 从未采集，不计入缺失文件
         assertTrue(r.frames.all { it.mark == null }) // 只剩后帧，不得把点击圈移到后帧
-        assertEquals("Final recorded page", r.pages.single().title)
+        assertEquals("结束时页面", r.pages.single().title)
     }
 
     @Test fun keyPagesRequireAnswerEvidenceAndExactCallAssociation() {

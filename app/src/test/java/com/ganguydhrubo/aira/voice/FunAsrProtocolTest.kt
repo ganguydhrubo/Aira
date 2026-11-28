@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.voice
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 /** 自建 Fun-ASR 实时服务的消息;样例取自真实服务的回应(说的是一句中文)。 */
@@ -30,12 +30,12 @@ class FunAsrProtocolTest {
         assertEquals(LiveAsrUpdate.Text("", ""), p.read("""{"sentences": [], "partial": "", "partial_start_ms": 0, "duration_ms": 500, "is_final": false}"""))
         assertEquals(LiveAsrUpdate.Text("", "你好，帮。"), p.read("""{"sentences": [], "partial": "你好，帮。", "partial_start_ms": 0, "duration_ms": 1000, "is_final": false}"""))
         assertEquals(
-            LiveAsrUpdate.Text("先Open 微信。", "给张三发消息"),
+            LiveAsrUpdate.Text("先打开微信。", "给张三发消息"),
             p.read("""{"sentences": [{"text": "先打开微信。", "start": 0, "end": 1800, "spk": 0}], "partial": "给张三发消息", "partial_start_ms": 1800, "duration_ms": 3000, "is_final": false}"""),
         )
         val final = """{"sentences": [{"text": "先打开微信。", "start": 0, "end": 1800}, {"text": "给张三发一条消息。", "start": 1800, "end": 6867}], "partial": "", "partial_start_ms": 0, "duration_ms": 6867, "is_final": true}"""
-        assertEquals(LiveAsrUpdate.Text("先Open 微信。给张三发一条消息。", ""), p.read(final))
-        assertEquals(LiveAsrUpdate.Ended("先Open 微信。给张三发一条消息。"), p.read("""{"event": "stopped"}"""))
+        assertEquals(LiveAsrUpdate.Text("先打开微信。给张三发一条消息。", ""), p.read(final))
+        assertEquals(LiveAsrUpdate.Ended("先打开微信。给张三发一条消息。"), p.read("""{"event": "stopped"}"""))
     }
 
     // 一段话说得长、还没切句时服务端只解最近 15 秒:窗口往后挪掉出去的字留在预览里,不被删掉;怎么接见 PartialStitchTest
@@ -43,23 +43,23 @@ class FunAsrProtocolTest {
         val p = FunAsrProtocol()
         fun partial(text: String, start: Long, duration: Long) =
             p.read("""{"sentences": [], "partial": "$text", "partial_start_ms": $start, "duration_ms": $duration, "is_final": false}""")
-        assertEquals(LiveAsrUpdate.Text("", "今天我们来聊一聊语音识别的问题，首先需要Open 设置页面。"), partial("今天我们来聊一聊语音识别的问题，首先需要Open 设置页面。", 0, 15000))
+        assertEquals(LiveAsrUpdate.Text("", "今天我们来聊一聊语音识别的问题，首先需要打开设置页面。"), partial("今天我们来聊一聊语音识别的问题，首先需要打开设置页面。", 0, 15000))
         // 窗口挪了:新的一份从「我们」开始;重叠那截的开头沿用已显示的,到两份一样的地方才换成新的
         assertEquals(
-            LiveAsrUpdate.Text("今天我们来聊一聊语音", "识别的问题，首先需要Open 设置页面，然后"),
-            partial("我们来聊一聊语音识别的问题，首先需要Open 设置页面，然后", 1000, 16000),
+            LiveAsrUpdate.Text("今天我们来聊一聊语音", "识别的问题，首先需要打开设置页面，然后"),
+            partial("我们来聊一聊语音识别的问题，首先需要打开设置页面，然后", 1000, 16000),
         )
         assertEquals(
-            LiveAsrUpdate.Text("今天我们来聊一聊语音识别的问题，", "首先需要Open 设置页面，然后找到"),
-            partial("聊语音识别的问题。首先需要Open 设置页面，然后找到", 2000, 17000),
+            LiveAsrUpdate.Text("今天我们来聊一聊语音识别的问题，", "首先需要打开设置页面，然后找到"),
+            partial("聊语音识别的问题。首先需要打开设置页面，然后找到", 2000, 17000),
         )
         // 窗口没挪、同一截又解了一遍:留住的不动,后面跟着新的
         assertEquals(
-            LiveAsrUpdate.Text("今天我们来聊一聊语音识别的问题，", "首先需要Open 设置页面，然后找到模型"),
-            partial("聊语音识别的问题，首先需要Open 设置页面，然后找到模型", 2000, 17500),
+            LiveAsrUpdate.Text("今天我们来聊一聊语音识别的问题，", "首先需要打开设置页面，然后找到模型"),
+            partial("聊语音识别的问题，首先需要打开设置页面，然后找到模型", 2000, 17500),
         )
         // 这段整段放进 sentences:留下的字作废,只用服务端的句子;下一段从头来,不和上一段对齐
-        val whole = "今天我们来聊一聊语音识别的问题，首先需要Open 设置页面，然后找到模型。"
+        val whole = "今天我们来聊一聊语音识别的问题，首先需要打开设置页面，然后找到模型。"
         assertEquals(
             LiveAsrUpdate.Text(whole, ""),
             p.read("""{"sentences": [{"text": "$whole", "start": 0, "end": 17800}], "partial": "", "partial_start_ms": 18000, "duration_ms": 18500, "is_final": false}"""),
@@ -75,7 +75,7 @@ class FunAsrProtocolTest {
         val p = FunAsrProtocol()
         p.read("""{"sentences": [], "partial": "今天我们来聊一聊", "partial_start_ms": 0, "duration_ms": 15000, "is_final": false}""")
         assertEquals(
-            LiveAsrUpdate.Text("Today", "我们来聊一聊语音"),
+            LiveAsrUpdate.Text("今天", "我们来聊一聊语音"),
             p.read("""{"sentences": [], "partial": "我们来聊一聊语音", "partial_start_ms": 1000, "duration_ms": 16000, "is_final": false}"""),
         )
         assertEquals(
@@ -91,7 +91,7 @@ class FunAsrProtocolTest {
         p.read("""{"sentences": [], "partial": "今天我们来聊一聊", "partial_start_ms": 0, "duration_ms": 15000, "is_final": false}""")
         p.read("""{"sentences": [], "partial": "我们来聊一聊语音", "partial_start_ms": 1000, "duration_ms": 16000, "is_final": false}""")
         assertEquals(
-            LiveAsrUpdate.Text("Today", ""),
+            LiveAsrUpdate.Text("今天", ""),
             p.read("""{"sentences": [], "partial": "", "partial_start_ms": 16500, "duration_ms": 16500, "is_final": false}"""),
         )
     }

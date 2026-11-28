@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.proactive
 
 import android.app.Notification
 import com.ganguydhrubo.aira.core.proactive.NoticeMessage
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 /** StatusBarNotification 之后那一半(纯映射);读系统对象的那一半要在真机上验。 */

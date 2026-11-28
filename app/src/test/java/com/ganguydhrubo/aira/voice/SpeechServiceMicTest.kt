@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.voice
 
 import android.Manifest
 import android.content.pm.PackageInfo
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 /** 识别服务说没有权限时,缺权限的是谁:只有三样都确定才说是识别服务。 */

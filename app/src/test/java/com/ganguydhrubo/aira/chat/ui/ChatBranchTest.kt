@@ -1,29 +1,29 @@
 package com.ganguydhrubo.aira.chat.ui
 
 import com.ganguydhrubo.aira.core.agent.AttachedPage
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 import com.ganguydhrubo.aira.settings.ui.models.Page
 
 /** 长按哪一条消息能分支:只有已答完的回答,且这个对话没有任务在跑。 */
 class ChatBranchTest {
-    private fun exchange(status: ExchangeStatus) = Exchange("Q", emptyList(), status, live = false)
+    private fun exchange(status: ExchangeStatus) = Exchange("问", emptyList(), status, live = false)
 
     @Test fun aFinishedAnswerCanBranch() {
-        val exchanges = listOf(exchange(ExchangeStatus.Done("A", null)), exchange(ExchangeStatus.Working))
+        val exchanges = listOf(exchange(ExchangeStatus.Done("答", null)), exchange(ExchangeStatus.Working))
         assertEquals(0, branchableTurn(exchanges, "r0", blocked = false))
     }
 
     @Test fun failedAndCancelledTurnsCanBranch() {
-        assertEquals(0, branchableTurn(listOf(exchange(ExchangeStatus.Failed("Error"))), "r0", blocked = false))
+        assertEquals(0, branchableTurn(listOf(exchange(ExchangeStatus.Failed("出错"))), "r0", blocked = false))
         assertEquals(0, branchableTurn(listOf(exchange(ExchangeStatus.Cancelled())), "r0", blocked = false))
     }
 
     @Test fun userMessagesSteersAndStatusCardsCannotBranch() {
-        val exchanges = listOf(exchange(ExchangeStatus.Done("A", null)))
+        val exchanges = listOf(exchange(ExchangeStatus.Done("答", null)))
         assertNull(branchableTurn(exchanges, "u0", blocked = false))
         assertNull(branchableTurn(exchanges, "m0-steer", blocked = false))
         assertNull(branchableTurn(exchanges, "selectable-answer", blocked = false))
@@ -34,46 +34,46 @@ class ChatBranchTest {
     @Test fun unfinishedTurnsCannotBranch() {
         assertNull(branchableTurn(listOf(exchange(ExchangeStatus.Working)), "r0", blocked = false))
         assertNull(branchableTurn(listOf(exchange(ExchangeStatus.WaitingUnlock)), "r0", blocked = false))
-        assertNull(branchableTurn(listOf(exchange(ExchangeStatus.Queued("Queue"))), "r0", blocked = false))
-        assertNull(branchableTurn(listOf(exchange(ExchangeStatus.NeedsInput("Q", null))), "r0", blocked = false))
+        assertNull(branchableTurn(listOf(exchange(ExchangeStatus.Queued("排队"))), "r0", blocked = false))
+        assertNull(branchableTurn(listOf(exchange(ExchangeStatus.NeedsInput("问", null))), "r0", blocked = false))
         assertNull(branchableTurn(listOf(exchange(ExchangeStatus.Paused("稍等"))), "r0", blocked = false))
-        assertNull(branchableTurn(listOf(exchange(ExchangeStatus.NeedsTakeover("Payment", "请接管"))), "r0", blocked = false))
+        assertNull(branchableTurn(listOf(exchange(ExchangeStatus.NeedsTakeover("付款", "请接管"))), "r0", blocked = false))
     }
 
     @Test fun aConversationWithARunningTaskCannotBranch() {
-        val exchanges = listOf(exchange(ExchangeStatus.Done("A", null)))
+        val exchanges = listOf(exchange(ExchangeStatus.Done("答", null)))
         assertNull(branchableTurn(exchanges, "r0", blocked = true))
     }
 
     @Test fun onlyUserMessagesCanRetry() {
-        val exchanges = listOf(exchange(ExchangeStatus.Done("A", null)))
+        val exchanges = listOf(exchange(ExchangeStatus.Done("答", null)))
         assertEquals(0, retryableTurn(exchanges, "u0", blocked = false))
         assertNull(retryableTurn(exchanges, "r0", blocked = false))
         assertNull(retryableTurn(exchanges, "m0-steer", blocked = false))
         assertNull(retryableTurn(exchanges, "u1", blocked = false))
         assertNull(retryableTurn(exchanges, "u", blocked = false))
         assertNull(retryableTurn(exchanges, "u0", blocked = true))
-        assertNull(retryableTurn(listOf(exchange(ExchangeStatus.Done("A", null)).copy(goal = " ")), "u0", blocked = false))
+        assertNull(retryableTurn(listOf(exchange(ExchangeStatus.Done("答", null)).copy(goal = " ")), "u0", blocked = false))
     }
 
     /** 这一轮还没结束时用户的话也不能重新问:菜单不显示,和点了之后的判断一致。 */
     @Test fun unfinishedTurnsCannotRetry() {
         listOf(
-            ExchangeStatus.Working, ExchangeStatus.WaitingUnlock, ExchangeStatus.Queued("Queue"),
-            ExchangeStatus.NeedsInput("Q", null), ExchangeStatus.Paused("稍等"), ExchangeStatus.NeedsTakeover("Payment", "请接管"),
+            ExchangeStatus.Working, ExchangeStatus.WaitingUnlock, ExchangeStatus.Queued("排队"),
+            ExchangeStatus.NeedsInput("问", null), ExchangeStatus.Paused("稍等"), ExchangeStatus.NeedsTakeover("付款", "请接管"),
         ).forEach { status ->
             val exchanges = listOf(exchange(status))
             assertNull(retryableTurn(exchanges, "u0", blocked = false))
             assertFalse(canRetryAt(exchanges, 0, blocked = false))
         }
-        assertEquals(0, retryableTurn(listOf(exchange(ExchangeStatus.Failed("Error"))), "u0", blocked = false))
+        assertEquals(0, retryableTurn(listOf(exchange(ExchangeStatus.Failed("出错"))), "u0", blocked = false))
         assertEquals(0, retryableTurn(listOf(exchange(ExchangeStatus.Cancelled())), "u0", blocked = false))
     }
 
     /** 菜单用的键判断和动作用的轮次判断是同一个:能显示就能做,不能做就不显示。 */
     @Test fun menuAndActionAgree() {
-        val statuses = listOf(ExchangeStatus.Done("A", null), ExchangeStatus.Working, ExchangeStatus.Queued("Queue"), ExchangeStatus.Cancelled())
-        for (status in statuses) for (blocked in listOf(true, false)) for (goal in listOf("Q", " ")) {
+        val statuses = listOf(ExchangeStatus.Done("答", null), ExchangeStatus.Working, ExchangeStatus.Queued("排队"), ExchangeStatus.Cancelled())
+        for (status in statuses) for (blocked in listOf(true, false)) for (goal in listOf("问", " ")) {
             val exchanges = listOf(exchange(status).copy(goal = goal))
             assertEquals(canBranchAt(exchanges, 0, blocked), branchableTurn(exchanges, "r0", blocked) != null)
             assertEquals(canRetryAt(exchanges, 0, blocked), retryableTurn(exchanges, "u0", blocked) != null)

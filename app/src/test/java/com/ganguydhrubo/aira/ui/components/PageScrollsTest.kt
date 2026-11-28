@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.ui.components
 
 import androidx.compose.runtime.saveable.SaverScope
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test
 

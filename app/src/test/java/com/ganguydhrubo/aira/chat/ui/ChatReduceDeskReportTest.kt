@@ -3,20 +3,20 @@ package com.ganguydhrubo.aira.chat.ui
 import com.ganguydhrubo.aira.core.agent.DeskTurn
 import com.ganguydhrubo.aira.core.agent.Turn
 import com.ganguydhrubo.aira.frontdesk.DeskNotifier
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 /** 前台写进会话的轮次重读出来:前台的一问一答带着它派出的任务,汇报是一句正常的回话,不是失败。 */
 class ChatReduceDeskReportTest {
     @Test fun deskReportRowRendersAsAReply() {
-        val exchange = ChatReduce.fromTurn(Turn(userText = "", outcome = "订票：Done: Tomorrow 8 点", status = DeskNotifier.STATUS))
+        val exchange = ChatReduce.fromTurn(Turn(userText = "", outcome = "订票：办好了：明早 8 点", status = DeskNotifier.STATUS))
         val status = exchange.status
         assertTrue("desk_report 不能显示成失败: $status", status is ExchangeStatus.Done)
-        assertEquals("订票：Done: Tomorrow 8 点", (status as ExchangeStatus.Done).answer)
+        assertEquals("订票：办好了：明早 8 点", (status as ExchangeStatus.Done).answer)
         assertEquals("", exchange.goal)
         // 画成一句前台回话
-        assertEquals("订票：Done: Tomorrow 8 点", exchange.deskReply)
+        assertEquals("订票：办好了：明早 8 点", exchange.deskReply)
     }
 
     @Test fun deskTurnRestoresBubbleReplyAndCards() {

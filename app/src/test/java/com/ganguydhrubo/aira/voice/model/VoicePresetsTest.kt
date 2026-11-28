@@ -4,11 +4,11 @@ import com.ganguydhrubo.aira.calls.VolcRealtimeConfig
 import com.ganguydhrubo.aira.settings.KeyCipher
 import com.ganguydhrubo.aira.voice.BailianRegion
 import com.ganguydhrubo.aira.voice.DoubaoProtocol
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 import java.net.URI
 

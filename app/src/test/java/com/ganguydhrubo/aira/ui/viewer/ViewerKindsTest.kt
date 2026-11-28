@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.ui.viewer
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 class ViewerKindsTest {

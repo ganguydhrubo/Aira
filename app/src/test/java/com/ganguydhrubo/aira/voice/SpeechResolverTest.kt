@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.voice
 
 import com.ganguydhrubo.aira.settings.Provider
 import com.ganguydhrubo.aira.settings.ProviderConfig
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class SpeechResolverTest {

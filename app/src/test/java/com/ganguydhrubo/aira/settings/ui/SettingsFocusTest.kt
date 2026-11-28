@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.settings.ui
 
 import com.ganguydhrubo.aira.ui.components.FocusTargetHost
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Test
 
 /** 页内定位请求状态机的分配、去重消费与重置。 */

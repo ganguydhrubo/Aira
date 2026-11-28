@@ -5,8 +5,8 @@ import com.ganguydhrubo.aira.core.learn.replay.MAX_ROUTE_STEPS
 import com.ganguydhrubo.aira.core.learn.replay.Route
 import com.ganguydhrubo.aira.core.learn.replay.RouteStep
 import org.junit.Assert.assertThrows
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -50,8 +50,8 @@ class FileRouteStoreTest {
 
     @Test fun putReplacingKeepsSuccessesAndDropsOld() {
         val store = FileRouteStore(tmp.newFolder("routes"))
-        store.put(route("old", "com.a", 1).copy(template = "Open A", successes = 3))
-        store.putReplacing(route("new", "com.b", 2).copy(template = "Open A"))
+        store.put(route("old", "com.a", 1).copy(template = "打开A", successes = 3))
+        store.putReplacing(route("new", "com.b", 2).copy(template = "打开A"))
         val r = store.all().single()
         assertEquals("new", r.id); assertEquals(3, r.successes)
     }

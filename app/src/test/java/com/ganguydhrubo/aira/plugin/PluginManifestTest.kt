@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.plugin
 
 import kotlinx.serialization.SerializationException
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 class PluginManifestTest {

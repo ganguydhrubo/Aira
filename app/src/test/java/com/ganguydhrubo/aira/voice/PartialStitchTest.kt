@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.voice
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 /** 解码窗口往后挪时怎么把一份份中间结果接起来;带「真实」字样的样例是真实服务回应里出现过的形态。 */
@@ -28,10 +28,10 @@ class PartialStitchTest {
     // 这一截沿用已显示的,到两份一样的地方才换
     @Test fun headOfTheNewWindowKeepsTheTextAlreadyShown() {
         val s = stitch(
-            Triple("最近的几个工具，它们其实是不同的思路，体验也不一样，比如这个功能", 0, 15000),
+            Triple("最近在用的几个工具，它们其实是不同的思路，体验也不一样，比如这个功能", 0, 15000),
             Triple("只是不同的思路体但也不一样，比如这个功能它可以直接操作", 4000, 19000),
         )
-        assertShown("最近的几个工具，它们其实是不同的思路，体验", "也不一样，比如这个功能它可以直接操作", s)
+        assertShown("最近在用的几个工具，它们其实是不同的思路，体验", "也不一样，比如这个功能它可以直接操作", s)
     }
 
     // 重叠太短、沿用完开头就没有可比的了:从窗口开头整份换成新的
@@ -77,7 +77,7 @@ class PartialStitchTest {
     @Test fun emptyPartialChangesNothingAndResetStartsOver() {
         val s = stitch(Triple("今天我们来聊一聊", 0, 15000), Triple("我们来聊一聊语音", 1000, 16000))
         s.feed("", 2000, 17000)
-        assertShown("Today", "我们来聊一聊语音", s)
+        assertShown("今天", "我们来聊一聊语音", s)
         s.reset()
         assertShown("", "", s)
         s.feed("第二段", 19000, 20000)

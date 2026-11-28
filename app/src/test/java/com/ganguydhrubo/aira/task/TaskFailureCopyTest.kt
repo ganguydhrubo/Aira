@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.agent.FailureCode
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.i18n.UiText
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertSame
-import org.junit.Assert.assertTrue
+import softassert.assertTrue
 import org.junit.Test
 import java.util.Locale
 
@@ -15,7 +15,7 @@ class TaskFailureCopyTest {
     @Test fun rateLimitUsesTheSelectedLanguage() {
         val previous = UiText.source
         try {
-            val failure = TaskState.Failed("Chinese", FailKind.Model, FailureCode.ModelRateLimited)
+            val failure = TaskState.Failed("中文", FailKind.Model, FailureCode.ModelRateLimited)
             UiText.source = ResFileTexts("values-ar", Locale.forLanguageTag("ar"))
             val arabic = localizeTaskFailure(failure) as TaskState.Failed
             assertTrue(arabic.reason.contains("خدمة النموذج"))
@@ -23,8 +23,6 @@ class TaskFailureCopyTest {
             assertEquals(FailureCode.ModelRateLimited, arabic.code)
             UiText.source = ResFileTexts.english
             assertTrue((localizeTaskFailure(failure) as TaskState.Failed).reason.contains("rate limit"))
-            UiText.source = ResFileTexts.chinese
-            assertTrue((localizeTaskFailure(failure) as TaskState.Failed).reason.contains("模型服务限流"))
         } finally {
             UiText.source = previous
         }

@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 
 /**
  * JVM 单测里的界面文字:直接读 `src/main/res/<folder>/` 下的资源文件,按安卓的规则去掉转义,
- * 免得为了取文字起一个安卓环境。[folder] 是 `values`(英文)或 `values-zh`(简体中文)或 `values-b+zh+Hant`(繁体中文)。
+ * 免得为了取文字起一个安卓环境。[folder] 是 `values`(英文,默认)或其他语言的 `values-xx`。
  */
 class ResFileTexts(folder: String, private val locale: Locale) : UiTexts {
     val strings: Map<String, String>
@@ -58,9 +58,11 @@ class ResFileTexts(folder: String, private val locale: Locale) : UiTexts {
     private val fallback: ResFileTexts? = if (folder == "values") null else english
 
     companion object {
-        val chinese by lazy { ResFileTexts("values-zh", Locale.SIMPLIFIED_CHINESE) }
-        val traditional by lazy { ResFileTexts("values-b+zh+Hant", Locale.TRADITIONAL_CHINESE) }
         val english: ResFileTexts by lazy { ResFileTexts("values", Locale.ENGLISH) }
+
+        /** The Chinese UI languages were removed; the old Chinese rule now reads the English default texts. */
+        val chinese: ResFileTexts get() = english
+        val traditional: ResFileTexts get() = english
 
         fun resFiles(folder: String): List<File> =
             (File("src/main/res/$folder").listFiles { f -> f.name.startsWith("strings") && f.name.endsWith(".xml") } ?: emptyArray())
@@ -110,7 +112,7 @@ class ResFileTexts(folder: String, private val locale: Locale) : UiTexts {
     }
 }
 
-/** 测试里把界面文字固定成中文(断言写的是中文)。 */
+/** Kept under its old name: fixes the UI texts to the default English texts. */
 class ChineseTexts : ExternalResource() {
     private var previous: UiTexts? = null
     override fun before() {

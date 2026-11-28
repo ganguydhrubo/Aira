@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.cap.web
 
 import com.ganguydhrubo.aira.core.cap.web.KeptPageClose
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 /** 留页的纯逻辑:留下、留新的顶掉旧的、到 2 小时自动关(假时钟)、各种关法的原因、关的时候在来源对话那一轮记一句。 */

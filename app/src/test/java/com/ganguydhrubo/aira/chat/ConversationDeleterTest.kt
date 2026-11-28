@@ -7,10 +7,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -73,7 +73,7 @@ class ConversationDeleterTest {
         assertEquals(listOf("cancel:a"), calls)
         assertTrue("a" in workspaces)
         // 任务收尾:存进停止的那一轮,再从进行中拿掉
-        store.append("a", Turn("查天气", "Stopped", "cancelled"))
+        store.append("a", Turn("查天气", "已停止", "cancelled"))
         active.value = listOf("b")
         job.join()
         assertEquals("workspace:a", calls.last())

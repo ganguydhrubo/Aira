@@ -13,9 +13,9 @@ import com.ganguydhrubo.aira.voice.ondevice.OnDeviceCatalog
 import com.ganguydhrubo.aira.voice.ui.VoiceSource
 import com.ganguydhrubo.aira.voice.ui.voiceOptions
 import com.ganguydhrubo.aira.voice.model.VoiceCapability
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 /** 通话的听写只用云端:手机自带识别和本机语音包都不出现在通话的选择列表里,也不算通话能用的听写。 */

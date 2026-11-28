@@ -6,6 +6,10 @@ import com.ganguydhrubo.aira.core.model.decision.DecisionModel
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 import com.ganguydhrubo.aira.settings.ui.JevPreset
 import com.ganguydhrubo.aira.settings.ui.testDecisionConnection

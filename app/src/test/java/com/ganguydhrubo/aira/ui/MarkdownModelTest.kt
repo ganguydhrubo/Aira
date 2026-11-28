@@ -5,9 +5,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class MarkdownModelTest {
@@ -46,7 +46,7 @@ class MarkdownModelTest {
         assertEquals(1, (b[0] as MdBlock.Heading).level)
         assertEquals(2, (b[1] as MdBlock.Heading).level)
         assertEquals(MdBlock.Code("kotlin", "val x = 1"), b[2])
-        assertEquals("Quote", ((b[3] as MdBlock.Quote).blocks.single() as MdBlock.Para).text.text)
+        assertEquals("引用", ((b[3] as MdBlock.Quote).blocks.single() as MdBlock.Para).text.text)
         assertEquals(MdBlock.Rule, b[4])
     }
 
@@ -79,7 +79,7 @@ class MarkdownModelTest {
     @Test
     fun tableRowsPaddedToHeader() {
         val t = MarkdownModel.parse("| 名称 | 价格 |\n|---|---|\n| **苹果** | 5 |\n| 梨 |\n").single() as MdBlock.Table
-        assertEquals(listOf("Name", "价格"), t.header.map { it.text })
+        assertEquals(listOf("名称", "价格"), t.header.map { it.text })
         assertEquals(listOf(listOf("苹果", "5"), listOf("梨", "")), t.rows.map { r -> r.map { it.text } })
     }
 

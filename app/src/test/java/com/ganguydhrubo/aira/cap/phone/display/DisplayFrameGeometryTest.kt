@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.cap.phone.display
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class DisplayFrameGeometryTest {

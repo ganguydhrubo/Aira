@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.i18n
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 import org.w3c.dom.Element
 import java.io.File

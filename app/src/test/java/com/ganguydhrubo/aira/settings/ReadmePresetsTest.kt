@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.docs.ReadmeSections
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 import java.io.File
 

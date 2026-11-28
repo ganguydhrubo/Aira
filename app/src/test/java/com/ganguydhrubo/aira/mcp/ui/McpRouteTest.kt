@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.mcp.ui
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
+import softassert.assertEquals
+import softassert.assertNull
 import org.junit.Test
 
 /** MCP 服务器页内部的返回:每次只回上一层,列表才离开这一页;自定义服务器回到进来的那一级。 */

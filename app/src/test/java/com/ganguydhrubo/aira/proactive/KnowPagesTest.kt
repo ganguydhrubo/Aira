@@ -7,9 +7,9 @@ import com.ganguydhrubo.aira.core.proactive.DigestNote
 import com.ganguydhrubo.aira.core.proactive.DigestPool
 import com.ganguydhrubo.aira.core.proactive.SpanDigest
 import com.ganguydhrubo.aira.core.proactive.SpanKind
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 /** 「Aira 知道了什么」分级页面的纯逻辑:索引上列哪些,某一页指的东西还在不在。 */
@@ -17,7 +17,7 @@ class KnowPagesTest {
     private val today = 20_000L
     private val week = DigestPool.weekOf(today)
     private val month = DigestPool.monthOf(today)
-    private fun note(id: String, day: Long) = DigestNote(id, "com.chat", day, 1, 2, 1, "Group", "句 $id")
+    private fun note(id: String, day: Long) = DigestNote(id, "com.chat", day, 1, 2, 1, "群", "句 $id")
     private val line = DigestLine("一句", notes = listOf("n1"), apps = listOf("com.chat"))
     private fun data(
         canMake: Boolean = false, notes: List<DigestNote> = emptyList(), days: List<DayDigest> = emptyList(),

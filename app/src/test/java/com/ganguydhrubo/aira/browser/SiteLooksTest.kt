@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.browser
 
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -26,7 +26,7 @@ class SiteLooksTest {
     @Test
     fun initialIsFirstCharacterUppercased() {
         assertEquals("E", SiteNames.initial("example"))
-        assertEquals("购", SiteNames.initial("Shopping"))
+        assertEquals("购", SiteNames.initial("购物"))
         assertEquals("?", SiteNames.initial(" "))
     }
 
@@ -43,9 +43,9 @@ class SiteLooksTest {
 
     @Test
     fun pickPrefersDeclaredNameThenTitlePart() {
-        assertEquals("Shopping" to SiteNames.RANK_DECLARED, SiteNames.pick("Shopping", "随便什么 - 别的", false))
-        assertEquals("Shopping" to SiteNames.RANK_HOME_TITLE, SiteNames.pick(null, "购物 - 好东西都在这里", true))
-        assertEquals("Shopping" to SiteNames.RANK_DECLARED, SiteNames.pick("Shopping", "登录 - 购物", false))
+        assertEquals("购物" to SiteNames.RANK_DECLARED, SiteNames.pick("购物", "随便什么 - 别的", false))
+        assertEquals("购物" to SiteNames.RANK_HOME_TITLE, SiteNames.pick(null, "购物 - 好东西都在这里", true))
+        assertEquals("购物" to SiteNames.RANK_DECLARED, SiteNames.pick("购物", "登录 - 购物", false))
         assertEquals("12306-铁路" to SiteNames.RANK_HOME_TITLE, SiteNames.pick(null, "12306-铁路", true))
         assertNull(SiteNames.pick(null, "  ", true))
         assertEquals(SiteNames.MAX_LEN, SiteNames.pick("一二三四五六七八九十一二三四五", null, true)!!.first.length)
@@ -68,7 +68,7 @@ class SiteLooksTest {
         val s = store()
         assertEquals(SiteLook(null, 0, 5), s.entries.value["example.com"])
         assertEquals("example", s.face("m.example.com").name)
-        assertEquals("Shopping", s.face("shop.example.com").name)
+        assertEquals("购物", s.face("shop.example.com").name)
         // 首页的名字补上来
         s.named("example.com", "示例", SiteNames.RANK_HOME_TITLE)
         assertEquals("示例", s.face("m.example.com").name)
@@ -83,7 +83,7 @@ class SiteLooksTest {
 
     @Test
     fun parseReadsTheScriptResult() {
-        assertEquals("Shopping" to "首页", SiteNames.parse("\"{\\\"site\\\":\\\"购物\\\",\\\"title\\\":\\\"首页\\\"}\""))
+        assertEquals("购物" to "首页", SiteNames.parse("\"{\\\"site\\\":\\\"购物\\\",\\\"title\\\":\\\"首页\\\"}\""))
         assertEquals(null to "首页", SiteNames.parse("\"{\\\"site\\\":\\\"\\\",\\\"title\\\":\\\"首页\\\"}\""))
         assertNull(SiteNames.parse("null"))
         assertNull(SiteNames.parse(null))
@@ -95,10 +95,10 @@ class SiteLooksTest {
         s.named("shop.example.com", "购物频道", SiteNames.RANK_HOME_TITLE)
         assertEquals("购物频道", s.face("shop.example.com").name)
         assertEquals("购物频道", s.face("m.example.com").name)
-        s.named("example.com", "Shopping", SiteNames.RANK_DECLARED)
+        s.named("example.com", "购物", SiteNames.RANK_DECLARED)
         // 别的子域名的首页标题不抢可注册域名上更可靠的名字
         s.named("m.example.com", "移动版", SiteNames.RANK_HOME_TITLE)
-        assertEquals("Shopping", s.face("example.com").name)
+        assertEquals("购物", s.face("example.com").name)
         assertEquals("移动版", s.face("m.example.com").name)
         // 主机名本身:不比原来差就换
         s.named("shop.example.com", "购物商城", SiteNames.RANK_DECLARED)

@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.learn.memory.TaskMemoryStep
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.settings.KeyCipher
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -24,8 +24,8 @@ class TaskMemoryFileTest {
     private fun memDir() = File(tmp.root, "task_memory")
 
     private val items = listOf(
-        TaskMemory("a", "帮妈妈买药", "已下单", listOf("com.taobao"), listOf("example.com"), 1L, listOf(TaskMemoryStep(2L, "Open", "药房首页"))),
-        TaskMemory("b", "订酒店", "Didn’t work out", emptyList(), emptyList(), 3L, emptyList()),
+        TaskMemory("a", "帮妈妈买药", "已下单", listOf("com.taobao"), listOf("example.com"), 1L, listOf(TaskMemoryStep(2L, "打开", "药房首页"))),
+        TaskMemory("b", "订酒店", "没办成", emptyList(), emptyList(), 3L, emptyList()),
     )
 
     private fun brokenFiles() = memDir().listFiles { f -> f.name.startsWith("task_memory.bin.broken-") }.orEmpty().toList()

@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.chat.ui
 
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class ReplyJoinTest {
@@ -12,7 +12,7 @@ class ReplyJoinTest {
 
     @Test
     fun followUpReplyWithoutUserWordsJoinsThePreviousOne() {
-        val list = listOf(desk("Q", "第一条"), desk("", "第二条"), desk("", "第三条"))
+        val list = listOf(desk("问", "第一条"), desk("", "第二条"), desk("", "第三条"))
         assertFalse(replyJoinsAbove(list, 0, noCalls))
         assertTrue(replyJoinsAbove(list, 1, noCalls))
         assertTrue(replyJoinsAbove(list, 2, noCalls))
@@ -21,7 +21,7 @@ class ReplyJoinTest {
 
     @Test
     fun userWordsBreakTheGroup() {
-        val list = listOf(desk("Q", "A"), desk("再问", "再答"), desk("", "接着说"))
+        val list = listOf(desk("问", "答"), desk("再问", "再答"), desk("", "接着说"))
         assertFalse(replyJoinsAbove(list, 1, noCalls))
         assertTrue(replyJoinsAbove(list, 2, noCalls))
     }

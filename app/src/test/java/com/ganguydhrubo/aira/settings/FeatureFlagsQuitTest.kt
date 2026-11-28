@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 /** 「完全退出」的标记:默认没有,记下后跨进程还在,松开时发一次。 */

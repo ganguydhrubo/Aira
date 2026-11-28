@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.mcp.ui
 import androidx.compose.ui.graphics.PathFillType
 import androidx.compose.ui.graphics.vector.VectorPath
 import androidx.compose.ui.unit.dp
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import softassert.assertNull
 import org.junit.Test
 
 class McpLogosTest {

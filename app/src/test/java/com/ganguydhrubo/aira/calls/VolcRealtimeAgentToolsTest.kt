@@ -29,6 +29,10 @@ import okhttp3.WebSocketListener
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.*
+import softassert.assertEquals // SOFTSTAR
+import softassert.assertTrue // SOFTSTAR
+import softassert.assertFalse // SOFTSTAR
+import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 /** Local real WebSocket tests for front desk tool registration; no credentials, provider calls or carrier calls. */
@@ -81,10 +85,10 @@ class VolcRealtimeAgentToolsTest {
             assertTrue(session.sendGreeting("你好"))
             assertEquals("speech_text_buffer.commit", nextMessage().type)
             // 前台汇报走同一条路,原样念出代码拼好的一句话。
-            assertTrue(session.sendNotice("订日料: 办好了"))
+            assertTrue(session.sendNotice("订日料那件，办好了"))
             val notice = nextMessage()
             assertEquals("speech_text_buffer.commit", notice.type)
-            assertEquals("订日料: 办好了", notice.getValue("text").jsonPrimitive.content)
+            assertEquals("订日料那件，办好了", notice.getValue("text").jsonPrimitive.content)
             assertFalse(session.sendNotice(""))
             finish(session)
         }
@@ -274,7 +278,7 @@ class VolcRealtimeAgentToolsTest {
             assertFalse(events.tryReceive().isSuccess)
             // 这套协议能交给模型的文字只有照念的 speech_text_buffer:没有提示输入,说不了就返回 false,什么也不发
             assertFalse(session.sendCue("[提示] 主人回复：七点"))
-            assertFalse(session.sendContext("[提示] Task completed"))
+            assertFalse(session.sendContext("[提示] 任务已完成"))
             finish(session)
             withTimeout(3_000) { collector.await() }
         }

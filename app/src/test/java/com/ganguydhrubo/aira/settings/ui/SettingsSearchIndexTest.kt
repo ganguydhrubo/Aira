@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.settings.ui
 
 import com.ganguydhrubo.aira.i18n.ResFileTexts
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 import java.util.Locale
 
@@ -30,7 +30,7 @@ class SettingsSearchIndexTest {
         val keyed = entries.mapNotNull { it.destination as? SettingsDestination.Page }.filter { it.item != null }
         val items = keyed.map { it.item!! }
         assertTrue("未知定位标识: ${items.filterNot { it in SettingsFocusKey.ALL }}", items.all { it in SettingsFocusKey.ALL })
-        assertEquals("SettingsFocusKey 有未进索引的项", SettingsFocusKey.ALL, items.toSet())
+        assertEquals("SettingsFocusKey 有未进搜索索引的项", SettingsFocusKey.ALL, items.toSet())
         val pairs = keyed.map { it.page to it.item }
         assertEquals("同一子页下定位标识重复", pairs.distinct(), pairs)
     }
@@ -89,10 +89,10 @@ class SettingsSearchIndexTest {
         assertEquals("plans", SettingsSearch.search(items, "定时").first().item.entry.id)
         assertEquals("proxy", SettingsSearch.search(items, "代理").first().item.entry.id)
         assertEquals("appearance", SettingsSearch.search(items, "深色").first().item.entry.id)
-        assertEquals("step_limit", SettingsSearch.search(items, "Steps").first().item.entry.id)
-        assertEquals("recovery_auto_wireless", SettingsSearch.search(items, "Wireless debugging").first().item.entry.id)
-        assertTrue(SettingsSearch.search(items, "Wireless debugging").any { it.item.entry.id == "shell_transport" })
-        assertEquals("voice_tts", SettingsSearch.search(items, "Read aloud").first().item.entry.id)
+        assertEquals("step_limit", SettingsSearch.search(items, "步数").first().item.entry.id)
+        assertEquals("recovery_auto_wireless", SettingsSearch.search(items, "无线调试").first().item.entry.id)
+        assertTrue(SettingsSearch.search(items, "无线调试").any { it.item.entry.id == "shell_transport" })
+        assertEquals("voice_tts", SettingsSearch.search(items, "朗读").first().item.entry.id)
         assertEquals("lock_screen_credential", SettingsSearch.search(items, "锁屏").first().item.entry.id)
         assertTrue(SettingsSearch.search(items, "锁屏").any { it.item.entry.id == "lock_screen_tasks" })
         assertTrue(SettingsSearch.search(items, "Scheduled").isEmpty())

@@ -2,10 +2,10 @@ package com.ganguydhrubo.aira.calls
 
 import com.ganguydhrubo.aira.core.agent.Turn
 import com.ganguydhrubo.aira.frontdesk.DeskNotifier
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Test
 
 class OwnerQuestionsTest {
@@ -44,9 +44,9 @@ class OwnerQuestionsTest {
     @Test fun aNotificationReplyWinsAndIsRecordedInTheConversationToo() {
         val answers = mutableListOf<String>()
         val handle = questions.open("chat-1", "要包间吗", notified = true) { answers += it }
-        assertTrue(questions.answer(handle.token, "No thanks"))
-        assertEquals(listOf("No thanks"), answers)
-        assertEquals("No thanks", written.last().second.userText)
+        assertTrue(questions.answer(handle.token, "不要"))
+        assertEquals(listOf("不要"), answers)
+        assertEquals("不要", written.last().second.userText)
         assertFalse(questions.answerIn("chat-1", "要"))
     }
 

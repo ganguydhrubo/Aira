@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 class FeatureFlagsCapsuleTest {

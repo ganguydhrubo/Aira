@@ -6,10 +6,10 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertArrayEquals
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -156,7 +156,7 @@ class RunStoreTest {
             RunEvent.TaskStarted(1, "g", "m"),
             RunEvent.ToolResult(2, 1, "phone_tap", "{\"ok\":true,\"note\":\"换行\\n也行\"}", true, null),
             RunEvent.Takeover(3, "login", "handed_back", 1200, 4),
-            RunEvent.TaskEnded(4, "failed", "Didn’t work out"),
+            RunEvent.TaskEnded(4, "failed", "没办成"),
         )
         written.forEach(h::event)
         h.close()

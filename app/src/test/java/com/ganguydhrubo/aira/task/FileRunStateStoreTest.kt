@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.core.run.RunId
 import com.ganguydhrubo.aira.core.run.ChannelPeer
 import com.ganguydhrubo.aira.core.run.RunPhase
 import com.ganguydhrubo.aira.core.run.StoredRun
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Test
 import java.nio.file.Files
 
@@ -18,14 +18,14 @@ class FileRunStateStoreTest {
             first.save(StoredRun(RunId("run-1"), "thread-1", "任务原话", RunPhase.Aftercare,
                 reply = "回答原文", deliveryId = "delivery-1", roundInProgress = true,
                 triggerWindowKey = "plan:1000", runSucceeded = false,
-                channelPeer = ChannelPeer("telegram", "owner", "thread-1"), channelMessageId = "message-1",
+                channelPeer = ChannelPeer("wechat", "owner", "thread-1"), channelMessageId = "message-1",
                 userText = "明天会下雨吗", followUpId = "followup-1", recordId = "20261107-010203-abc123"))
             val reopened = FileRunStateStore(file)
             assertEquals("回答原文", reopened.get(RunId("run-1"))?.reply)
             assertEquals("delivery-1", reopened.get(RunId("run-1"))?.deliveryId)
             assertEquals("plan:1000", reopened.get(RunId("run-1"))?.triggerWindowKey)
             assertEquals(false, reopened.get(RunId("run-1"))?.runSucceeded)
-            assertEquals(ChannelPeer("telegram", "owner", "thread-1"), reopened.get(RunId("run-1"))?.channelPeer)
+            assertEquals(ChannelPeer("wechat", "owner", "thread-1"), reopened.get(RunId("run-1"))?.channelPeer)
             assertEquals("message-1", reopened.get(RunId("run-1"))?.channelMessageId)
             assertEquals("明天会下雨吗", reopened.get(RunId("run-1"))?.userText)
             assertEquals("followup-1", reopened.get(RunId("run-1"))?.followUpId)

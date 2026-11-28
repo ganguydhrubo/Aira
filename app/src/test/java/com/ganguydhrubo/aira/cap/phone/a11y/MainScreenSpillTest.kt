@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.cap.phone.a11y
 import android.view.accessibility.AccessibilityEvent
 import com.ganguydhrubo.aira.cap.phone.a11y.MainScreenSpill.InUse
 import com.ganguydhrubo.aira.cap.phone.a11y.MainScreenSpill.PullBack
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 class MainScreenSpillTest {

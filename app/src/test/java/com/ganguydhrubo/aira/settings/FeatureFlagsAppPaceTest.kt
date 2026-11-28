@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.cap.phone.OperatingPace
 import com.ganguydhrubo.aira.core.learn.knowledge.GuideCatalog
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertTrue
 import org.junit.Test
 
 /** 按应用操作节奏:首次读取把内置 careful App 预置为「像人」,之后只看存下的列表;删光也不再重新预置。 */

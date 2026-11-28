@@ -6,7 +6,7 @@ import com.ganguydhrubo.aira.voice.model.SttBinding
 import com.ganguydhrubo.aira.voice.model.SttProtocol
 import com.ganguydhrubo.aira.voice.model.TtsBinding
 import com.ganguydhrubo.aira.voice.model.TtsProtocol
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Test
 
 /** 编辑表单只露出协议和地址;表单之外的协议参数(计费方案、地域、语言、音色)编辑后必须原样留下。 */

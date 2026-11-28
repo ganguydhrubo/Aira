@@ -20,7 +20,7 @@ import com.ganguydhrubo.aira.voice.model.voiceTestProvider
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.Assert.assertEquals
+import softassert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Test
 

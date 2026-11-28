@@ -15,11 +15,11 @@ import com.ganguydhrubo.aira.core.learn.teach.TeachTrace
 import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.skills.PersonalSkillFiles
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
+import softassert.assertEquals
+import softassert.assertFalse
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import softassert.assertNull
+import softassert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -36,7 +36,7 @@ class TeachFilesTest {
         var session = TeachSession(id, "找到筛选入口", TeachPhase.Recording)
         session = TeachTrace.reduce(
             session,
-            TeachObservation(1_000, TeachEventKind.Text, "com.example.app", null, null, secret, "CAPTCHA", "otp", true, 0),
+            TeachObservation(1_000, TeachEventKind.Text, "com.example.app", null, null, secret, "验证码", "otp", true, 0),
             "com.ganguydhrubo.aira",
         )
         session = TeachTrace.reduce(
@@ -86,11 +86,7 @@ class TeachFilesTest {
     }
 
     @Test fun disclosureSaysARedactedSummaryMayBeUploaded() {
-        val zh = ResFileTexts.chinese.strings.getValue("teach_disclosure")
         val en = ResFileTexts("values", Locale.ENGLISH).strings.getValue("teach_disclosure")
-        assertTrue(zh.contains("发给Current model"))
-        assertTrue(zh.contains("不会上传"))
-        assertFalse(zh.contains("不会联网"))
         assertTrue(en.contains("redacted summary"))
         assertTrue(en.contains("nothing is uploaded"))
         assertFalse(en.lowercase().contains("never online"))

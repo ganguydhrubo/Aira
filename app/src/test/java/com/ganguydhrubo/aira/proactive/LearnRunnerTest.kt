@@ -50,9 +50,9 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
+import softassert.assertEquals
+import softassert.assertFalse
+import softassert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -1287,7 +1287,7 @@ class LearnRunnerTest {
         e.contacts.data = seededContacts()
         fun copies() { e.store.brokenCopies = 1; e.contacts.brokenCopies = 1 }
         fun gone() = e.store.brokenCopies == 0 && e.contacts.brokenCopies == 0
-        copies(); e.runner.open(); assertFalse("只是Open 页面不删", gone())
+        copies(); e.runner.open(); assertFalse("只是打开页面不删", gone())
         e.runner.deleteTopic("ka"); assertTrue(gone())
         copies(); e.runner.deleteContact("c2"); assertTrue(gone())
         copies(); e.runner.clearApp("com.chat"); assertTrue(gone())
@@ -2019,7 +2019,7 @@ class LearnRunnerTest {
         assertEquals("day", e.model.kinds.last())
         val input = e.model.input(e.model.calls.lastIndex)
         assertTrue(input, "[s1] app: App shop" in input && "买的东西发货了" in input)
-        assertFalse("没有Notifications", "text 1" in input || "title 1" in input)
+        assertFalse("没有通知原文", "text 1" in input || "title 1" in input)
         assertTrue(e.model.tools.last().isEmpty())
         val d = e.digestStore.data.days.single()
         assertEquals(20_000L, d.day)
@@ -2447,7 +2447,7 @@ class LearnRunnerTest {
         val input = e.model.input(e.model.calls.lastIndex)
         assertTrue(input, "Week: 2024-09-30 (Mon) to 2024-10-06 (Sun)" in input)
         assertTrue(input, "[d1] date: 2024-10-04 (Fri), apps: App shop" in input && "买的东西发货了,今天到" in input)
-        assertFalse("没有Notifications", "text 1" in input || "title 1" in input)
+        assertFalse("没有通知原文", "text 1" in input || "title 1" in input)
         assertTrue(e.model.tools.last().isEmpty())
         val w = e.digestStore.data.weeks.single()
         assertEquals(19_996L, w.start)
@@ -2640,7 +2640,7 @@ class LearnRunnerTest {
             e.runner.deleteSpan(SpanKind.Week, week)
             assertTrue(e.runner.digestWeeks.value.isEmpty())
             assertTrue(e.digestStore.data.weeks.single().let { it.removed && it.lines.isEmpty() })
-            assertTrue("月归纳里依据这一周的句子也Remove ", e.digestStore.data.months.single().lines.isEmpty())
+            assertTrue("月归纳里依据这一周的句子也去掉", e.digestStore.data.months.single().lines.isEmpty())
             val month = e.digestStore.data.months.single().start
             e.runner.deleteSpan(SpanKind.Month, month)
             assertTrue(e.runner.digestMonths.value.isEmpty())
@@ -3442,7 +3442,7 @@ class LearnRunnerTest {
                 DigestNote("gone", "com.shop", today - LearnTuning.NOTES_KEEP_DAYS - 1, at - 9 * LearnTuning.DAY_MS, at - 9 * LearnTuning.DAY_MS, 1, text = "过期的一句", madeAtMs = at),
                 DigestNote("kept", "com.shop", today, at, at, 1, text = "今天的一句", madeAtMs = at),
             ),
-            days = listOf(DayDigest(today - LearnTuning.DAYS_KEEP - 1, 1, line("过期的一天")), DayDigest(today - 1, 1, line("Yesterday"))),
+            days = listOf(DayDigest(today - LearnTuning.DAYS_KEEP - 1, 1, line("过期的一天")), DayDigest(today - 1, 1, line("昨天"))),
             weeks = listOf(
                 SpanDigest(today - LearnTuning.WEEKS_KEEP_DAYS - 7, 1, line("过期的一周")),
                 SpanDigest(DigestPool.weekOf(today) - 7, 1, line("上周")),
@@ -3457,7 +3457,7 @@ class LearnRunnerTest {
         run {
             val e = Env(this); e.digest = true; e.digestStore.data = data
             val days = e.runner.digests(DigestLevel.Day, LearnLevel.Balanced, tier)!!
-            assertEquals(listOf("Yesterday"), days.digests.flatMap { d -> d.lines.map { it.text } })
+            assertEquals(listOf("昨天"), days.digests.flatMap { d -> d.lines.map { it.text } })
             assertEquals(listOf("上周"), e.runner.digests(DigestLevel.Week, LearnLevel.Balanced, tier)!!.digests.flatMap { d -> d.lines.map { it.text } })
             assertEquals(listOf("上个月"), e.runner.digests(DigestLevel.Month, LearnLevel.Balanced, tier)!!.digests.flatMap { d -> d.lines.map { it.text } })
             // 文件里也去掉了
@@ -3476,7 +3476,7 @@ class LearnRunnerTest {
         run {
             val e = Env(this); e.digest = true; e.digestStore.data = data
             val carried = e.runner.observed(LearnLevel.Balanced, tier)!!
-            assertTrue("Yesterday" in carried)
+            assertTrue("昨天" in carried)
             for (no in listOf("过期的一天", "过期的一周", "过期的一个月")) assertFalse(no, no in carried)
             assertEquals(listOf(today - 1), e.digestStore.data.days.map { it.day })
         }
@@ -3492,7 +3492,7 @@ class LearnRunnerTest {
         // 「当日消息归纳」关着(东西还留着,期限照算):已经读进来的那份照样清
         run {
             val e = Env(this); e.digest = false
-            e.digestStore.data = DigestData(days = listOf(DayDigest(today - LearnTuning.DAYS_KEEP + 1, 1, line("快到期的一天")), DayDigest(today - 1, 1, line("Yesterday"))))
+            e.digestStore.data = DigestData(days = listOf(DayDigest(today - LearnTuning.DAYS_KEEP + 1, 1, line("快到期的一天")), DayDigest(today - 1, 1, line("昨天"))))
             e.runner.open()
             assertEquals(2, e.runner.digestDays.value.size)
             wait(3 * LearnTuning.DAY_MS)
