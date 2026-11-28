@@ -138,8 +138,8 @@ class OpenRouterSignInTest {
         val vm = ModelSetupViewModel(s, scope, io = Dispatchers.IO, browser = browser, signIns = ChatGptSignIns(scope))
         val ui = vm.signInAndWait(AccountProvider.OpenRouter)
         assertEquals(AccountProvider.OpenRouter, ui.accountSignIn.provider)
-        assertEquals("已取消登录。", ui.accountSignIn.failure)
-        assertEquals(listOf<String?>("已取消登录。"), browser.pages)
+        assertEquals("Sign-in was cancelled.", ui.accountSignIn.failure)
+        assertEquals(listOf<String?>("Sign-in was cancelled."), browser.pages)
         assertTrue(s.providers.value.isEmpty())
         assertEquals(0, server.requestCount)
     }

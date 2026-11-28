@@ -29,7 +29,7 @@ class SedimentationWiringTest {
     private val catalog = GuideCatalog.loadBundled()
     private val tools = setOf("phone_launch_app", "phone_observe", "phone_tap", "phone_type_text", "hand_to_user", "finish")
     private val draftMd = "---\nname: send-wechat-message\ndisplay: 发微信消息\ndescription: 给指定联系人发一条微信消息\napps: [com.tencent.mm]\nsource: learned\n---\n" +
-        "## 入口\n用 `phone_launch_app` 打开。\n## 步骤\n1. 点搜索\n## 容易出错的地方\n同名群聊。\n## 怎样算办成(核实证据)\n消息出现在聊天里。\n## 什么时候停下交给用户\n要登录时。"
+        "## Entry\n用 `phone_launch_app` 打开。\n## Steps\n1. 点搜索\n## Common mistakes\n同名群聊。\n## Done when (proof)\n消息出现在聊天里。\n## When to stop and hand over\n要登录时。"
 
     /**
      * 一次发微信的运行:在微信([app])里做 6 个动作。动作从时刻 100 起,[extra] 里的事件按自己写的时刻算先后

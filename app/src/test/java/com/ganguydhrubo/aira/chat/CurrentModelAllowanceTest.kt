@@ -32,7 +32,7 @@ class CurrentModelAllowanceTest {
     private fun config(id: String, providerId: String, name: String = "", model: String = "$id-model") =
         ProviderConfig(id = id, kind = ProviderConfig.Kind.OpenAiCompat, baseUrl = "https://$providerId.example.com", model = model, capabilities = caps(), name = name, providerId = providerId)
 
-    private val providers = listOf(provider("p1", "DeepSeek"), provider("p2", "Kimi"), provider("p3", "智谱"))
+    private val providers = listOf(provider("p1", "DeepSeek"), provider("p2", "Kimi"), provider("p3", "Zhipu GLM"))
 
     @Test fun concreteModelShowsItsModelIdAndOnlyItsProvider() {
         // 显示口径跟设置里模型行一致:用模型标识;name 不看(use() 建的配置 name 就是服务商名)

@@ -84,28 +84,20 @@ class SettingsSearchIndexTest {
     }
 
     @Test
-    fun chineseUiMatchesChineseTitlesAndNotEnglishKeys() {
-        val items = SettingsSearchIndex.resolve(entries) { ResFileTexts.chinese.string(it, emptyArray()) }
-        assertEquals("plans", SettingsSearch.search(items, "定时").first().item.entry.id)
-        assertEquals("proxy", SettingsSearch.search(items, "代理").first().item.entry.id)
-        assertEquals("appearance", SettingsSearch.search(items, "深色").first().item.entry.id)
-        assertEquals("step_limit", SettingsSearch.search(items, "步数").first().item.entry.id)
-        assertEquals("recovery_auto_wireless", SettingsSearch.search(items, "无线调试").first().item.entry.id)
-        assertTrue(SettingsSearch.search(items, "无线调试").any { it.item.entry.id == "shell_transport" })
-        assertEquals("voice_tts", SettingsSearch.search(items, "朗读").first().item.entry.id)
-        assertEquals("lock_screen_credential", SettingsSearch.search(items, "锁屏").first().item.entry.id)
-        assertTrue(SettingsSearch.search(items, "锁屏").any { it.item.entry.id == "lock_screen_tasks" })
-        assertTrue(SettingsSearch.search(items, "Scheduled").isEmpty())
-        // 子页带着它在哪:沙盒在「高级 › 运行环境」下面
+    fun englishUiMatchesEnglishTitles() {
+        val items = SettingsSearchIndex.resolve(entries) { ResFileTexts.english.string(it, emptyArray()) }
+        assertEquals("plans", SettingsSearch.search(items, "Scheduled tasks").first().item.entry.id)
+        assertEquals("proxy", SettingsSearch.search(items, "Network proxy").first().item.entry.id)
+        assertEquals("step_limit", SettingsSearch.search(items, "Step limit per task").first().item.entry.id)
+        assertEquals("voice_tts", SettingsSearch.search(items, "Read replies aloud").first().item.entry.id)
+        // sub-pages carry where they are: the sandbox sits under Advanced
         val sandbox = items.single { it.entry.id == "sandbox" }
-        assertTrue(sandbox.path.startsWith(ResFileTexts.chinese.strings.getValue("settings_advanced")))
+        assertTrue(sandbox.path.startsWith(ResFileTexts.english.strings.getValue("settings_advanced")))
     }
 
     private companion object {
         val LANGUAGES = listOf(
             "values" to Locale.ENGLISH,
-            "values-zh" to Locale.SIMPLIFIED_CHINESE,
-            "values-b+zh+Hant" to Locale.TRADITIONAL_CHINESE,
             "values-ja" to Locale.JAPANESE,
             "values-ko" to Locale.KOREAN,
             "values-es" to Locale("es"),

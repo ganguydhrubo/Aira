@@ -240,7 +240,7 @@ class RunRecoveryTest {
         assertEquals(1, turns.size)
         assertEquals("failed", turns.single().status)
         assertEquals("目标 a", turns.single().userText)
-        assertEquals("任务中断了，可以重新发起。", turns.single().outcome)
+        assertEquals("The task was interrupted. You can start it again.", turns.single().outcome)
     }
 
     @Test fun interruptionIncludesPersistedProgressButNotificationStaysShort() = runTest(UnconfinedTestDispatcher()) {
@@ -259,9 +259,9 @@ class RunRecoveryTest {
         rig.recovery.recover()
 
         val outcome = rig.conversations.turns("thread-a").single().outcome
-        assertTrue(outcome, outcome.startsWith("任务中断了，可以重新发起。"))
+        assertTrue(outcome, outcome.startsWith("The task was interrupted. You can start it again."))
         assertTrue(outcome, "已确认进度:已加日程 · 12/36 · 第 12 条" in outcome)
-        assertEquals("任务中断了，可以重新发起。", rig.conversations.turns("thread-a").single().outcome.lineSequence().first())
+        assertEquals("The task was interrupted. You can start it again.", rig.conversations.turns("thread-a").single().outcome.lineSequence().first())
         assertTrue((rig.channel.sent.single() as Delivery.Notice).text.length < 100)
     }
 

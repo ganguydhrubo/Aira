@@ -143,7 +143,7 @@ class RootfsInstallerTest {
         expectFailure { installer(free = 10L shl 20).install { _, _ -> } }
         assertEquals(0, opens)
         assertEquals(null, state.completedStep())
-        assertTrue((state.status.value as SandboxStatus.Broken).reason.contains("可用空间不足"))
+        assertTrue((state.status.value as SandboxStatus.Broken).reason.contains("Not enough space"))
     }
 
     @Test

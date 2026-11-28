@@ -24,7 +24,7 @@ class ModelsCopyTest {
     private val caps = Capabilities(toolCalls = true, vision = false, contextTokens = 64_000, reasoning = false)
     private val ds = Provider("p1", "DeepSeek", ProviderConfig.Kind.OpenAiCompat, "https://api.deepseek.com",
         listOf(ListedModel("deepseek-chat"), ListedModel("deepseek-reasoner"), ListedModel("deepseek-coder")))
-    private val qw = Provider("p2", "通义千问", ProviderConfig.Kind.OpenAiCompat, "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    private val qw = Provider("p2", "Qwen (Alibaba Cloud)", ProviderConfig.Kind.OpenAiCompat, "https://dashscope.aliyuncs.com/compatible-mode/v1",
         listOf(ListedModel("qwen-vl", vision = true)))
     private val main = ProviderConfig("c1", ds.kind, ds.baseUrl, "deepseek-reasoner", caps, ds.name, ds.id)
     private val vl = ProviderConfig("c2", qw.kind, qw.baseUrl, "qwen-vl", caps, qw.name, qw.id)
@@ -52,15 +52,15 @@ class ModelsCopyTest {
         val u = ui(RoleChoices(mainGroup = "g"), groups = listOf(g))
         val line = ModelsCopy.roleLine(u, ModelRole.Main)
         assertEquals("主力组", line.title)
-        assertEquals("2 个模型", line.subtitle)
+        assertEquals("2 models", line.subtitle)
     }
 
     @Test fun providerNameAddsNicknameThroughOneFormat() {
         assertEquals("DeepSeek", ModelsCopy.providerName(ds))
-        assertEquals("DeepSeek（工作）", ModelsCopy.providerName(ds.copy(nickname = "工作")))
+        assertEquals("DeepSeek (工作)", ModelsCopy.providerName(ds.copy(nickname = "工作")))
         val cf = Provider("p3", "Cloudflare Workers AI", ProviderConfig.Kind.OpenAiCompat,
             "https://api.cloudflare.com/client/v4/accounts/abcd1234efgh5678/ai/v1")
-        assertEquals("Cloudflare Workers AI（abcd…5678）", ModelsCopy.providerName(cf))
-        assertEquals("Cloudflare Workers AI（个人）", ModelsCopy.providerName(cf.copy(nickname = "个人")))
+        assertEquals("Cloudflare Workers AI (abcd…5678)", ModelsCopy.providerName(cf))
+        assertEquals("Cloudflare Workers AI (个人)", ModelsCopy.providerName(cf.copy(nickname = "个人")))
     }
 }

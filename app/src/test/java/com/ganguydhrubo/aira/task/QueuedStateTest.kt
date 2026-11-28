@@ -33,8 +33,8 @@ class QueuedStateTest {
         val ex = ChatViewModel.reduce(Exchange("订会议室", emptyList(), ExchangeStatus.Working, live = true), queued)
         assertEquals(ExchangeStatus.Queued(why), ex.status)
         assertFalse(ChatCopy.paused(ex.status))
-        assertEquals("排队中", ChatCopy.progressLine(ex))
-        assertEquals("排队中" to ChatCopy.Tone.Accent, ChatCopy.subtitle(ex, null))
+        assertEquals("Queued", ChatCopy.progressLine(ex))
+        assertEquals("Queued" to ChatCopy.Tone.Accent, ChatCopy.subtitle(ex, null))
     }
 
     // 不能点继续的等待(比如等你在屏幕上选一下)在对话里也不给继续
@@ -45,8 +45,8 @@ class QueuedStateTest {
     }
 
     @Test fun notificationSaysQueued() {
-        assertEquals("排队中" to why, TaskService.describe(queued))
-        assertEquals("已暂停" to "挪走了", TaskService.describe(TaskState.Held(TaskGate.paused("挪走了"))))
+        assertEquals("Queued" to why, TaskService.describe(queued))
+        assertEquals("Paused" to "挪走了", TaskService.describe(TaskState.Held(TaskGate.paused("挪走了"))))
     }
 
     @Test fun capsuleCardHasNoContinue() {

@@ -225,10 +225,10 @@ class VoicePacksViewModelTest {
 
     @Test fun onDeviceFailureShowsCorruptPackCopy() {
         UiText.source = ResFileTexts.chinese
-        assertEquals("语音包已损坏，请重新下载", onDeviceFailure(OnDeviceSttException.Kind.Corrupt))
+        assertEquals("The voice pack is damaged. Please download it again.", onDeviceFailure(OnDeviceSttException.Kind.Corrupt))
         // 损坏包在别的错误里面(加载失败的包装)也认得出
         val wrapped = VoiceModelError.OnDeviceFailed("On-device recognition failed", RuntimeException(OnDeviceSttException(OnDeviceSttException.Kind.Corrupt, "bad")))
-        assertEquals("语音包已损坏，请重新下载", VoiceCopy.failure(SpeechFailure.Provider(wrapped)))
+        assertEquals("The voice pack is damaged. Please download it again.", VoiceCopy.failure(SpeechFailure.Provider(wrapped)))
         UiText.source = ResFileTexts.english
         assertFalse(onDeviceFailure(OnDeviceSttException.Kind.Corrupt).contains("native detail"))
         // 本机语音包没装:和开不了会话时同一句
@@ -239,14 +239,14 @@ class VoicePacksViewModelTest {
     @Test fun otherOnDeviceFailuresShowGenericRetryCopy() {
         UiText.source = ResFileTexts.chinese
         for (kind in listOf(OnDeviceSttException.Kind.Timeout, OnDeviceSttException.Kind.OutOfMemory, OnDeviceSttException.Kind.Unsupported, OnDeviceSttException.Kind.Failed)) {
-            assertEquals(kind.name, "离线识别失败，请重试", onDeviceFailure(kind))
+            assertEquals(kind.name, "Offline recognition failed. Try again.", onDeviceFailure(kind))
         }
         val plain = listOf(
             VoiceModelError.OnDeviceFailed("On-device recognition took longer than 30000 ms"),
             VoiceModelError.OnDeviceFailed("On-device recognition was cancelled", kotlinx.coroutines.CancellationException("x")),
             VoiceModelError.OnDeviceFailed("On-device model was released", IllegalStateException("released")),
         )
-        plain.forEach { assertEquals(it.detail, "离线识别失败，请重试", VoiceCopy.failure(SpeechFailure.Provider(it))) }
+        plain.forEach { assertEquals(it.detail, "Offline recognition failed. Try again.", VoiceCopy.failure(SpeechFailure.Provider(it))) }
         UiText.source = ResFileTexts.english
         val english = onDeviceFailure(OnDeviceSttException.Kind.Timeout)
         assertFalse(english.contains("native detail"))

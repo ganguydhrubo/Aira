@@ -175,7 +175,7 @@ class ModelSetupViewModelTest {
         reply = { throw ModelError.ModelNotFound("b") }
         vm.pick(ModelRole.Main, p.id, "b"); runCurrent()
         assertEquals("a", store.configFor(ModelRole.Main)?.model)
-        assertTrue((vm.state.value.manualPick[p.id] as ListState.Failed).message.contains("「b」"))
+        assertTrue((vm.state.value.manualPick[p.id] as ListState.Failed).message.contains("“b”"))
         assertTrue(store.provider(p.id)!!.verifiedModels.isEmpty())
         assertEquals(listOf("b", "b"), built.map { it.first })
         vm.pick(ModelRole.Light, p.id, "b"); runCurrent()
@@ -196,7 +196,7 @@ class ModelSetupViewModelTest {
         runCurrent()
         assertEquals(0, picked)
         assertEquals("a", store.configFor(ModelRole.Light)?.model)
-        assertTrue((vm.state.value.manualPick[p.id] as ListState.Failed).message.contains("「typo」"))
+        assertTrue((vm.state.value.manualPick[p.id] as ListState.Failed).message.contains("“typo”"))
         reply = { ModelReply(listOf(Part.Text("hi")), StopReason.EndTurn, null) }
         vm.pickManual(ModelRole.Light, p.id, "typo2"); runCurrent()
         assertEquals(ListState.Failed(tr(com.ganguydhrubo.aira.R.string.model_probe_no_tools_pick, "typo2")), vm.state.value.manualPick[p.id])
@@ -607,7 +607,7 @@ class ModelSetupViewModelTest {
         assertEquals("Gemini", f.suggestedPreset?.label)
         assertTrue(f.presetKindMismatch)
         assertEquals(
-            "这是「Gemini」的官方地址，用它的预设更省事：地址和接口类型都已填好。接口类型也对不上：「Gemini」用的是 Gemini 接口，这里选的是 OpenAI 兼容。",
+            "This is Gemini’s official address. Its preset fills in the address and interface type for you. The interface type doesn’t match either: Gemini uses the Gemini interface, but OpenAI-compatible is selected.",
             ModelSetupCopy.presetSuggestion(f),
         )
         assertEquals(ProviderConfig.Kind.Gemini, f.exampleKind)
@@ -661,7 +661,7 @@ class ModelSetupViewModelTest {
         reply = { throw ModelError.ModelNotFound("gemini") }
         vm.retestModel(p.id, "gemini"); runCurrent()
         assertEquals(
-            ListState.Failed("模型「gemini」不存在。要填服务商文档里完整的模型 ID（例如 gemini-flash-latest）。"),
+            ListState.Failed("Model “gemini” doesn’t exist. Enter the full model ID from the provider’s docs (e.g. gemini-flash-latest)."),
             vm.state.value.retest[p.id to "gemini"],
         )
         assertEquals(setOf("gemini", "backup"), vm.state.value.unverified(vm.state.value.providers.single()).toSet())
@@ -687,7 +687,7 @@ class ModelSetupViewModelTest {
         vm.setBaseUrl("https://models.example.com/v1")
         assertNull(vm.state.value.form.unencryptedWarning)
         vm.setBaseUrl("http://models.example.com/v1")
-        assertEquals("这个地址不加密，API Key 和对话内容可能被同一网络里的人看到。", vm.state.value.form.unencryptedWarning)
+        assertEquals("This address isn’t encrypted; your API key and chats could be seen by others on the network.", vm.state.value.form.unencryptedWarning)
         vm.setApiKey("k")
         assertTrue(vm.state.value.form.canTest)
     }
@@ -702,9 +702,9 @@ class ModelSetupViewModelTest {
         val main = store.roles.value.main
         vm.openForm()
         assertTrue(vm.state.value.showForm)
-        vm.selectPreset("通义千问")
+        vm.selectPreset("Qwen (Alibaba Cloud)")
         vm.setApiKey("qk"); vm.testAndSave(); runCurrent()
-        assertEquals(listOf("DeepSeek", "通义千问"), vm.state.value.providers.map { it.name })
+        assertEquals(listOf("DeepSeek", "Qwen (Alibaba Cloud)"), vm.state.value.providers.map { it.name })
         assertEquals(listOf("sk", "qk"), store.providers.value.map { store.providerKey(it.id) })
         assertEquals("第二家不改主模型", main, store.roles.value.main)
         assertEquals(1, store.list().size)
@@ -718,8 +718,8 @@ class ModelSetupViewModelTest {
         val vm = vm(store)
         vm.setApiKey("sk"); vm.testAndSave(); runCurrent()
         vm.pick(ModelRole.Main, store.providers.value.single().id, "deepseek-chat"); runCurrent()
-        vm.openForm(); vm.selectPreset("通义千问"); vm.setApiKey("qk"); vm.testAndSave(); runCurrent()
-        val qwen = vm.state.value.providers.first { it.name == "通义千问" }
+        vm.openForm(); vm.selectPreset("Qwen (Alibaba Cloud)"); vm.setApiKey("qk"); vm.testAndSave(); runCurrent()
+        val qwen = vm.state.value.providers.first { it.name == "Qwen (Alibaba Cloud)" }
         // 选择页列出所有服务商的全部模型,不按能力过滤
         assertEquals(listOf(3, 2), vm.state.value.providers.map { vm.state.value.options(it).size })
         vm.pick(ModelRole.Vision, qwen.id, "qwen-plain"); runCurrent()
@@ -761,7 +761,7 @@ class ModelSetupViewModelTest {
     @Test fun nextNeedsAMainModel() = runTest {
         val store = store()
         val vm = vm(store)
-        vm.selectPreset("自定义")
+        vm.selectPreset("Custom")
         vm.setBaseUrl("http://192.168.1.5:8000/v1")
         assertTrue("自定义的 OpenAI 兼容接口可以不填 Key", vm.state.value.form.canTest)
         listing["http://192.168.1.5:8000/v1"] = ModelListResult.Failed(ListFailure.NotSupported)
@@ -826,9 +826,9 @@ class ModelSetupViewModelTest {
             listOf(ListedModel("a"), ListedModel("b", toolCalls = true, contextTokens = 64_000), ListedModel("c", toolCalls = false)),
             Capabilities(true, false, 64_000, false),
         )
-        assertEquals(listOf("工具调用 · 未确认" to false), ModelSetupCopy.tags(o[0]))
-        assertEquals(listOf("工具调用" to true, "64K" to false), ModelSetupCopy.tags(o[1]))
-        assertEquals(listOf("不支持工具调用" to false), ModelSetupCopy.tags(o[2]))
+        assertEquals(listOf("Tool calling · unconfirmed" to false), ModelSetupCopy.tags(o[0]))
+        assertEquals(listOf("Tool calling" to true, "64K" to false), ModelSetupCopy.tags(o[1]))
+        assertEquals(listOf("No tool calling" to false), ModelSetupCopy.tags(o[2]))
     }
 
     /** 自定义服务商可以起名字(去掉首尾空白);不填用地址的主机名。同一个地址起不同的名字是两家。 */
@@ -1176,7 +1176,7 @@ class ModelSetupViewModelTest {
         listBoom = IllegalArgumentException("Unexpected char 0x0a in Authorization value: Bearer sk-\nabc")
         vm.refresh(id); runCurrent()
         val failed = vm.state.value.listing[id] as ListState.Failed
-        assertEquals("Key 里有无法使用的字符，请只粘贴密钥本身。", failed.message)
+        assertEquals("This key has characters that cannot be used. Paste only the key itself.", failed.message)
         assertFalse(failed.message.contains("Bearer"))
         assertEquals("sk", store.providerKey(id))
     }

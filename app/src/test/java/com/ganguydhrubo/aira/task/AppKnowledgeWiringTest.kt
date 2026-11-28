@@ -34,19 +34,19 @@ class AppKnowledgeWiringTest {
     private val unreviewed = TaskState.Succeeded("已查看", verified = false, reviewed = false)
 
     private fun runEvents(trial: Boolean = false, steps: Int = 5): List<RunEvent> {
-        val out = mutableListOf<RunEvent>(RunEvent.Observed(1, 1, "闲鱼首页", place = Place.app("com.taobao.idlefish")))
+        val out = mutableListOf<RunEvent>(RunEvent.Observed(1, 1, "Reddit 首页", place = Place.app("com.reddit.frontpage")))
         listOf("phone_launch_app", "phone_tap", "phone_tap", "phone_scroll", "phone_tap").take(steps).forEachIndexed { i, name ->
             out += RunEvent.ModelReply((i + 2).toLong(), i + 1, "", name,
-                if (i == 0) """{"package":"com.taobao.idlefish"}""" else """{"x":500,"y":500}""", null, null, null)
+                if (i == 0) """{"package":"com.reddit.frontpage"}""" else """{"x":500,"y":500}""", null, null, null)
             out += RunEvent.ToolResult((i + 20).toLong(), i + 1, name, """{"ok":true}""", true, null)
         }
-        if (trial) out += RunEvent.State(99, "knowledge_trial_used", "xianyu")
+        if (trial) out += RunEvent.State(99, "knowledge_trial_used", "reddit")
         out += RunEvent.TaskEnded(100, "succeeded", "done")
         return out
     }
 
     private fun aftermath(events: List<RunEvent>, end: TaskState = unreviewed, outcome: RunOutcome = RunOutcome.Done, origin: RunOrigin = RunOrigin.Ui) =
-        RunAftermath("c1", "r1", "查看闲鱼", end, emptyList(), emptyList(), emptyList(), emptySet(), knownTools(), { events },
+        RunAftermath("c1", "r1", "查看 Reddit", end, emptyList(), emptyList(), emptyList(), emptySet(), knownTools(), { events },
             origin = origin, knowledge = knowledge, outcome = outcome)
 
     private var seq = 0
@@ -58,10 +58,10 @@ class AppKnowledgeWiringTest {
         val learning = learning(files, TextModel(facts))
         val notes = learning.learn(aftermath(runEvents()))
         assertEquals(AppKnowledgeStage.Draft, files.all().single().stage)
-        assertEquals("Aira 记下了几条关于闲鱼的知识，等你确认", notes.skillNotes.single().text)
+        assertEquals("Aira 记下了几条关于Reddit的知识，等你确认", notes.skillNotes.single().text)
         assertTrue(files.notes().isEmpty())
         files.approve(files.all().single().id)
-        assertTrue(files.notes().getValue("xianyu").trial)
+        assertTrue(files.notes().getValue("reddit").trial)
         // 判下来办成、没跑核查:试用转正式
         learning.learn(aftermath(runEvents(trial = true, steps = 1)))
         assertEquals(AppKnowledgeStage.Verified, files.all().single().stage)
@@ -76,7 +76,7 @@ class AppKnowledgeWiringTest {
         files.approve(first.id)
         // 再来一次:对在用的那份起草修订
         val notes = learning(files, TextModel(more)).learn(aftermath(runEvents()))
-        assertEquals("Aira 修订了闲鱼的知识，等你确认", notes.skillNotes.single().text)
+        assertEquals("Aira 修订了Reddit的知识，等你确认", notes.skillNotes.single().text)
         val ui = SkillsUi.of(MapSkills(), files).appKnowledge.single { it.stage == AppKnowledgeStage.Draft }
         assertTrue(ui.revision)
         assertEquals(listOf("+ - 「我的」页里的「我发布的」列出自己挂出的商品。"), ui.changedLines)
@@ -88,9 +88,9 @@ class AppKnowledgeWiringTest {
 
     @Test fun versionShadowedByARevisionOnTrialIsShownAsReplaced() {
         val files = AppKnowledgeFiles(tmp.root)
-        files.putPending(AppKnowledgeDraft("v1", "xianyu", "p", facts, "r", AppKnowledgeStage.Draft, 1))
-        files.approve("v1"); files.recordTrial("xianyu", true)
-        files.putPending(AppKnowledgeDraft("v2", "xianyu", "p", more, "r", AppKnowledgeStage.Draft, 2, revises = "v1"))
+        files.putPending(AppKnowledgeDraft("v1", "reddit", "p", facts, "r", AppKnowledgeStage.Draft, 1))
+        files.approve("v1"); files.recordTrial("reddit", true)
+        files.putPending(AppKnowledgeDraft("v2", "reddit", "p", more, "r", AppKnowledgeStage.Draft, 2, revises = "v1"))
         assertTrue(SkillsUi.of(MapSkills(), files).appKnowledge.none { it.replaced })
         files.approve("v2")
         val rows = SkillsUi.of(MapSkills(), files).appKnowledge.associateBy { it.id }

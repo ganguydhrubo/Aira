@@ -135,15 +135,15 @@ class TaskPlaybackActionsTest {
             RunEvent.TaskPlayback(5, 2, "phone_type_text", "same", 5, 6, succeeded = true),
         )
         val steps = TaskReportViewModel.playbackSteps(events)
-        assertEquals("出错:字没输进去", steps[0].failure)
-        assertEquals("出错：未记录具体原因。", steps[1].failure)
+        assertEquals("Error: Text didn’t go in", steps[0].failure)
+        assertEquals("Error: no specific reason was recorded.", steps[1].failure)
         assertNull(steps[2].failure)
     }
 
     @Test fun errorsUseKnownTranslationThenMessageThenCodeAndTolerateTruncation() {
-        assertEquals("出错:字没输进去", RunTimelineViewModel.failureLabel("""{"ok":false,"error":"action_not_applied","message":"truncated"""))
-        assertEquals("出错:连接已经断开", RunTimelineViewModel.failureLabel("""{"ok":false,"error":"custom_failure","message":"连接已经断开"}"""))
-        assertEquals("出错:custom_failure", RunTimelineViewModel.failureLabel("""{"ok":false,"error":"custom_failure"}"""))
+        assertEquals("Error: Text didn’t go in", RunTimelineViewModel.failureLabel("""{"ok":false,"error":"action_not_applied","message":"truncated"""))
+        assertEquals("Error: 连接已经断开", RunTimelineViewModel.failureLabel("""{"ok":false,"error":"custom_failure","message":"连接已经断开"}"""))
+        assertEquals("Error: custom_failure", RunTimelineViewModel.failureLabel("""{"ok":false,"error":"custom_failure"}"""))
         assertNull(RunTimelineViewModel.failureLabel("""{"ok":true,"nested":{"ok":false,"error":"custom_failure"}}"""))
         assertNull(RunTimelineViewModel.failureLabel("broken record"))
     }

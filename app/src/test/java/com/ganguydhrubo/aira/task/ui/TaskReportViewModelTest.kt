@@ -27,7 +27,7 @@ class TaskReportViewModelTest {
         h.close()
         val report = TaskReportViewModel(store, h.runId).load()!!
         assertEquals(answer, report.answer)
-        assertEquals("只办成了一部分", report.header.outcome)
+        assertEquals("Only partly done", report.header.outcome)
         assertTrue(report.playback.isEmpty())
         assertEquals(241, TaskReportViewModel.excerpt(answer).length)
         assertEquals("简短回答", TaskReportViewModel.excerpt("简短回答"))
@@ -79,7 +79,7 @@ class TaskReportViewModelTest {
         assertEquals(listOf(2, 4), r.frames.map { it.frame.screenshotId })
         assertEquals(1, r.missingFrames) // null 从未采集，不计入缺失文件
         assertTrue(r.frames.all { it.mark == null }) // 只剩后帧，不得把点击圈移到后帧
-        assertEquals("结束时页面", r.pages.single().title)
+        assertEquals("Final recorded page", r.pages.single().title)
     }
 
     @Test fun keyPagesRequireAnswerEvidenceAndExactCallAssociation() {
