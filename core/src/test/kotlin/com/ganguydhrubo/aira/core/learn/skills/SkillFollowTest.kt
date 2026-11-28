@@ -77,7 +77,7 @@ class SkillFollowTest {
     @Test fun catalogResolvesKnowledgeNamesAliasesAndKeepsRawPackages() {
         val skills = InMemoryPersonalSkills(
             personalSkill("by-name", extraMeta = "apps: [\"telegram\"]\nsites: [\"youtube.com\"]\n"),
-            personalSkill("by-alias", extraMeta = "apps: [\"微信\", \"WeChat\"]\n"),
+            personalSkill("by-alias", extraMeta = "apps: [\"Telegram\", \"TG\"]\n"),
             personalSkill("by-package", extraMeta = "apps: [com.example.app]\n"),
             personalSkill("unknown", extraMeta = "apps: [\"一个不存在的 App\", \"telegramm\"]\n"),
             personalSkill("plain"),

@@ -28,7 +28,7 @@ class MemoryRequestsTest {
     }
 
     @Test fun languages() {
-        assertEquals(listOf("zh", "en", "ja", "ko", "ru", "es", "pt", "tr", "ar", "fa", "vi", "id"), MemoryRequests.languages)
+        assertEquals(listOf("en", "ja", "ko", "ru", "es", "pt", "tr", "ar", "fa", "vi", "id"), MemoryRequests.languages)
     }
 
     @Test fun japanese() {

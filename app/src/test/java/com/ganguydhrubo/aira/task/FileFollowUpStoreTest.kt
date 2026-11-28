@@ -6,6 +6,7 @@ import com.ganguydhrubo.aira.core.run.RunOrigin
 import com.ganguydhrubo.aira.core.run.RunProvenance
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.nio.file.Files
@@ -47,10 +48,8 @@ class FileFollowUpStoreTest {
             val restored = FollowUpQueue(FileFollowUpQueueStore(file)).changes.value.single()
 
             assertEquals(item, restored)
-            val authorized = taskUnlockAuthorization(restored.provenance.origin, restored.channelPeer) { candidate ->
-                candidate == peer
-            }
-            assertTrue(requireNotNull(authorized).invoke())
+            // Channel tasks never get unattended unlock, before or after a reload.
+            assertNull(taskUnlockAuthorization(restored.provenance.origin, restored.channelPeer, localUnlockEnabled = { true }))
         } finally {
             dir.deleteRecursively()
         }
