@@ -306,7 +306,7 @@ class ForegroundAddsNoSkillsIndexTest {
         val catalog = com.ganguydhrubo.aira.core.learn.knowledge.GuideCatalog.loadBundled()
         val store = com.ganguydhrubo.aira.core.learn.knowledge.KnowledgeStore(com.ganguydhrubo.aira.core.learn.knowledge.KnowledgeStore.loadBundled())
         val screen = object : com.ganguydhrubo.aira.core.screen.uistate.ScreenPort by FakeScreen() {
-            override suspend fun snapshot() = com.ganguydhrubo.aira.core.screen.uistate.ScreenSnapshot("s", "com.tencent.mm", emptyList(), 1080, 2400)
+            override suspend fun snapshot() = com.ganguydhrubo.aira.core.screen.uistate.ScreenSnapshot("s", "org.telegram.messenger", emptyList(), 1080, 2400)
         }
         fun tools(vararg c: Part.ToolCall) = ModelReply(c.toList(), StopReason.ToolUse, null)
         val m = FakeModel(tools(Part.ToolCall("o1", "phone_observe", "{}")), tools(Part.ToolCall("o2", "phone_observe", "{}")),

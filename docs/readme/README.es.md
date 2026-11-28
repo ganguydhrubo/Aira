@@ -1,4 +1,4 @@
-<!-- translated-from: README.md @ bf6e60c9f6ae -->
+<!-- translated-from: README.md @ ebe4848fbb14 -->
 <div align="center">
 
 <img src="../media/logo.png" alt="Aira" width="88" />

@@ -16,18 +16,18 @@ class KnowledgeStoreTest {
     private val bundled by lazy { KnowledgeStore.loadBundled() }
 
     @Test fun byPackageFindsTelegram() {
-        val e = KnowledgeStore(bundled).byPackage("com.tencent.mm")
-        assertNotNull(e); assertEquals("微信", e!!.display)
-        assertTrue(e.body!!.contains("联系人"))
+        val e = KnowledgeStore(bundled).byPackage("org.telegram.messenger")
+        assertNotNull(e); assertEquals("Telegram", e!!.display)
+        assertTrue(e.body!!.contains("chat", ignoreCase = true))
     }
 
     @Test fun userNotesAppendedAndLabelled() {
-        val store = KnowledgeStore(bundled, mapOf("telegram" to "我的补充", "zhihu.com" to "网页补充"))
-        val body = store.byPackage("com.tencent.mm")!!.body!!
-        assertTrue(body.startsWith("## 是什么"))
-        assertTrue(body.endsWith("${KnowledgeStore.NOTES_HEADER}\n我的补充"))
-        assertTrue(store.byDomain("www.zhihu.com")!!.body!!.endsWith("网页补充"))
-        // 没有正文的条目也能只带用户补充
+        val store = KnowledgeStore(bundled, mapOf("telegram" to "my note", "youtube.com" to "site note"))
+        val body = store.byPackage("org.telegram.messenger")!!.body!!
+        assertTrue(body.startsWith("## What it is"))
+        assertTrue(body.endsWith("${KnowledgeStore.NOTES_HEADER}\nmy note"))
+        assertTrue(store.byDomain("www.youtube.com")!!.body!!.endsWith("site note"))
+        // An entry without a body can still carry only the user's note
         val bare = KnowledgeStore(listOf(entry("a", pkgs = listOf("p.a"), body = null)), mapOf("a" to "x"))
         assertEquals("${KnowledgeStore.NOTES_HEADER}\nx", bare.byPackage("p.a")!!.body)
     }
@@ -55,7 +55,7 @@ class KnowledgeStoreTest {
     }
 
     @Test fun matchTaskByAlias() {
-        val hit = KnowledgeStore(bundled).matchTask("帮我在 weixin 上给小王发消息")
+        val hit = KnowledgeStore(bundled).matchTask("send Wang a message on TG")
         assertEquals("telegram", hit.first().name)
     }
 
@@ -73,44 +73,44 @@ class KnowledgeStoreTest {
 
     @Test fun packageForDisplayName() {
         val store = KnowledgeStore(bundled)
-        assertEquals("com.xingin.xhs", store.packageFor("小红书"))
-        assertEquals("com.tencent.mm", store.packageFor("微信"))
-        assertNull(store.packageFor("不存在的应用"))
+        assertEquals("com.google.android.youtube", store.packageFor("YouTube"))
+        assertEquals("org.telegram.messenger", store.packageFor("Telegram"))
+        assertNull(store.packageFor("No Such App"))
     }
 
     @Test fun appWithoutHandwrittenProfileUsesSkillBody() {
-        val e = KnowledgeStore(bundled).byPackage("com.taobao.idlefish")
-        assertNotNull(e); assertTrue(e!!.body!!.contains("二手"))
+        val e = KnowledgeStore(bundled).byPackage("com.whatsapp")
+        assertNotNull(e); assertTrue(e!!.body!!.contains("WhatsApp"))
     }
 
     @Test fun handwrittenProfileBodyComesFirst() {
-        val body = KnowledgeStore(bundled).byPackage("com.tencent.mm")!!.body!!
-        assertTrue(body.startsWith("## 是什么"))
-        assertTrue(body.contains("## 界面"))
+        val body = KnowledgeStore(bundled).byPackage("org.telegram.messenger")!!.body!!
+        assertTrue(body.startsWith("## What it is"))
+        assertTrue(body.contains("## Screens"))
     }
 
     @Test fun appAndSiteAreCrossLinked() {
         val store = KnowledgeStore(bundled)
-        val app = store.byPackage("com.zhihu.android")!!
-        val site = store.byDomain("www.zhihu.com")!!
-        assertEquals(Surface.Android, app.surface); assertEquals(listOf("zhihu.com"), app.related)
-        assertEquals(Surface.Web, site.surface); assertEquals(listOf("zhihu"), site.related)
-        assertEquals("zhihu", site.service)
-        // 任务开头同一服务只给一份
-        assertEquals(1, store.matchTask("用知乎看今天的热榜", 5).count { it.service == "zhihu" })
+        val app = store.byPackage("com.google.android.youtube")!!
+        val site = store.byDomain("www.youtube.com")!!
+        assertEquals(Surface.Android, app.surface); assertEquals(listOf("youtube.com"), app.related)
+        assertEquals(Surface.Web, site.surface); assertEquals(listOf("youtube"), site.related)
+        assertEquals("youtube", site.service)
+        // Only one entry per service at the start of a task
+        assertEquals(1, store.matchTask("watch the trending videos on YouTube", 5).count { it.service == "youtube" })
     }
 
     @Test fun profileMergesStubAliases() {
-        val e = KnowledgeStore(bundled).byPackage("com.xingin.xhs")!!
-        assertNotNull(e.body); assertTrue("xhs" in e.aliases); assertEquals("android", e.surface.name.lowercase())
+        val e = KnowledgeStore(bundled).byPackage("com.google.android.youtube")!!
+        assertNotNull(e.body); assertTrue("YT" in e.aliases); assertEquals("android", e.surface.name.lowercase())
     }
 
     @Test fun genericAndNumericAliasesDoNotOverMatch() {
         val store = KnowledgeStore(bundled)
-        assertTrue(store.matchTask("帮我设置一个闹钟", 5).none { it.name == "android-settings" })
-        assertTrue(store.matchTask("付58元", 5).none { it.name == "58.com" })
-        assertEquals("xiaohongshu", store.matchTask("打开小红书").first().name)
-        assertTrue(store.matchTask("打开设置,报告安卓版本号", 5).any { it.name == "android-settings" })
+        assertTrue(store.matchTask("set an alarm for me", 5).none { it.name == "android-settings" })
+        assertTrue(store.matchTask("pay 58 rupees", 5).isEmpty())
+        assertEquals("youtube", store.matchTask("open YouTube").first().name)
+        assertTrue(store.matchTask("open Settings and report the Android version", 5).any { it.name == "android-settings" })
     }
 
     @Test fun brandWordFollowedByAnotherAppNameDoesNotPickTheBrandsShopDoc() {

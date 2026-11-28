@@ -18,7 +18,7 @@ import org.junit.Test
 
 class AppKnowledgeLearningTest {
     private val store = KnowledgeStore(KnowledgeStore.loadBundled())
-    private val app = store.byPackage("com.taobao.idlefish")!!
+    private val app = store.byPackage("com.google.android.youtube")!!
     private val facts = "- 首页顶部的搜索框进入搜索页,结果分商品和用户两个标签。\n- 「我的」页里的「我发布的」列出自己挂出的商品。"
     private val unreviewed = TaskState.Succeeded("已查看", verified = false, reviewed = false)
 
@@ -29,7 +29,7 @@ class AppKnowledgeLearningTest {
         results.forEachIndexed { i, r ->
             val name = names[i]
             out += RunEvent.ModelReply(i.toLong(), i + 1, "", name,
-                if (i == 0) """{"package":"com.taobao.idlefish"}""" else """{"x":500,"y":500}""", null, null, null)
+                if (i == 0) """{"package":"com.google.android.youtube"}""" else """{"x":500,"y":500}""", null, null, null)
             out += RunEvent.ToolResult((i + 20).toLong(), i + 1, name, r, !r.contains("false") && !r.contains("unchanged"), null)
         }
         return out + extra
@@ -39,7 +39,7 @@ class AppKnowledgeLearningTest {
     private fun request(m: FakeModel) = m.requests.single().single().parts.filterIsInstance<Part.Text>().single().text
 
     private fun draft(m: FakeModel, ev: List<RunEvent>, end: TaskState = unreviewed, outcome: RunOutcome = RunOutcome.Done,
-        current: AppKnowledgeDraft? = null, goal: String = "查看闲鱼") = runBlocking {
+        current: AppKnowledgeDraft? = null, goal: String = "Open YouTube") = runBlocking {
         AppKnowledgeDrafter(m).draft(AppRunInput("r1", goal, end, outcome, ev, knownTools()), app, store.builtIn(app.name), current, "d1", 5)
     }
 
@@ -47,8 +47,8 @@ class AppKnowledgeLearningTest {
         val m = model(facts)
         val d = draft(m, events())!!
         assertEquals(AppKnowledgeStage.Draft, d.stage)
-        assertEquals("xianyu", d.appName)
-        assertEquals("闲鱼", d.display)
+        assertEquals("youtube", d.appName)
+        assertEquals("YouTube", d.display)
         assertEquals(facts, d.markdown)
         assertFalse(d.lesson)
         assertNull(d.revises)
@@ -63,13 +63,13 @@ class AppKnowledgeLearningTest {
     }
 
     @Test fun repliesThatAreNotAFactListAreRejected() {
-        assertNull(draft(model("---\nname: xianyu\n---\n## 是什么\n闲鱼。"), events()))
+        assertNull(draft(model("---\nname: youtube\n---\n## 是什么\nYouTube。"), events()))
         assertNull(draft(model("- 搜索页里点 `phone_fly` 能飞。"), events()))
         assertNull(draft(model((1..20).joinToString("\n") { "- 第 $it 条事实写在这里。" }), events()))
     }
 
     @Test fun revisionOfCurrentSupplement() {
-        val current = AppKnowledgeDraft("d0", "xianyu", "com.taobao.idlefish", "- 旧的一条。", "r0", AppKnowledgeStage.Trial, 1)
+        val current = AppKnowledgeDraft("d0", "youtube", "com.google.android.youtube", "- 旧的一条。", "r0", AppKnowledgeStage.Trial, 1)
         val m = model(facts)
         val d = draft(m, events(), current = current)!!
         assertEquals("d0", d.revises)
@@ -87,7 +87,7 @@ class AppKnowledgeLearningTest {
     }
 
     @Test fun verifiedNotesAndAPlainDoneRunAskNothing() {
-        val verified = AppKnowledgeDraft("d0", "xianyu", "com.taobao.idlefish", "- 旧的一条。", "r0", AppKnowledgeStage.Verified, 1)
+        val verified = AppKnowledgeDraft("d0", "youtube", "com.google.android.youtube", "- 旧的一条。", "r0", AppKnowledgeStage.Verified, 1)
         val m = model(facts)
         assertNull(draft(m, events(), current = verified))
         assertTrue(m.requests.isEmpty())
@@ -97,7 +97,7 @@ class AppKnowledgeLearningTest {
     }
 
     @Test fun olderFullAppMdSupplementCanBeRevised() {
-        val old = AppKnowledgeDraft("d0", "xianyu", "com.taobao.idlefish", "---\nname: xianyu\n---\n## 界面\n首页顶部有搜索入口。", "r0", AppKnowledgeStage.Trial, 1)
+        val old = AppKnowledgeDraft("d0", "youtube", "com.google.android.youtube", "---\nname: youtube\n---\n## 界面\n首页顶部有搜索入口。", "r0", AppKnowledgeStage.Trial, 1)
         assertEquals("- 首页顶部有搜索入口。", AppKnowledgeDrafter.facts(old.markdown))
         val m = model("- 首页顶部有搜索入口。\n- 「我的」页里有「我发布的」。")
         assertEquals("d0", draft(m, events(), current = old)!!.revises)
@@ -105,11 +105,11 @@ class AppKnowledgeLearningTest {
     }
 
     @Test fun revisionOnTrialShadowsThePreviousOne() {
-        val v1 = AppKnowledgeDraft("v1", "xianyu", "p", "- a", "r", AppKnowledgeStage.Verified, 1)
-        val v2 = AppKnowledgeDraft("v2", "xianyu", "p", "- b", "r", AppKnowledgeStage.Trial, 2, revises = "v1")
-        assertEquals("v2", AppKnowledgeTrial.inUse(listOf(v1, v2), "xianyu")?.id)
-        assertEquals("v1", AppKnowledgeTrial.inUse(listOf(v1, v2.copy(stage = AppKnowledgeStage.Archived)), "xianyu")?.id)
-        assertEquals("v1", AppKnowledgeTrial.inUse(listOf(v1, v2.copy(stage = AppKnowledgeStage.Draft)), "xianyu")?.id)
+        val v1 = AppKnowledgeDraft("v1", "youtube", "p", "- a", "r", AppKnowledgeStage.Verified, 1)
+        val v2 = AppKnowledgeDraft("v2", "youtube", "p", "- b", "r", AppKnowledgeStage.Trial, 2, revises = "v1")
+        assertEquals("v2", AppKnowledgeTrial.inUse(listOf(v1, v2), "youtube")?.id)
+        assertEquals("v1", AppKnowledgeTrial.inUse(listOf(v1, v2.copy(stage = AppKnowledgeStage.Archived)), "youtube")?.id)
+        assertEquals("v1", AppKnowledgeTrial.inUse(listOf(v1, v2.copy(stage = AppKnowledgeStage.Draft)), "youtube")?.id)
     }
 
     @Test fun failedAndBumpyRunsLearnLessons() {
@@ -150,16 +150,16 @@ class AppKnowledgeLearningTest {
 
     @Test fun touchedAppsAreThoseActedIn() {
         val ev = events() + listOf(
-            RunEvent.ModelReply(80, 9, "", "phone_launch_app", """{"package":"com.tencent.mm"}""", null, null, null),
+            RunEvent.ModelReply(80, 9, "", "phone_launch_app", """{"package":"org.telegram.messenger"}""", null, null, null),
             RunEvent.ToolResult(81, 9, "phone_launch_app", """{"ok":true}""", true, null),
             RunEvent.ModelReply(82, 10, "", "phone_launch_app", """{"package":"com.unknown.app"}""", null, null, null),
             RunEvent.ToolResult(83, 10, "phone_launch_app", """{"ok":true}""", true, null),
         )
-        assertEquals(listOf("xianyu", "telegram"), AppKnowledgeDrafter.touched(ev, knownTools(), store).map { it.name })
+        assertEquals(listOf("youtube", "telegram"), AppKnowledgeDrafter.touched(ev, knownTools(), store).map { it.name })
     }
 
     @Test fun lessonsNeedTwoBadTrialsInARow() {
-        val done = AppKnowledgeDraft("d1", "xianyu", "p", facts, "r", AppKnowledgeStage.Trial, 1)
+        val done = AppKnowledgeDraft("d1", "youtube", "p", facts, "r", AppKnowledgeStage.Trial, 1)
         assertEquals(AppKnowledgeStage.Verified, AppKnowledgeTrial.next(done, good = true).stage)
         assertEquals(AppKnowledgeStage.Archived, AppKnowledgeTrial.next(done, good = false).stage)
         val lesson = done.copy(lesson = true)

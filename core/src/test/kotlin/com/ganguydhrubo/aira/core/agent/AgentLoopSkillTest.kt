@@ -50,14 +50,14 @@ class AgentLoopSkillTest {
         extraMeta = "aliases: [知乎收藏夹, 我的收藏, 收藏夹条数]\n")
 
     @Test fun knowledgeIndexStillByTaskWords() {
-        val r = run("用闲鱼查手机,再发微信给小王,再在知乎搜一下")
+        val r = run("Open YouTube")
         val idx = r.requests.first().index().single()
-        // 知识和技能各在自己的标题下(标题里写着用哪个工具读全文)
-        assertTrue(idx.lines().first() == KNOWLEDGE_INDEX_HEADER && idx.lines().any { it.startsWith("- app:xianyu(闲鱼):") })
+        // Knowledge and skills each sit under their own header (the header names the tool that reads the full text)
+        assertTrue(idx.lines().first() == KNOWLEDGE_INDEX_HEADER && idx.lines().any { it.startsWith("- app:youtube(YouTube):") })
         assertTrue(SKILL_INDEX_HEADER in idx.lines())
-        // 索引行在任务原文之后
+        // The index lines come after the task text
         val texts = r.requests.first().userTexts()
-        assertTrue(texts.indexOf(idx) > texts.indexOfFirst { it.startsWith("用闲鱼") })
+        assertTrue(texts.indexOf(idx) > texts.indexOfFirst { it.startsWith("Open YouTube") })
     }
 
     // 目标和技能名一个字面也对不上:技能照样全部列出,由模型按描述判断

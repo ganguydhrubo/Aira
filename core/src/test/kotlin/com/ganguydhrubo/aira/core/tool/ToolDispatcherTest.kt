@@ -387,21 +387,21 @@ class ToolDispatcherTest {
     // 知识和技能各查各的、各读各的;读错了组的名字时说清该用哪个工具
     @Test fun knowledgeAndSkillLookupsThroughDispatcher() = runTest {
         val d = toolDispatcher(FakeScreen(), skills = com.ganguydhrubo.aira.core.learn.knowledge.GuideCatalog.loadBundled())
-        val found = d.execute(call("knowledge_search", """{"query":"闲鱼"}""")).content
+        val found = d.execute(call("knowledge_search", """{"query":"WhatsApp"}""")).content
         val matches = found["matches"]!!.jsonArray
         assertTrue(matches.size in 1..10)
         assertEquals(setOf("name", "display", "kind", "description"), matches[0].jsonObject.keys)
         assertTrue(matches.all { it.jsonObject.s("kind") in setOf("app", "site") })
-        val sites = d.execute(call("knowledge_search", """{"query":"知乎","kind":"site"}""")).content["matches"]!!.jsonArray
+        val sites = d.execute(call("knowledge_search", """{"query":"YouTube","kind":"site"}""")).content["matches"]!!.jsonArray
         assertTrue(sites.isNotEmpty() && sites.all { it.jsonObject.s("kind") == "site" })
         assertEquals("invalid_arguments", d.execute(call("knowledge_search", """{"query":"x","kind":"skill"}""")).content.s("error"))
-        val skills = d.execute(call("skill_search", """{"query":"文档"}""")).content["matches"]!!.jsonArray
+        val skills = d.execute(call("skill_search", """{"query":"document"}""")).content["matches"]!!.jsonArray
         assertTrue(skills.isNotEmpty() && skills.all { it.jsonObject.s("kind") in setOf("skill", "personal") })
-        val view = d.execute(call("knowledge_read", """{"name":"app:xianyu"}""")).content
+        val view = d.execute(call("knowledge_read", """{"name":"app:whatsapp"}""")).content
         assertTrue(view["ok"]!!.jsonPrimitive.boolean)
-        assertTrue(view.s("content").contains("com.taobao.idlefish"))
+        assertTrue(view.s("content").contains("com.whatsapp"))
         assertTrue(d.execute(call("skill_read", """{"name":"documents"}""")).content["ok"]!!.jsonPrimitive.boolean)
-        val wrongGroup = d.execute(call("skill_read", """{"name":"app:xianyu"}""")).content
+        val wrongGroup = d.execute(call("skill_read", """{"name":"app:whatsapp"}""")).content
         assertEquals("skill_not_found", wrongGroup.s("error"))
         assertTrue(wrongGroup.s("message"), "knowledge_read" in wrongGroup.s("message"))
         val skillAsKnowledge = d.execute(call("knowledge_read", """{"name":"documents"}""")).content

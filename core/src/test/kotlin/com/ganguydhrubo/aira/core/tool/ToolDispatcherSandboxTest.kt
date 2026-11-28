@@ -154,7 +154,7 @@ class ToolDispatcherSandboxTest {
         val r = d.execute(call("skill_read", buildJsonObject { put("name", "my-trip") })).content
         assertEquals("true", r.s("ok"))
         assertNull(r["scripts"])
-        val bundled = d.execute(call("knowledge_read", buildJsonObject { put("name", "site:zhihu.com") })).content
+        val bundled = d.execute(call("knowledge_read", buildJsonObject { put("name", "site:youtube.com") })).content
         assertEquals("true", bundled.s("ok"))
     }
 

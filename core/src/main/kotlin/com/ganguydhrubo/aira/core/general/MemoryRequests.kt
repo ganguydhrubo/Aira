@@ -91,7 +91,7 @@ internal object MemoryRequests {
 
 
     private val zhEn = Phrases(
-        languages = listOf("zh", "en"),
+        languages = listOf("en"),
         save = SAVE_REQUEST,
         recallQuestion = RECALL_QUESTION,
         saveNegation = SAVE_NEGATION,

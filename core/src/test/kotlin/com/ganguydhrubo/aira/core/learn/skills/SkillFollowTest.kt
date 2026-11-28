@@ -32,42 +32,42 @@ class SkillFollowTest {
     }
 
     @Test fun actionMustMatchDeclaredAppAfterReading() {
-        val telegram = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
-        val inTelegram = act(20).copy(resultJson = """{"ok":true,"actionApp":"com.tencent.mm"}""")
+        val telegram = mapOf("s" to SkillPlaces(packages = setOf("org.telegram.messenger")))
+        val inTelegram = act(20).copy(resultJson = """{"ok":true,"actionApp":"org.telegram.messenger"}""")
         assertEquals(setOf("s"), followed(listOf(read("s", 10), inTelegram), telegram))
-        assertTrue(followed(listOf(read("s", 10), act(20), saw(21, Place.app("com.tencent.mm"))), telegram).isEmpty())
+        assertTrue(followed(listOf(read("s", 10), act(20), saw(21, Place.app("org.telegram.messenger"))), telegram).isEmpty())
         // 进微信是在读技能之前,读完以后在别处动手
-        assertTrue(followed(listOf(saw(5, Place.app("com.tencent.mm")), read("s", 10), act(20)), telegram).isEmpty())
+        assertTrue(followed(listOf(saw(5, Place.app("org.telegram.messenger")), read("s", 10), act(20)), telegram).isEmpty())
     }
 
     @Test fun visitingSkillAppDoesNotAttributeAnActionInAnotherApp() {
-        val telegram = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
+        val telegram = mapOf("s" to SkillPlaces(packages = setOf("org.telegram.messenger")))
         val unrelated = act(20).copy(resultJson = """{"ok":true,"screen":{"currentApp":"com.android.settings"}}""")
-        assertTrue(followed(listOf(read("s", 10), saw(15, Place.app("com.tencent.mm")), unrelated), telegram).isEmpty())
+        assertTrue(followed(listOf(read("s", 10), saw(15, Place.app("org.telegram.messenger")), unrelated), telegram).isEmpty())
     }
 
     @Test fun declaredSiteMatchesSubdomainsAndPages() {
-        val bili = mapOf("s" to SkillPlaces(domains = setOf("bilibili.com")))
-        val page = act(20, "web_navigate").copy(resultJson = """{"ok":true,"url":"https://m.bilibili.com/video/1"}""")
+        val bili = mapOf("s" to SkillPlaces(domains = setOf("youtube.com")))
+        val page = act(20, "web_navigate").copy(resultJson = """{"ok":true,"url":"https://m.youtube.com/video/1"}""")
         assertEquals(setOf("s"), followed(listOf(read("s", 10), page), bili))
-        val unrelated = page.copy(resultJson = """{"ok":true,"url":"https://notbilibili.com/video/1"}""")
+        val unrelated = page.copy(resultJson = """{"ok":true,"url":"https://notyoutube.com/video/1"}""")
         assertTrue(followed(listOf(read("s", 10), unrelated), bili).isEmpty())
     }
 
     @Test fun eachSkillIsJudgedOnItsOwn() {
-        val places = mapOf("wx" to SkillPlaces(packages = setOf("com.tencent.mm")), "dy" to SkillPlaces(packages = setOf("com.ss.android.ugc.aweme")))
-        val tap = act(20).copy(resultJson = """{"ok":true,"actionApp":"com.tencent.mm","screen":{"currentApp":"com.ss.android.ugc.aweme"}}""")
+        val places = mapOf("wx" to SkillPlaces(packages = setOf("org.telegram.messenger")), "dy" to SkillPlaces(packages = setOf("com.ss.android.ugc.aweme")))
+        val tap = act(20).copy(resultJson = """{"ok":true,"actionApp":"org.telegram.messenger","screen":{"currentApp":"com.ss.android.ugc.aweme"}}""")
         val events = listOf(read("dy", 10), read("wx", 11), tap)
         assertEquals(setOf("wx"), followed(events, places))
     }
 
     // 界面一个字也读不出来时没有读屏记录:调用结果里报的 currentApp / currentSite 照样算进过
     @Test fun currentAppInToolResultsCountsAsVisiting() {
-        val telegram = mapOf("s" to SkillPlaces(packages = setOf("com.tencent.mm")))
-        val result = RunEvent.ToolResult(20, 1, "phone_tap", """{"ok":true,"screen":{"currentApp":"com.tencent.mm","full":false}}""", true, null)
+        val telegram = mapOf("s" to SkillPlaces(packages = setOf("org.telegram.messenger")))
+        val result = RunEvent.ToolResult(20, 1, "phone_tap", """{"ok":true,"screen":{"currentApp":"org.telegram.messenger","full":false}}""", true, null)
         assertEquals(setOf("s"), followed(listOf(read("s", 10), result), telegram))
-        val bili = mapOf("s" to SkillPlaces(domains = setOf("bilibili.com")))
-        val page = RunEvent.ToolResult(20, 1, "web_navigate", """{"ok":true,"currentSite":"m.bilibili.com"}""", true, null)
+        val bili = mapOf("s" to SkillPlaces(domains = setOf("youtube.com")))
+        val page = RunEvent.ToolResult(20, 1, "web_navigate", """{"ok":true,"currentSite":"m.youtube.com"}""", true, null)
         assertEquals(setOf("s"), followed(listOf(read("s", 10), page), bili))
         // 读技能之前的结果不算
         assertTrue(followed(listOf(result.copy(atMs = 5), read("s", 10), act(20)), telegram).isEmpty())
@@ -76,17 +76,17 @@ class SkillFollowTest {
     // 技能头部写的可能是知识名、别名、显示名(手写的),也可能是包名(自学的):认得出的都换成包名、域名
     @Test fun catalogResolvesKnowledgeNamesAliasesAndKeepsRawPackages() {
         val skills = InMemoryPersonalSkills(
-            personalSkill("by-name", extraMeta = "apps: [\"telegram\"]\nsites: [\"bilibili.com\"]\n"),
+            personalSkill("by-name", extraMeta = "apps: [\"telegram\"]\nsites: [\"youtube.com\"]\n"),
             personalSkill("by-alias", extraMeta = "apps: [\"微信\", \"WeChat\"]\n"),
             personalSkill("by-package", extraMeta = "apps: [com.example.app]\n"),
-            personalSkill("unknown", extraMeta = "apps: [\"一个不存在的 App\", \"wechatt\"]\n"),
+            personalSkill("unknown", extraMeta = "apps: [\"一个不存在的 App\", \"telegramm\"]\n"),
             personalSkill("plain"),
         )
         val catalog = GuideCatalog.withPersonal(GuideCatalog.loadBundled(), skills)
         val byName = catalog.skillPlaces("by-name")!!
-        assertTrue("com.tencent.mm" in byName.packages)
-        assertTrue("bilibili.com" in byName.domains)
-        assertEquals(setOf("com.tencent.mm"), catalog.skillPlaces("by-alias")!!.packages)
+        assertTrue("org.telegram.messenger" in byName.packages)
+        assertTrue("youtube.com" in byName.domains)
+        assertEquals(setOf("org.telegram.messenger"), catalog.skillPlaces("by-alias")!!.packages)
         assertTrue("com.example.app" in catalog.skillPlaces("by-package")!!.packages)
         // 认不出来、也不像包名的不算写了:不然这份技能永远认不出照着做了
         assertEquals(false, catalog.skillPlaces("unknown")!!.declared)
@@ -96,9 +96,9 @@ class SkillFollowTest {
 
     // App 和网站知识互相登记的一起算:技能写了网站,任务在它的 App 里做,也算照着做了
     @Test fun appAndSiteKnowledgeAreLinked() {
-        val skills = InMemoryPersonalSkills(personalSkill("bili", extraMeta = "sites: [\"bilibili.com\"]\n"))
+        val skills = InMemoryPersonalSkills(personalSkill("bili", extraMeta = "sites: [\"youtube.com\"]\n"))
         val places = GuideCatalog.withPersonal(GuideCatalog.loadBundled(), skills).skillPlaces("bili")!!
-        val biliApp = GuideCatalog.loadBundled().rows.first { it.name == "bilibili" && it.packages.isNotEmpty() }.packages.first()
+        val biliApp = GuideCatalog.loadBundled().rows.first { it.name == "youtube" && it.packages.isNotEmpty() }.packages.first()
         assertTrue(biliApp in places.packages)
         val events = listOf(read("bili", 10), act(20).copy(resultJson = """{"ok":true,"actionApp":"$biliApp"}"""))
         assertEquals(setOf("bili"), SkillFollow.followed(events, events.filterIsInstance<RunEvent.SkillUsed>(), tools) { places })

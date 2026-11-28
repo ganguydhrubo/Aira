@@ -104,16 +104,16 @@ class LoopScenarioTest {
     // (b) 网页:打开站点后按域名注入站点知识;沙箱在
     @Test fun webTaskWithSiteKnowledge() = runTest {
         val web = FakeWebPort().apply {
-            title = "知乎"
-            page = pageText("https://www.zhihu.com/hot", "知乎", "热榜\n1. 今日话题")
+            title = "YouTube"
+            page = pageText("https://www.youtube.com/feed/trending", "YouTube", "Trending\n1. Today's top video")
         }
         val main = fakeModel("main") {
-            call("web_navigate", "url" to "https://www.zhihu.com/hot")
+            call("web_navigate", "url" to "https://www.youtube.com/feed/trending")
             call("web_read_page")
-            answer("知乎热榜第一是「今日话题」")
+            answer("The top trending video on YouTube is \"Today's top video\"")
         }
         val tools = toolDispatcher(FakeScreen(), skills = catalog, web = web, sandbox = FakeSandbox())
-        val end = loop(main, tools, knowledge = bundled, skills = catalog).run("用网页看一下知乎热榜")
+        val end = loop(main, tools, knowledge = bundled, skills = catalog).run("Check YouTube trending on the web")
         assertTrue("$end", end is TaskState.Succeeded)
         val refs = main.requests[1].messages.contextBodies(ContextKind.SiteKnowledge)
         assertEquals(1, refs.size)

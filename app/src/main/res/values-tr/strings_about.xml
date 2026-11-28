@@ -105,5 +105,5 @@
     <string name="about_mirrors_test_fail">Güncelleme denetimleri bu yansıyı kullanamıyor. İndirmeler yine de çalışabilir.</string>
     <string name="about_founder_label">KURUCU</string>
     <string name="about_founder_talk">Kurucuyla iletişime geç</string>
-    <string name="about_founder_quote">Aira'yı telefonunuz sizin için gerçek işler yapsın diye, kendi dilinizde geliştiriyorum.</string>
+    <string name="about_founder_quote">Aira\'yı telefonunuz sizin için gerçek işler yapsın diye, kendi dilinizde geliştiriyorum.</string>
 </resources>

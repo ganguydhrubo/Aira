@@ -23,19 +23,20 @@ class BundledKnowledgeTest {
     @Test fun bundledTreesPassValidationAndIndexIsCurrent() {
         val r = KnowledgeIndex.build(resources)
         assertTrue(r.errors.joinToString("\n"), r.errors.isEmpty())
-        assertEquals(mapOf("app" to 49, "site" to 29, "skill" to 6), r.entries.groupingBy { it.kind }.eachCount())
+        assertEquals(mapOf("app" to 22, "site" to 9, "skill" to 6), r.entries.groupingBy { it.kind }.eachCount())
         // 类路径上的索引就是按当前文件生成的那份
         assertEquals(r.entries, catalog.rows)
     }
 
     @Test fun sitePaceFollowsTheSiteKnowledge() {
-        assertEquals("careful", catalog.sitePace("www.zhipin.com"))
+        // No bundled site asks for a careful pace any more; unknown sites have no pace either.
+        catalog.rows.filter { it.kind == KnowledgeIndex.SITE }.flatMap { it.sites }.forEach { assertEquals(it, null, catalog.sitePace(it)) }
         assertEquals(null, catalog.sitePace("example.com"))
     }
 
     // App 的 pace 按包名查 App 知识:限制浏览快慢的那几个内置 App 是 careful,别的没有说法
     @Test fun appPaceFollowsTheAppKnowledgeByPackage() {
-        val careful = listOf("xiaohongshu", "telegram", "douyin", "kuaishou", "weibo", "boss-zhipin", "xianyu", "xiaoheihe", "instagram", "tiktok")
+        val careful = listOf("instagram", "tiktok")
         val apps = catalog.rows.filter { it.kind == KnowledgeIndex.APP }
         for (name in careful) {
             val row = apps.single { it.name == name }
@@ -49,7 +50,7 @@ class BundledKnowledgeTest {
     }
 
     @Test fun everyEntryHasABody() {
-        assertEquals(37, bundled.size)
+        assertEquals(31, bundled.size)
         assertTrue(bundled.all { !it.body.isNullOrBlank() && it.body!!.length <= KnowledgeIndex.BODY_LIMIT })
         assertTrue(bundled.map { it.name }.containsAll(listOf("telegram", "whatsapp", "android-settings", "github.com", "youtube.com", "mail.google.com")))
     }
@@ -129,7 +130,6 @@ class BundledKnowledgeTest {
         assertTrue(catalog.find("a").isEmpty())
         assertTrue(catalog.find("z").isEmpty())
         assertTrue(catalog.find("Telegram", kind = "app").any { it.name == "telegram" })
-        assertTrue(catalog.find("微").any { it.name == "telegram" })
     }
 }
 
