@@ -7,7 +7,7 @@ import com.ganguydhrubo.aira.skills.ui.skillPreviewBody
 
 class SkillPreviewTest {
     @Test fun railSkillDisplaysItsMarkdownBodyWithoutTheFileHeader() {
-        val body = "## Entry\n- 用 `phone_launch_app` 打开铁路 <参数>。\n\n## Steps\n1. 选择**出发日期**。"
+        val body = "## Entry\n- 用 `phone_launch_app` Open 铁路 <参数>。\n\n## Steps\n1. 选择**出发日期**。"
         val document = "\uFEFF---\nname: train-fare\ndisplay: 查车次\n---\n$body".replace("\n", "\r\n")
         assertEquals(body, skillPreviewBody(document))
         val blocks = MarkdownModel.parse(skillPreviewBody(document))

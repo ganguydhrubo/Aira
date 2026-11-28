@@ -33,9 +33,9 @@ class ChatRowsTest {
 
     @Test
     fun streamingAnswerAndOptionalRowsStayAlignedWithTheDsl() {
-        val working = Exchange("问", emptyList(), ExchangeStatus.Working, live = true, draft = "正在回答")
+        val working = Exchange("Q", emptyList(), ExchangeStatus.Working, live = true, draft = "正在回答")
         assertEquals(3, count(listOf(working)))
-        val done = working.copy(status = ExchangeStatus.Done("回答", null), draft = null, runId = "run")
+        val done = working.copy(status = ExchangeStatus.Done("Answer", null), draft = null, runId = "run")
         assertEquals(2, count(listOf(done)))
         assertEquals(3, count(listOf(done), phoneSetupRow = -1))
         assertEquals(4, count(listOf(done), phoneSetupRow = -1, hasBlocked = true))
@@ -43,7 +43,7 @@ class ChatRowsTest {
 
     @Test
     fun setupLineFollowsTheTurnThatNeededThePhone() {
-        val first = Exchange("开应用", emptyList(), ExchangeStatus.Failed("手机操作没准备好"), live = false, runId = "run-1")
+        val first = Exchange("开应用", emptyList(), ExchangeStatus.Failed("Phone control没准备好"), live = false, runId = "run-1")
         val second = Exchange("聊两句", emptyList(), ExchangeStatus.Done("好的", null), live = false, runId = "run-2")
         val both = listOf(first, second)
         // 挂在触发它的那一轮后面:第一轮后面多一行,末尾没有
@@ -60,7 +60,7 @@ class ChatRowsTest {
 
     @Test
     fun setupLineStaysOutOfOtherConversationsAndEmptyLists() {
-        val ex = Exchange("问", emptyList(), ExchangeStatus.Done("答", null), live = false, runId = "run-1")
+        val ex = Exchange("Q", emptyList(), ExchangeStatus.Done("A", null), live = false, runId = "run-1")
         val list = listOf(ex)
         // 别的对话触发的:这里不显示
         assertEquals(null, phoneSetupRow(PhoneSetupPrompt.Need("other", "run-1"), "c", list))
@@ -76,12 +76,12 @@ class ChatRowsTest {
 
     @Test
     fun keysListRowsInTheSameOrderTheDslEmitsThem() {
-        val working = Exchange("问", emptyList(), ExchangeStatus.Working, live = true, draft = "正在回答")
+        val working = Exchange("Q", emptyList(), ExchangeStatus.Working, live = true, draft = "正在回答")
         assertEquals(listOf("u0", "d0", "r0"), chatItemKeys(listOf(working), kept = null, phoneSetupRow = null, hasBlocked = false))
 
         val steer = SteerNote("s1", "改成靠窗", SteerState.Joined, interrupted = "被打断", finished = "正在改")
         val done = Exchange(
-            "买票", emptyList(), ExchangeStatus.Done("完成", null), live = false, runId = "run",
+            "买票", emptyList(), ExchangeStatus.Done("Done", null), live = false, runId = "run",
             steers = listOf(steer),
             files = listOf(SharedFile("a.txt", 1L, "a.txt", "content://a")),
         )
@@ -95,7 +95,7 @@ class ChatRowsTest {
     fun targetKeysPointAtTheRenderedRow() {
         val steer = SteerNote("s1", "改成靠窗", SteerState.Joined, interrupted = "被打断", finished = "正在改")
         val done = Exchange(
-            "买票", emptyList(), ExchangeStatus.Done("完成", null), live = false, runId = "run",
+            "买票", emptyList(), ExchangeStatus.Done("Done", null), live = false, runId = "run",
             steers = listOf(steer),
             files = listOf(SharedFile("a.txt", 1L, "a.txt", "content://a")),
         )
@@ -112,7 +112,7 @@ class ChatRowsTest {
     @Test
     fun withdrawnSteerFallsBackToTheTurnStart() {
         val withdrawn = SteerNote("s1", "撤回的话", SteerState.Withdrawn)
-        val done = Exchange("问", emptyList(), ExchangeStatus.Done("答", null), live = false, steers = listOf(withdrawn))
+        val done = Exchange("Q", emptyList(), ExchangeStatus.Done("A", null), live = false, steers = listOf(withdrawn))
         assertEquals("u0", chatTargetKey(listOf(done), ChatTarget.Message(0, 0)))
     }
 }

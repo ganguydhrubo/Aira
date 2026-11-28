@@ -33,6 +33,6 @@ class CallVoiceStageTest {
     }
 
     @Test fun `text deltas do not move the stage`() {
-        assertEquals(CallVoiceStage.Thinking, run(VolcRealtimeEvent.UserSpeechEnded, VolcRealtimeEvent.AssistantTranscript("好")))
+        assertEquals(CallVoiceStage.Thinking, run(VolcRealtimeEvent.UserSpeechEnded, VolcRealtimeEvent.AssistantTranscript("OK")))
     }
 }

@@ -243,7 +243,7 @@ class ModelSetupViewModelTest {
         assertTrue(store.roles.value.lightFallbacks.isEmpty())
         vm.pickFallback(ModelRole.Light, 0, p.id, "b"); runCurrent()
         assertEquals(1, store.roles.value.lightFallbacks.size)
-        assertEquals("列表里选的备援不试调用", listOf("backup-typed", "nope"), built.map { it.first })
+        assertEquals("列表里选不试调用", listOf("backup-typed", "nope"), built.map { it.first })
     }
 
     /** 「用作」里手填的轻量模型先试调用,没通过原来的轻量不动;列表里的直接用,不发请求。 */
@@ -432,7 +432,7 @@ class ModelSetupViewModelTest {
         var done = 0
         vm.useFromProvider(ModelRole.Vision, p.id, "vendor/opaque-image") { done++ }
         runCurrent()
-        assertEquals("没通过不落", 0, done)
+        assertEquals("没 via 不落", 0, done)
         assertTrue(vm.state.value.manualPick[p.id] is ListState.Failed)
         assertNull(store.configFor(ModelRole.Vision))
         assertEquals(listOf("vendor/opaque-image"), built.map { it.first })
@@ -607,7 +607,7 @@ class ModelSetupViewModelTest {
         assertEquals("Gemini", f.suggestedPreset?.label)
         assertTrue(f.presetKindMismatch)
         assertEquals(
-            "这是「Gemini」的官方地址，用它的预设更省事：地址和接口类型都已填好。接口类型也对不上：「Gemini」用的是 Gemini 接口，这里选的是 OpenAI 兼容。",
+            "This is Gemini’s official address. Its preset fills in the address and interface type for you.The interface type doesn’t match either: Gemini uses the Gemini interface, but OpenAI-compatible。",
             ModelSetupCopy.presetSuggestion(f),
         )
         assertEquals(ProviderConfig.Kind.Gemini, f.exampleKind)
@@ -661,7 +661,7 @@ class ModelSetupViewModelTest {
         reply = { throw ModelError.ModelNotFound("gemini") }
         vm.retestModel(p.id, "gemini"); runCurrent()
         assertEquals(
-            ListState.Failed("模型「gemini」不存在。要填服务商文档里完整的模型 ID（例如 gemini-flash-latest）。"),
+            ListState.Failed("Model “gemini” doesn’t exist. Enter the full model ID from the provider’s docs (e.g. gemini-flash-latest）。"),
             vm.state.value.retest[p.id to "gemini"],
         )
         assertEquals(setOf("gemini", "backup"), vm.state.value.unverified(vm.state.value.providers.single()).toSet())
@@ -687,7 +687,7 @@ class ModelSetupViewModelTest {
         vm.setBaseUrl("https://models.example.com/v1")
         assertNull(vm.state.value.form.unencryptedWarning)
         vm.setBaseUrl("http://models.example.com/v1")
-        assertEquals("这个地址不加密，API Key 和对话内容可能被同一网络里的人看到。", vm.state.value.form.unencryptedWarning)
+        assertEquals("This address isn’t encrypted; your API key and chats could be seen by others on the network.", vm.state.value.form.unencryptedWarning)
         vm.setApiKey("k")
         assertTrue(vm.state.value.form.canTest)
     }
@@ -763,7 +763,7 @@ class ModelSetupViewModelTest {
         val vm = vm(store)
         vm.selectPreset("Custom")
         vm.setBaseUrl("http://192.168.1.5:8000/v1")
-        assertTrue("自定义的 OpenAI 兼容接口可以不填 Key", vm.state.value.form.canTest)
+        assertTrue("自定义的 OpenAI-compatible接口可以不填 Key", vm.state.value.form.canTest)
         listing["http://192.168.1.5:8000/v1"] = ModelListResult.Failed(ListFailure.NotSupported)
         vm.testAndSave(); runCurrent()
         // 服务不提供列表:先要一个模型名,没存
@@ -826,9 +826,9 @@ class ModelSetupViewModelTest {
             listOf(ListedModel("a"), ListedModel("b", toolCalls = true, contextTokens = 64_000), ListedModel("c", toolCalls = false)),
             Capabilities(true, false, 64_000, false),
         )
-        assertEquals(listOf("工具调用 · 未确认" to false), ModelSetupCopy.tags(o[0]))
-        assertEquals(listOf("工具调用" to true, "64K" to false), ModelSetupCopy.tags(o[1]))
-        assertEquals(listOf("不支持工具调用" to false), ModelSetupCopy.tags(o[2]))
+        assertEquals(listOf("Tool calling · unconfirmed" to false), ModelSetupCopy.tags(o[0]))
+        assertEquals(listOf("Tool calling" to true, "64K" to false), ModelSetupCopy.tags(o[1]))
+        assertEquals(listOf("No tool calling" to false), ModelSetupCopy.tags(o[2]))
     }
 
     /** 自定义服务商可以起名字(去掉首尾空白);不填用地址的主机名。同一个地址起不同的名字是两家。 */
@@ -1176,7 +1176,7 @@ class ModelSetupViewModelTest {
         listBoom = IllegalArgumentException("Unexpected char 0x0a in Authorization value: Bearer sk-\nabc")
         vm.refresh(id); runCurrent()
         val failed = vm.state.value.listing[id] as ListState.Failed
-        assertEquals("Key 里有无法使用的字符，请只粘贴密钥本身。", failed.message)
+        assertEquals("This key has characters that cannot be used. Paste only the key itself.", failed.message)
         assertFalse(failed.message.contains("Bearer"))
         assertEquals("sk", store.providerKey(id))
     }

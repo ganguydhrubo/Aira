@@ -83,11 +83,11 @@ class SkillsSyncTest {
     }
 
     @Test fun cardLineForSandboxSteps() {
-        assertEquals("正在处理文件:python3 sum.py", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxCommand("python3   sum.py", network = false))
+        assertEquals("Working on files: python3 sum.py", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxCommand("python3   sum.py", network = false))
         assertEquals("正在处理文件:${"x".repeat(40)}… · 可联网", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxCommand("x".repeat(50), network = true))
-        assertEquals("正在运行脚本", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxScript(network = false))
+        assertEquals("Running a script", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxScript(network = false))
         assertEquals("第 3/10 页", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxProgress("第 3/10 页", network = false))
         // 命令里的零宽字符、改写方向的字符不上卡片
-        assertEquals("正在处理文件:rm a.txt", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxCommand("rm \u202Ea\u200B.txt", network = false))
+        assertEquals("Working on files: rm a.txt", com.ganguydhrubo.aira.settings.ui.StatusCopy.sandboxCommand("rm \u202Ea\u200B.txt", network = false))
     }
 }

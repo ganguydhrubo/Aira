@@ -36,7 +36,7 @@ class TeachFilesTest {
         var session = TeachSession(id, "找到筛选入口", TeachPhase.Recording)
         session = TeachTrace.reduce(
             session,
-            TeachObservation(1_000, TeachEventKind.Text, "com.example.app", null, null, secret, "验证码", "otp", true, 0),
+            TeachObservation(1_000, TeachEventKind.Text, "com.example.app", null, null, secret, "CAPTCHA", "otp", true, 0),
             "com.ganguydhrubo.aira",
         )
         session = TeachTrace.reduce(
@@ -88,7 +88,7 @@ class TeachFilesTest {
     @Test fun disclosureSaysARedactedSummaryMayBeUploaded() {
         val zh = ResFileTexts.chinese.strings.getValue("teach_disclosure")
         val en = ResFileTexts("values", Locale.ENGLISH).strings.getValue("teach_disclosure")
-        assertTrue(zh.contains("发给当前模型"))
+        assertTrue(zh.contains("发给Current model"))
         assertTrue(zh.contains("不会上传"))
         assertFalse(zh.contains("不会联网"))
         assertTrue(en.contains("redacted summary"))

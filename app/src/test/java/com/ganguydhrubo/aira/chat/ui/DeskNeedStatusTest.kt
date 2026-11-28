@@ -15,8 +15,8 @@ class DeskNeedStatusTest {
     }
 
     @Test fun heldThatNeedsYouIsAPausedCard() {
-        val status = ChatReduce.needStatus(TaskState.Held(GateReason("x", "先打开无障碍", resumable = true, needsYou = true)), { it })
-        assertEquals(ExchangeStatus.Paused("先打开无障碍", true), status)
+        val status = ChatReduce.needStatus(TaskState.Held(GateReason("x", "先Open 无障碍", resumable = true, needsYou = true)), { it })
+        assertEquals(ExchangeStatus.Paused("先Open 无障碍", true), status)
     }
 
     @Test fun queuedLockedAndRunningDrawNothing() {

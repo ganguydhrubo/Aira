@@ -9,7 +9,7 @@ class SegmentsTest {
         val s = Segments()
         assertEquals("帮我", s.partial("帮我"))
         s.segmentDone("帮我订票")
-        assertEquals("帮我订票明天", s.partial("明天"))
+        assertEquals("帮我订票明天", s.partial("Tomorrow"))
     }
 
     @Test

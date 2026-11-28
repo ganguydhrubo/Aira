@@ -12,7 +12,7 @@ class OnDeviceLanguageTest {
 
     @Test
     fun scriptAndRegionTagsMapToLanguagePart() {
-        assertEquals("zh", OnDeviceLanguage.languagePart("zh-Hans-CN"))
+        assertEquals("zh", OnDeviceLanguage.languagePart("en-CN"))
         assertEquals("pt", OnDeviceLanguage.languagePart("pt-BR"))
         assertEquals("id", OnDeviceLanguage.languagePart("in-ID"))
         assertNull(OnDeviceLanguage.languagePart(null))

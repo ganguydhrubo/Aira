@@ -77,7 +77,7 @@ class DeskResultNoticeTest {
     @Test fun aDeskFollowedRunNotifiesExactlyOnce() = runBlocking {
         val rig = Rig()
         val child = rig.dispatch("查天气")
-        val run = FakeRun(child, "k1", TaskState.Running(1, "打开天气"))
+        val run = FakeRun(child, "k1", TaskState.Running(1, "Open 天气"))
         rig.runs.value = listOf(run)
         eventually("port binds the run") { rig.port.followedTaskOf("k1") == child }
 
@@ -93,7 +93,7 @@ class DeskResultNoticeTest {
     @Test fun aRunTypedInTheChildNotifiesItself() = runBlocking {
         val rig = Rig()
         val child = rig.dispatch("查天气")
-        val first = FakeRun(child, "k1", TaskState.Running(1, "打开天气"))
+        val first = FakeRun(child, "k1", TaskState.Running(1, "Open 天气"))
         rig.runs.value = listOf(first)
         eventually("port binds the run") { rig.port.followedTaskOf("k1") == child }
         first.flow.value = TaskState.Succeeded("晴")
@@ -113,7 +113,7 @@ class DeskResultNoticeTest {
     @Test fun aRecoveredResendNotifiesItself() = runBlocking {
         val rig = Rig()
         val child = rig.dispatch("查天气")
-        val run = FakeRun(child, "k1", TaskState.Running(1, "打开天气"))
+        val run = FakeRun(child, "k1", TaskState.Running(1, "Open 天气"))
         rig.runs.value = listOf(run)
         eventually("port binds the run") { rig.port.followedTaskOf("k1") == child }
         assertEquals(1, rig.taskNotices(run, TaskState.Succeeded("晴"), restored = true))
@@ -124,7 +124,7 @@ class DeskResultNoticeTest {
     @Test fun noLiveDeskOrACancelMeansTheTaskNotifies() = runBlocking {
         val rig = Rig()
         val child = rig.dispatch("查天气")
-        val run = FakeRun(child, "k1", TaskState.Running(1, "打开天气"))
+        val run = FakeRun(child, "k1", TaskState.Running(1, "Open 天气"))
         rig.runs.value = listOf(run)
         eventually("port binds the run") { rig.port.followedTaskOf("k1") == child }
         assertTrue(rig.registry.reportsEnding("k1", TaskState.Succeeded("晴")))
@@ -138,7 +138,7 @@ class DeskResultNoticeTest {
     @Test fun aDeskFollowedQuestionWritesNoLineAndNoSecondNotification() = runBlocking {
         val rig = Rig()
         val child = rig.dispatch("订票")
-        val run = FakeRun(child, "k1", TaskState.Running(1, "打开购票"))
+        val run = FakeRun(child, "k1", TaskState.Running(1, "Open 购票"))
         rig.runs.value = listOf(run)
         eventually("port binds the run") { rig.port.followedTaskOf("k1") == child }
         run.flow.value = TaskState.WaitingInput("要几点的车?")

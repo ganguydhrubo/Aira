@@ -54,11 +54,11 @@ class AttachmentMessageTest {
 
     @Test fun plainDropsThePathLines() {
         assertEquals("查车次", AttachmentMessage.plain("查车次\n附件:/workspace/inbox/a.pdf(1 KB)"))
-        assertEquals("照片", AttachmentMessage.plain("附件:/workspace/inbox/a.jpg(1 KB)"))
-        assertEquals("2 张照片", AttachmentMessage.plain("附件:/workspace/inbox/a.jpg(1 KB)\n附件:/workspace/inbox/b.png(1 KB)"))
+        assertEquals("Photo", AttachmentMessage.plain("附件:/workspace/inbox/a.jpg(1 KB)"))
+        assertEquals("2 photos", AttachmentMessage.plain("附件:/workspace/inbox/a.jpg(1 KB)\n附件:/workspace/inbox/b.png(1 KB)"))
         assertEquals("a.pdf", AttachmentMessage.plain("附件:/workspace/inbox/a.pdf(1 KB)"))
-        assertEquals("a.pdf 等 2 个文件", AttachmentMessage.plain("附件:/workspace/inbox/a.pdf(1 KB)\n附件:/workspace/inbox/b.zip(1 KB)"))
-        assertEquals("照片和文件", AttachmentMessage.plain("附件:/workspace/inbox/a.jpg(1 KB)\n附件:/workspace/inbox/b.zip(1 KB)"))
+        assertEquals("a.pdf 等 2 more files", AttachmentMessage.plain("附件:/workspace/inbox/a.pdf(1 KB)\n附件:/workspace/inbox/b.zip(1 KB)"))
+        assertEquals("Photos and files", AttachmentMessage.plain("附件:/workspace/inbox/a.jpg(1 KB)\n附件:/workspace/inbox/b.zip(1 KB)"))
         assertEquals("没有附件\n第二行", AttachmentMessage.plain("没有附件\n第二行"))
     }
 
@@ -74,7 +74,7 @@ class AttachmentMessageTest {
     @Test fun badgeByExtension() {
         assertEquals("PDF", FileBadge.text("合同.pdf"))
         assertEquals("XLSX", FileBadge.text("表.xlsx"))
-        assertEquals("文件", FileBadge.text("README"))
+        assertEquals("Files", FileBadge.text("README"))
         assertEquals(FileBadge.Kind.Pdf, FileBadge.kind("a.PDF"))
         assertEquals(FileBadge.Kind.Sheet, FileBadge.kind("a.csv"))
         assertEquals(FileBadge.Kind.Doc, FileBadge.kind("a.docx"))

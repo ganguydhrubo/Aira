@@ -261,7 +261,7 @@ class OnDeviceSttAdapterTest {
             adapter.utterance(context, model, "zh-CN")(wavOf(1))
             fail()
         } catch (e: VoiceModelError) {
-            assertFalse("包还装着,不能说「需要下载」", e is VoiceModelError.PackMissing)
+            assertFalse("包还装着,不能说「Download required」", e is VoiceModelError.PackMissing)
             assertTrue(e is VoiceModelError.OnDeviceFailed)
         }
     }

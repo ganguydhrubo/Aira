@@ -79,7 +79,7 @@ class SystemSpeechTest {
     @Test
     fun systemLanguageDropsScriptAndExtensions() {
         val system = com.ganguydhrubo.aira.i18n.AppLanguage.System
-        assertEquals("zh-CN", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("zh-Hans-CN")))
+        assertEquals("zh-CN", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("en-CN")))
         assertEquals("zh-TW", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("zh-Hant-TW")))
         assertEquals("sr-RS", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("sr-Latn-RS")))
         assertEquals("de-DE", SystemSpeech.speechTag(system, java.util.Locale.forLanguageTag("de-DE-u-co-phonebk")))

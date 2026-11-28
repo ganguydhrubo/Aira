@@ -306,10 +306,10 @@ class VolcRealtimeClientTest {
             """{"type":"response.output_text.delta","delta":"好"}""",
         ))
         val transcripts = observed.filterIsInstance<VolcRealtimeEvent.UserTranscript>()
-        assertEquals(listOf("问", "问明天", "问明天几点开门", "问后天几点开门，不要不要预约"),
+        assertEquals(listOf("Q", "问明天", "问明天几点开门", "问后天几点开门，不要不要预约"),
             transcripts.filterNot { it.isFinal }.map { it.text })
         assertEquals(VolcRealtimeEvent.UserTranscript("问后天几点开门，不要不要预约", true), transcripts.last())
-        assertEquals(listOf("好", "好"), observed.filterIsInstance<VolcRealtimeEvent.AssistantTranscript>().map { it.delta })
+        assertEquals(listOf("OK", "OK"), observed.filterIsInstance<VolcRealtimeEvent.AssistantTranscript>().map { it.delta })
     }
 
     @Test fun asrUsesExpectedTextFieldPriorityAndCompletedPayload() = runBlocking {

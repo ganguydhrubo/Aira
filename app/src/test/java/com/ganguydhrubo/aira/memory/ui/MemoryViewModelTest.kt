@@ -48,7 +48,7 @@ class MemoryViewModelTest {
     @Test fun inferredMemoryShowsItWasAirasConclusion() = runTest {
         store.add(MemoryKind.fact, "用户常在张江路一带活动", emptyList(), said.copy(type = com.ganguydhrubo.aira.core.learn.memory.MemoryContext.INFERRED, quote = "你自己总结几条写进记忆")).getOrThrow()
         val vm = vm()
-        assertEquals("Aira 在 10 月 23 日按你的要求归纳:『你自己总结几条写进记忆』", vm.ui.value.rows.first { it.content == "用户常在张江路一带活动" }.source)
+        assertEquals("Aira's conclusion on 10 月 23 日, at your request: “你自己总结几条写进记忆』", vm.ui.value.rows.first { it.content == "用户常在张江路一带活动" }.source)
         // 开关默认关,打开后存得住
         assertFalse(vm.ui.value.switches.inferMemories)
         vm.setSwitches { it.copy(inferMemories = true) }
@@ -63,8 +63,8 @@ class MemoryViewModelTest {
             vm.ui.value.rows.map { it.content }.toSet(),
         )
         assertEquals(MemoryKind.fact, vm.ui.value.rows.first { it.content == "用户住在张江" }.kind)
-        assertEquals("你手写的", vm.ui.value.rows.first { it.content == "用户住在张江" }.source)
-        assertEquals("你在 10 月 23 日说:『以后点外卖都不要香菜』", vm.ui.value.rows.first { it.kind == MemoryKind.preference }.source)
+        assertEquals("Written by you", vm.ui.value.rows.first { it.content == "用户住在张江" }.source)
+        assertEquals("You said on 10 月 23 日: “以后点外卖都不要香菜』", vm.ui.value.rows.first { it.kind == MemoryKind.preference }.source)
     }
 
     @Test fun pendingCollectsProceduresAndCounts() = runTest {
@@ -105,12 +105,12 @@ class MemoryViewModelTest {
     @Test fun manualAddSensitiveShowsMessage() = runTest {
         val vm = vm()
         vm.add(MemoryKind.fact, "我的支付密码是123456", emptyList()); runCurrent()
-        assertEquals("这类信息我不会记", vm.ui.value.message)
+        assertEquals("I don’t remember this kind of information", vm.ui.value.message)
         assertEquals(3, vm.ui.value.rows.size)
         vm.dismissMessage()
         vm.add(MemoryKind.fact, "用户的妈妈叫老妈", emptyList()); runCurrent()
         assertEquals(4, vm.ui.value.rows.size)
-        assertEquals("你手写的", vm.ui.value.rows.first { it.content == "用户的妈妈叫老妈" }.source)
+        assertEquals("Written by you", vm.ui.value.rows.first { it.content == "用户的妈妈叫老妈" }.source)
     }
 
     @Test fun clearAllNeedsTwoConfirms() = runTest {
@@ -152,42 +152,42 @@ class MemoryViewModelTest {
 
     @Test fun approveWithEdit() = runTest {
         val skills = com.ganguydhrubo.aira.task.MapSkills()
-        skills.putPending("d1", com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点搜索"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.pending, "r1", null, 0, emptyList()))
+        skills.putPending("d1", com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.pending, "r1", null, 0, emptyList()))
         val vm = skillsVm(skills)
         assertEquals(listOf("d1"), vm.ui.value.skills.drafts.map { it.id })
         // 改过的全文同样过校验:缺小节、带敏感信息、提到没有的工具都不收
-        vm.approveSkill("d1", skillMd("meeting-notes", "## Steps\n1. 点搜索框")); runCurrent()
+        vm.approveSkill("d1", skillMd("meeting-notes", "## Steps\n1. 点框")); runCurrent()
         assertTrue(vm.ui.value.message!!.contains("五个小节"))
         vm.dismissMessage()
         vm.approveSkill("d1", fullMd("meeting-notes", "支付密码是123456")); runCurrent()
-        assertEquals("这类信息我不会记", vm.ui.value.message)
+        assertEquals("I don’t remember this kind of information", vm.ui.value.message)
         vm.dismissMessage()
-        vm.approveSkill("d1", fullMd("meeting-notes", "用 `missing_tool` 打开")); runCurrent()
-        assertEquals("里面提到了 Aira 没有的工具", vm.ui.value.message)
+        vm.approveSkill("d1", fullMd("meeting-notes", "用 `missing_tool` Open ")); runCurrent()
+        assertEquals("It mentions tools Aira doesn’t have", vm.ui.value.message)
         assertEquals(1, vm.ui.value.skills.drafts.size)
-        vm.approveSkill("d1", fullMd("renamed", "1. 用 `phone_tap` 点搜索框")); runCurrent()
+        vm.approveSkill("d1", fullMd("renamed", "1. 用 `phone_tap` 点框")); runCurrent()
         assertTrue(vm.ui.value.skills.drafts.isEmpty())
         val got = skills.get("meeting-notes")!!
-        assertTrue(got.markdown.contains("点搜索框"))
+        assertTrue(got.markdown.contains("点框"))
         assertTrue(got.markdown.startsWith("---\nname: meeting-notes\n"))
         assertEquals(listOf("meeting-notes"), vm.ui.value.skills.installed.map { it.name })
     }
 
     @Test fun updateDraftShowsChangedLines() = runTest {
-        val old = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点搜索\n2. 整理待办"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.active, "r0", null, 0, emptyList())
+        val old = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点\n2. 整理待办"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.active, "r0", null, 0, emptyList())
         val skills = com.ganguydhrubo.aira.task.MapSkills(old)
-        skills.putPending("d2", old.copy(markdown = skillMd("meeting-notes", "## Steps\n1. 点搜索\n2. 补充负责人"), replacesDraftOf = "meeting-notes"))
+        skills.putPending("d2", old.copy(markdown = skillMd("meeting-notes", "## Steps\n1. 点\n2. 补充负责人"), replacesDraftOf = "meeting-notes"))
         val vm = skillsVm(skills)
         assertEquals(listOf("+ 2. 补充负责人", "- 2. 整理待办"), vm.ui.value.skills.drafts.single().changedLines)
     }
 
     @Test fun restoreSuspended() = runTest {
-        val s = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点搜索"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.suspended, "r0", null, 0, listOf("failed", "verified", "unverified"))
+        val s = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", skillMd("meeting-notes", "## Steps\n1. 点"), com.ganguydhrubo.aira.core.learn.skills.SkillStatus.suspended, "r0", null, 0, listOf("failed", "verified", "unverified"))
         val skills = com.ganguydhrubo.aira.task.MapSkills(s)
         val vm = skillsVm(skills)
         val row = vm.ui.value.skills.installed.single()
         assertTrue(row.suspended)
-        assertEquals(listOf("没办成", "核查通过", "没能核实"), row.recent)
+        assertEquals(listOf("Didn’t work out", "Check passed", "Couldn’t verify"), row.recent)
         vm.restoreSkill("meeting-notes"); runCurrent()
         assertEquals(com.ganguydhrubo.aira.core.learn.skills.SkillStatus.active, skills.get("meeting-notes")!!.status)
         assertTrue(skills.get("meeting-notes")!!.outcomes.isEmpty())
@@ -203,9 +203,9 @@ class MemoryViewModelTest {
     @Test fun importedSkillWaitsInPendingThenTrial() = runTest {
         val skills = com.ganguydhrubo.aira.task.MapSkills()
         val vm = skillsVm(skills)
-        assertEquals(null, vm.importSkill(fullMd("meeting-notes", "1. 用 `phone_tap` 点搜索框"))); runCurrent()
+        assertEquals(null, vm.importSkill(fullMd("meeting-notes", "1. 用 `phone_tap` 点框"))); runCurrent()
         assertEquals(Segment.Pending, vm.ui.value.segment)
-        assertEquals("已导入，到「待确认」里看看再收下。", vm.ui.value.message)
+        assertEquals("Imported. Review it under “To review”.", vm.ui.value.message)
         val draft = vm.ui.value.skills.drafts.single()
         assertTrue(draft.imported)
         assertTrue(skills.get("meeting-notes") == null)
@@ -217,8 +217,8 @@ class MemoryViewModelTest {
 
     @Test fun importRefusesBadOrClashingSkills() = runTest {
         val vm = skillsVm(com.ganguydhrubo.aira.task.MapSkills(), builtin = setOf("meeting-notes"))
-        assertEquals("和内置技能重名了，改个名字再试。", vm.importSkill(fullMd("meeting-notes", "1. 点搜索框")))
-        assertTrue(vm.importSkill(skillMd("other", "## Steps\n1. 点搜索框"))!!.contains("五个小节"))
+        assertEquals("A built-in skill already has this name. Rename it and try again.", vm.importSkill(fullMd("meeting-notes", "1. 点框")))
+        assertTrue(vm.importSkill(skillMd("other", "## Steps\n1. 点框"))!!.contains("五个小节"))
         // 原因由导入框自己显示,页面上不另弹提示
         assertEquals(null, vm.ui.value.message)
         assertTrue(vm.ui.value.skills.drafts.isEmpty())
@@ -226,13 +226,13 @@ class MemoryViewModelTest {
 
     @Test fun importedDraftIsCheckedEvenWhenNotEdited() = runTest {
         val skills = com.ganguydhrubo.aira.task.MapSkills()
-        val imported = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", fullMd("meeting-notes", "用 `missing_tool` 打开"),
+        val imported = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill("meeting-notes", fullMd("meeting-notes", "用 `missing_tool` Open "),
             com.ganguydhrubo.aira.core.learn.skills.SkillStatus.pending, null, null, 0, emptyList(), source = com.ganguydhrubo.aira.core.learn.skills.PersonalSkill.SOURCE_IMPORTED)
         skills.putPending("d1", imported)
-        skills.putPending("d2", imported.copy(name = "learned", markdown = fullMd("learned", "用 `missing_tool` 打开"), learnedFrom = "r1", source = null))
+        skills.putPending("d2", imported.copy(name = "learned", markdown = fullMd("learned", "用 `missing_tool` Open "), learnedFrom = "r1", source = null))
         val vm = skillsVm(skills)
         vm.approveSkill("d1"); runCurrent()
-        assertEquals("里面提到了 Aira 没有的工具", vm.ui.value.message)
+        assertEquals("It mentions tools Aira doesn’t have", vm.ui.value.message)
         assertTrue(skills.get("meeting-notes") == null)
         // 自学的草稿起草时已经按那次运行的工具查过,没改过就照旧收下
         vm.approveSkill("d2"); runCurrent()

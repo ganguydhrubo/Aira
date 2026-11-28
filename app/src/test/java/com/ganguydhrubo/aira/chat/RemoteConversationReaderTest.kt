@@ -60,7 +60,7 @@ class RemoteConversationReaderTest {
 
     @Test fun clipsLongFieldsAndMarksTheTurn() {
         val id = store.newConversation()
-        store.append(id, Turn("问".repeat(RemoteCompanion.MAX_USER_TEXT + 10), "答".repeat(RemoteCompanion.MAX_OUTCOME + 10), "succeeded", note = "注"))
+        store.append(id, Turn("Q".repeat(RemoteCompanion.MAX_USER_TEXT + 10), "A".repeat(RemoteCompanion.MAX_OUTCOME + 10), "succeeded", note = "注"))
         val turn = reader.conversation(id, 0, 10)!!.turns.single()
         assertTrue(turn.truncated)
         assertTrue(turn.userText.endsWith("…"))

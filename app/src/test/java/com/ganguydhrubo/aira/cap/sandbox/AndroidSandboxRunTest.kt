@@ -66,9 +66,9 @@ class AndroidSandboxRunTest {
         assertEquals(SandboxStatus.Ready(false), sb.awaitReady(5_000))
         assertEquals(1, starts) // 已就绪不再准备
 
-        status = SandboxStatus.Installing(10, "解包")
+        status = SandboxStatus.Installing(10, "Unpacking")
         val slow = AndroidSandbox(dirs, { status }, { emptyList() }, startPreparing = { kotlinx.coroutines.GlobalScope.launch { kotlinx.coroutines.delay(60_000) } })
-        assertEquals(SandboxStatus.Installing(10, "解包"), slow.awaitReady(100))
+        assertEquals(SandboxStatus.Installing(10, "Unpacking"), slow.awaitReady(100))
 
         status = SandboxStatus.Unsupported("x86")
         assertEquals(SandboxStatus.Unsupported("x86"), AndroidSandbox(dirs, { status }, { emptyList() }, startPreparing = { fail("must not prepare"); null }).awaitReady(100))
@@ -82,7 +82,7 @@ class AndroidSandboxRunTest {
         assertFalse(RuntimePreparer.needsWork(SandboxStatus.Ready(true), "v2", "v2", skipBroken = false))
         assertTrue(RuntimePreparer.needsWork(SandboxStatus.Broken("x"), "v2", "v2", skipBroken = false))
         assertFalse(RuntimePreparer.needsWork(SandboxStatus.Broken("x"), "v2", "v2", skipBroken = true))
-        assertFalse(RuntimePreparer.needsWork(SandboxStatus.Installing(5, "解包"), null, "v2", skipBroken = false))
+        assertFalse(RuntimePreparer.needsWork(SandboxStatus.Installing(5, "Unpacking"), null, "v2", skipBroken = false))
         assertFalse(RuntimePreparer.needsWork(SandboxStatus.Unsupported("x86"), null, "v2", skipBroken = false))
     }
 

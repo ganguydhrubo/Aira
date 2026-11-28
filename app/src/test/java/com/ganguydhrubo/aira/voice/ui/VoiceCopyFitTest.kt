@@ -8,7 +8,7 @@ class VoiceCopyFitTest {
     private fun fits(max: Int): (String, String) -> Boolean = { s, t -> (s + t).length <= max }
 
     @Test fun shortTextIsUntouched() {
-        assertEquals("你好。" to "打开", VoiceCopy.fitHeard("你好。", "打开", fits(20)))
+        assertEquals("你好。" to "Open", VoiceCopy.fitHeard("你好。", "Open", fits(20)))
         assertEquals("" to "", VoiceCopy.fitHeard("", "", fits(0)))
     }
 

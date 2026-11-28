@@ -42,7 +42,7 @@ class RemoteRunExportTest {
         writeRun(ended = false, origin = "mcp")
         File(tmp.root, "files/runs/$runId/screens").mkdirs()
         File(tmp.root, "files/runs/$runId/screens/0001.jpg").writeBytes(marker.toByteArray())
-        val task = RemoteTask("t1", conversation, "打开设置", 10L, TaskState.Running(1, "working"))
+        val task = RemoteTask("t1", conversation, "Open 设置", 10L, TaskState.Running(1, "working"))
         index.tasks["t1"] = task
         index.runs["t1"] = runId
         val byTask = found(export.load("t1"))
@@ -69,7 +69,7 @@ class RemoteRunExportTest {
     }
 
     @Test fun taskWithoutARunIsPartialAndAPrunedRunSaysItIsGone() {
-        index.tasks["t1"] = RemoteTask("t1", conversation, "打开设置", 10L, null)
+        index.tasks["t1"] = RemoteTask("t1", conversation, "Open 设置", 10L, null)
         val waiting = found(export.load("t1"))
         assertEquals(null, waiting.runId)
         assertEquals(true, RunRecordExport.of(waiting).json["partial"]!!.jsonPrimitive.boolean)

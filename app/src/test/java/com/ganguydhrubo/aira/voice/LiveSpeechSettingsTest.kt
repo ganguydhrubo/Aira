@@ -154,19 +154,19 @@ class LiveSpeechSettingsTest {
 
     @Test fun summariesNameTheService() {
         val none = SystemCapability(false, false)
-        assertEquals(SpeechOptions.Summary("千问（自建）", "192.168.1.10:10095", false), SpeechOptions.summary(SpeechChoice.FunAsr("ws://192.168.1.10:10095"), none, emptyList()))
-        assertEquals(SpeechOptions.Summary("fun-asr-realtime", "阿里云百炼 · 北京", false), SpeechOptions.summary(SpeechChoice.Bailian(), none, emptyList()))
+        assertEquals(SpeechOptions.Summary("Qwen (self-hosted)", "192.168.1.10:10095", false), SpeechOptions.summary(SpeechChoice.FunAsr("ws://192.168.1.10:10095"), none, emptyList()))
+        assertEquals(SpeechOptions.Summary("fun-asr-realtime", "Alibaba Cloud Bailian · 北京", false), SpeechOptions.summary(SpeechChoice.Bailian(), none, emptyList()))
         assertEquals(
-            SpeechOptions.Summary("paraformer-realtime-v2", "阿里云百炼 · 新加坡", false),
+            SpeechOptions.Summary("paraformer-realtime-v2", "Alibaba Cloud Bailian · 新加坡", false),
             SpeechOptions.summary(SpeechChoice.Bailian("paraformer-realtime-v2", BailianRegion.Singapore), none, emptyList()),
         )
     }
 
     @Test fun probeFailuresAreExplainedWithoutServerText() {
-        assertEquals("服务拒绝了这个 Key。检查 Key 是否正确、是否属于所选地域。", SpeechOptions.probeFailure(ModelError.Auth()))
-        assertEquals("服务拒绝了这个 Key。检查 Key 是否正确、是否属于所选地域。", SpeechOptions.probeFailure(LiveAsrError("InvalidApiKey", auth = true)))
-        assertEquals("服务拒绝了请求（ModelNotFound）。", SpeechOptions.probeFailure(LiveAsrError("ModelNotFound")))
-        assertEquals("连不上服务。检查地址，以及服务是否在运行。", SpeechOptions.probeFailure(IOException("refused")))
-        assertEquals("连不上服务。检查地址，以及服务是否在运行。", SpeechOptions.probeFailure(ModelError.Network()))
+        assertEquals("The service rejected the key. Check the key and that it belongs to the chosen region.", SpeechOptions.probeFailure(ModelError.Auth()))
+        assertEquals("The service rejected the key. Check the key and that it belongs to the chosen region.", SpeechOptions.probeFailure(LiveAsrError("InvalidApiKey", auth = true)))
+        assertEquals("The service refused the request (ModelNotFound）。", SpeechOptions.probeFailure(LiveAsrError("ModelNotFound")))
+        assertEquals("Couldn't reach the service. Check the address and that the service is running.", SpeechOptions.probeFailure(IOException("refused")))
+        assertEquals("Couldn't reach the service. Check the address and that the service is running.", SpeechOptions.probeFailure(ModelError.Network()))
     }
 }

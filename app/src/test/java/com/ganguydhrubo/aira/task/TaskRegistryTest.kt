@@ -120,9 +120,9 @@ class TaskRegistryTest {
 
     @Test fun channelMessageIsExecutedOnlyOnceAndKeepsItsReplyAddress() {
         val peer = ChannelPeer("telegram", "owner", "thread")
-        val first = registry.tryStart("thread", "任务", queueInConversation = true,
+        val first = registry.tryStart("thread", "Tasks", queueInConversation = true,
             channelPeer = peer, channelMessageId = "message-1")
-        val duplicate = registry.tryStart("thread", "任务", queueInConversation = true,
+        val duplicate = registry.tryStart("thread", "Tasks", queueInConversation = true,
             channelPeer = peer, channelMessageId = "message-1")
         assertTrue(first is StartResult.Started)
         assertSame(StartResult.DuplicateChannelMessage, duplicate)

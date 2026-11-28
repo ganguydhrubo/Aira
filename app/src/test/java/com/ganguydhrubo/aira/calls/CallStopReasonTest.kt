@@ -19,7 +19,7 @@ class CallStopReasonTest {
         val stop = CallStopReason()
         val mediaFailure = "AI 音频连接失败，电话由系统处理"
         assertTrue(stop.record(mediaFailure))
-        assertFalse(stop.record("通话已结束"))
+        assertFalse(stop.record("Call ended"))
         assertEquals(mediaFailure, stop.value)
     }
 

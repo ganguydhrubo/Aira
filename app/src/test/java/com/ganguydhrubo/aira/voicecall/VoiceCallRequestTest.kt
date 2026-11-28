@@ -13,7 +13,7 @@ class VoiceCallRequestTest {
     @Test
     fun offerWithoutTranscriptRejects() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开微信"))
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 微信"))
     }
 
     // 规则⑤正例:匹配 → Accept(用户整句原文,非归一化结果)
@@ -39,8 +39,8 @@ class VoiceCallRequestTest {
     @Test
     fun partialOverlapAccepts() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        gate.onUserTranscript("帮我打开微信好吗")
-        assertEquals(VoiceCallDecision.Accept("帮我打开微信好吗"), gate.offer("c1", "打开微信"))
+        gate.onUserTranscript("帮我Open 微信好吗")
+        assertEquals(VoiceCallDecision.Accept("帮我Open 微信好吗"), gate.offer("c1", "Open 微信"))
     }
 
     // 规则⑤:模型只摘片段也改不了用户的意思——否定词不会被摘掉,交给后台的永远是整句
@@ -57,40 +57,40 @@ class VoiceCallRequestTest {
     @Test
     fun utteranceLongerThanTranscriptRejectsAndKeepsTranscript() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        gate.onUserTranscript("打开微信")
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开微信再发个红包"))
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c2", "打开微信"))
+        gate.onUserTranscript("Open 微信")
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 微信再发个红包"))
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c2", "Open 微信"))
     }
 
     // 规则③反例:不匹配 → Reject 且不消费转写,后续匹配的 offer 仍可用这条转写
     @Test
     fun mismatchedUtteranceRejectsAndKeepsTranscript() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        gate.onUserTranscript("打开微信")
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开支付宝"))
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c2", "打开微信"))
+        gate.onUserTranscript("Open 微信")
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 支付宝"))
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c2", "Open 微信"))
     }
 
     // 规则②:offer 过的 callId 即作废——即使上次被拒、这次转写匹配,重放仍 Reject
     @Test
     fun seenCallIdRejectsEvenWithMatchingTranscript() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        gate.onUserTranscript("打开微信")
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开支付宝"))
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开微信"))
+        gate.onUserTranscript("Open 微信")
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 支付宝"))
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 微信"))
         // 被拒的重放不消费转写,新 callId 仍可正常通过
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c2", "打开微信"))
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c2", "Open 微信"))
     }
 
     // 规则②跨轮:上一轮回合已接受的 callId,新一轮转写登记后重放仍 Reject
     @Test
     fun replayedCallIdAcrossTurnsRejects() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        gate.onUserTranscript("打开微信")
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c1", "打开微信"))
-        gate.onUserTranscript("打开支付宝")
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开支付宝"))
-        assertEquals(VoiceCallDecision.Accept("打开支付宝"), gate.offer("c2", "打开支付宝"))
+        gate.onUserTranscript("Open 微信")
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c1", "Open 微信"))
+        gate.onUserTranscript("Open 支付宝")
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 支付宝"))
+        assertEquals(VoiceCallDecision.Accept("Open 支付宝"), gate.offer("c2", "Open 支付宝"))
     }
 
     // 规则⑤:一句话可以办几件事——同轮转写不随放行消费,各次调用各带自己那段原话
@@ -110,10 +110,10 @@ class VoiceCallRequestTest {
     @Test
     fun nextUserTurnExpiresTheTranscript() {
         val gate = VoiceCallRequest(RingBuffer(10))
-        gate.onUserTranscript("打开微信")
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c1", "打开微信"))
+        gate.onUserTranscript("Open 微信")
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c1", "Open 微信"))
         gate.onUserTurnStart()
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c2", "打开微信"))
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c2", "Open 微信"))
     }
 
     // onUserTranscript 每轮覆盖,只留最新:旧转写不能再用来通过校验
@@ -121,9 +121,9 @@ class VoiceCallRequestTest {
     fun newerTranscriptOverwritesOlder() {
         val gate = VoiceCallRequest(RingBuffer(10))
         gate.onUserTranscript("你好")
-        gate.onUserTranscript("打开微信")
+        gate.onUserTranscript("Open 微信")
         assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "你好"))
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c2", "打开微信"))
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c2", "Open 微信"))
     }
 
     // 规则④反例:utterance 是回声窗内助手内容的子串 → Reject(标点差异归一化后仍算回声)
@@ -131,10 +131,10 @@ class VoiceCallRequestTest {
     fun utteranceInsideEchoWindowRejects() {
         val window = RingBuffer<String>(20)
         val gate = VoiceCallRequest(window)
-        window.append("好的,马上帮你打开微信")
+        window.append("好的,马上帮你Open 微信")
         // 助手播音被服务端 VAD 当成用户转写回流,模型原样调 aira_request
-        gate.onUserTranscript("马上帮你打开微信")
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "马上帮你打开微信"))
+        gate.onUserTranscript("马上帮你Open 微信")
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "马上帮你Open 微信"))
     }
 
     // 规则④正例:回声只盖住这句的一小部分 → 不算回声(用户自己接着说了别的)
@@ -164,9 +164,9 @@ class VoiceCallRequestTest {
     fun aTurnMostlyMadeOfEchoRejectsEvenForAFragment() {
         val window = RingBuffer<String>(ECHO_WINDOW_CAPACITY_CHARS)
         val gate = VoiceCallRequest(window)
-        window.append("好的,马上帮你打开微信")
-        gate.onUserTranscript("马上帮你打开微信吧")
-        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "打开微信"))
+        window.append("好的,马上帮你Open 微信")
+        gate.onUserTranscript("马上帮你Open 微信吧")
+        assertEquals(VoiceCallDecision.Reject, gate.offer("c1", "Open 微信"))
     }
 
     // 规则④正例:回声窗有无关内容,utterance 与转写匹配且不在窗内 → Accept
@@ -175,8 +175,8 @@ class VoiceCallRequestTest {
         val window = RingBuffer<String>(20)
         val gate = VoiceCallRequest(window)
         window.append("今天天气真不错")
-        gate.onUserTranscript("打开微信")
-        assertEquals(VoiceCallDecision.Accept("打开微信"), gate.offer("c1", "打开微信"))
+        gate.onUserTranscript("Open 微信")
+        assertEquals(VoiceCallDecision.Accept("Open 微信"), gate.offer("c1", "Open 微信"))
     }
 
     // 回声窗环形边界:恰好写满容量的内容仍完整参与回声判定

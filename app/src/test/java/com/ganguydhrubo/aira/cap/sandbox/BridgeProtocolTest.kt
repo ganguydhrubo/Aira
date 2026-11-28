@@ -93,7 +93,7 @@ class BridgeProtocolTest {
     @Test fun phoneRequestUsesCurrentTaskHandler() = runBlocking {
         val params = buildJsonObject {
             put("tool", "query")
-            put("args", buildJsonObject { put("text", "设置") })
+            put("args", buildJsonObject { put("text", "Settings") })
         }
         val calls = mutableListOf<Pair<String, JsonObject>>()
         val ok = BridgeProtocol.handle(req("phone", params), token,
@@ -105,7 +105,7 @@ class BridgeProtocolTest {
         assertEquals("true", ok.s("ok"))
         assertEquals("1", ok.s("matches"))
         assertEquals("query", calls.single().first)
-        assertEquals("设置", calls.single().second["text"]!!.jsonPrimitive.content)
+        assertEquals("Settings", calls.single().second["text"]!!.jsonPrimitive.content)
 
         val denied = BridgeProtocol.handle(req("phone", params, tok = "wrong"), token,
             progress = { true }, share = { _, _ -> "" }, info = { JsonObject(emptyMap()) },

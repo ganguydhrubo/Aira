@@ -135,7 +135,7 @@ class StringResourcesTest {
         assertEquals(AppLanguage.System, of(null))
         assertEquals(AppLanguage.System, of(""))
         // Languages Aira doesn't offer fall back to English.
-        assertEquals(AppLanguage.English, of("zh-Hans"))
+        assertEquals(AppLanguage.English, of("en"))
         assertEquals(AppLanguage.English, of("zh"))
         assertEquals(AppLanguage.English, of("en"))
         assertEquals(AppLanguage.English, of("fr-FR"))

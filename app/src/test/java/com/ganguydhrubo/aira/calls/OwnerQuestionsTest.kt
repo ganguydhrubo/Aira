@@ -44,9 +44,9 @@ class OwnerQuestionsTest {
     @Test fun aNotificationReplyWinsAndIsRecordedInTheConversationToo() {
         val answers = mutableListOf<String>()
         val handle = questions.open("chat-1", "要包间吗", notified = true) { answers += it }
-        assertTrue(questions.answer(handle.token, "不要"))
-        assertEquals(listOf("不要"), answers)
-        assertEquals("不要", written.last().second.userText)
+        assertTrue(questions.answer(handle.token, "No thanks"))
+        assertEquals(listOf("No thanks"), answers)
+        assertEquals("No thanks", written.last().second.userText)
         assertFalse(questions.answerIn("chat-1", "要"))
     }
 

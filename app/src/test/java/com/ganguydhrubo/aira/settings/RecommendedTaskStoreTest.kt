@@ -19,9 +19,9 @@ class RecommendedTaskStoreTest {
     @Test fun seedsOnceAndKeepsEditsAcrossReload() {
         val file = File(tmp.root, "recommended-tasks.json")
         val first = RecommendedTaskStore(file) { "id-${nextId++}" }
-        first.ensureLoaded { listOf("总结群消息" to "打开微信，总结今天的消息。", "  " to " ") }
+        first.ensureLoaded { listOf("总结群消息" to "Open 微信，总结Today's messages。", "  " to " ") }
         assertEquals(listOf("总结群消息"), first.tasks.value.map { it.title })
-        assertNull(first.update("id-0", "总结", "打开微信，总结今天的消息。\n列出要回复的。"))
+        assertNull(first.update("id-0", "总结", "Open 微信，总结Today's messages。\n列出要回复的。"))
         assertNull(first.add("另一条", "另一条提示词"))
         assertNull(first.delete("id-0"))
 
@@ -54,12 +54,12 @@ class RecommendedTaskStoreTest {
     @Test fun emptyListStaysEmpty() {
         val file = File(tmp.root, "recommended-tasks.json")
         val first = RecommendedTaskStore(file) { "id" }
-        first.ensureLoaded { listOf("默认" to "默认提示词") }
+        first.ensureLoaded { listOf("Default" to "默认提示词") }
         assertNull(first.delete("id"))
         assertEquals("[]", file.readText())
 
         val second = RecommendedTaskStore(file) { "新的" }
-        second.ensureLoaded { listOf("默认" to "默认提示词") }
+        second.ensureLoaded { listOf("Default" to "默认提示词") }
         assertTrue(second.tasks.value.isEmpty())
         assertFalse(second.unreadable.value)
     }
@@ -79,11 +79,11 @@ class RecommendedTaskStoreTest {
         val tasks = store()
         tasks.ensureLoaded { emptyList() }
         assertEquals(RecommendedTaskError.BlankTitle, tasks.add("  ", "提示词"))
-        assertEquals(RecommendedTaskError.BlankPrompt, tasks.add("标题", " \n "))
+        assertEquals(RecommendedTaskError.BlankPrompt, tasks.add("Title", " \n "))
         assertEquals(RecommendedTaskError.TooLong, tasks.add("标".repeat(RecommendedTaskStore.TITLE_MAX + 1), "提示词"))
         assertEquals(RecommendedTaskError.TooLong, tasks.add("😀".repeat(RecommendedTaskStore.TITLE_MAX + 1), "提示词"))
         assertNull(tasks.add("😀".repeat(RecommendedTaskStore.TITLE_MAX), "短"))
-        assertEquals(RecommendedTaskError.TooLong, tasks.update("id-0", "标题", "字".repeat(RecommendedTaskStore.PROMPT_MAX + 1)))
+        assertEquals(RecommendedTaskError.TooLong, tasks.update("id-0", "Title", "字".repeat(RecommendedTaskStore.PROMPT_MAX + 1)))
         assertEquals("短", tasks.tasks.value.single().prompt)
     }
 
@@ -99,7 +99,7 @@ class RecommendedTaskStoreTest {
         val file = File(tmp.root, "recommended-tasks.json")
         file.writeText("{不是列表")
         val tasks = RecommendedTaskStore(file) { "id" }
-        tasks.ensureLoaded { listOf("默认" to "默认提示词") }
+        tasks.ensureLoaded { listOf("Default" to "默认提示词") }
         assertTrue(tasks.unreadable.value)
         assertTrue(tasks.tasks.value.isEmpty())
         assertEquals(RecommendedTaskError.Unreadable, tasks.add("新的", "新的提示词"))
@@ -109,7 +109,7 @@ class RecommendedTaskStoreTest {
         assertFalse(tasks.unreadable.value)
         assertEquals("[]", file.readText())
         val reloaded = RecommendedTaskStore(file) { "新的" }
-        reloaded.ensureLoaded { listOf("默认" to "默认提示词") }
+        reloaded.ensureLoaded { listOf("Default" to "默认提示词") }
         assertTrue(reloaded.tasks.value.isEmpty())
     }
 
@@ -129,16 +129,16 @@ class RecommendedTaskStoreTest {
                 """{"id":"b","title":"订几个闹钟","prompt":"帮我订明天早上9:40、9:50、10:00 的闹钟"},""" +
                 """{"id":"c","title":"我自己的任务","prompt":"把发来的 PDF 整理成一段摘要"}]""",
         )
-        val retired = listOf("整理 PDF 摘要" to "把发来的 PDF 整理成一段摘要")
+        val retired = listOf("Summarize a PDF" to "Summarize the PDF you send into a short digest.")
         val tasks = RecommendedTaskStore(file)
         tasks.ensureLoaded(seed = { emptyList() }, retired = { retired })
         // 没动过的下线示例剔掉;同一个提示词但标题是用户自己写的,留着
-        assertEquals(listOf("订几个闹钟", "我自己的任务"), tasks.tasks.value.map { it.title })
+        assertEquals(listOf("Set some alarms", "我自己的任务"), tasks.tasks.value.map { it.title })
         // 用户加一条后写回文件,下线的也不会再出现在读取结果里
         assertNull(tasks.add("新的", "新的提示词"))
         val reopened = RecommendedTaskStore(file)
         reopened.ensureLoaded(seed = { emptyList() }, retired = { retired })
-        assertEquals(listOf("订几个闹钟", "我自己的任务", "新的"), reopened.tasks.value.map { it.title })
+        assertEquals(listOf("Set some alarms", "我自己的任务", "新的"), reopened.tasks.value.map { it.title })
     }
 
     @Test fun legacyMarkersStayLiteralAndFillInOptInSurvivesReloadAndEdit() {

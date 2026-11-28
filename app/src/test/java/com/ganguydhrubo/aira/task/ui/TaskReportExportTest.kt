@@ -9,7 +9,7 @@ import javax.xml.parsers.DocumentBuilderFactory
 import com.ganguydhrubo.aira.settings.ui.models.use
 
 class TaskReportExportTest {
-    private val report = TaskReport(TimelineHeader("查询 <车票> & 时间", emptyList(), "已完成", verdict = "", duration = "2 分钟", modelCalls = 1),
+    private val report = TaskReport(TimelineHeader("查询 <车票> & 时间", emptyList(), "Done", verdict = "", duration = "2 minutes", modelCalls = 1),
         "## 结果\n\n**最低票价： **302 元。**正常粗体**\n\n| 车次 | 票价 |\n| --- | --- |\n| G6042 | ¥302 |\n\n- 中文项目\n- 第二项\n\n[来源](https://example.com/?a=1&b=2)\n\n```\na < b && c\nline2\n```", emptyList())
 
     @Test fun markdownAndPlainTextKeepFullAnswerAndUnicode() {
@@ -44,7 +44,7 @@ class TaskReportExportTest {
     @Test fun copiedPlainTextKeepsHeaderAndAnswerWithoutMarkup() {
         val text = TaskReportExport.text(report)
         assertTrue(text.startsWith("查询 <车票> & 时间"))
-        assertTrue(text.contains("已完成 · 2 分钟"))
+        assertTrue(text.contains("Done: · 2 minutes"))
         assertTrue(text.contains("G6042"))
         assertTrue(text.contains("中文项目"))
         assertFalse(text.contains("**"))

@@ -29,7 +29,7 @@ class SedimentationWiringTest {
     private val catalog = GuideCatalog.loadBundled()
     private val tools = setOf("phone_launch_app", "phone_observe", "phone_tap", "phone_type_text", "hand_to_user", "finish")
     private val draftMd = "---\nname: send-telegram-message\ndisplay: 发微信消息\ndescription: 给指定联系人发一条微信消息\napps: [com.tencent.mm]\nsource: learned\n---\n" +
-        "## Entry\n用 `phone_launch_app` 打开。\n## Steps\n1. 点搜索\n## Common mistakes\n同名群聊。\n## Done when (proof)\n消息出现在聊天里。\n## When to stop and hand over\n要登录时。"
+        "## Entry\n用 `phone_launch_app` Open 。\n## Steps\n1. 点\n## Common mistakes\n同名群聊。\n## Done when (proof)\n消息出现在聊天里。\n## When to stop and hand over\n要登录时。"
 
     /**
      * 一次发微信的运行:在微信([app])里做 6 个动作。动作从时刻 100 起,[extra] 里的事件按自己写的时刻算先后
@@ -88,7 +88,7 @@ class SedimentationWiringTest {
         val on = MapSkills()
         val notes = runBlocking { learning(on, learn = true).learn(after(events())) }
         assertEquals(listOf("draft-1"), on.drafts.keys.toList())
-        assertEquals("Aira 学会了一项技能:给指定联系人发一条微信消息", notes.skillNotes.single().text)
+        assertEquals("Aira learned a skill: 给指定联系人发一条微信消息", notes.skillNotes.single().text)
         assertEquals("draft-1", notes.skillNotes.single().draftId)
     }
 
@@ -124,7 +124,7 @@ class SedimentationWiringTest {
         val skills = MapSkills(skill)
         val used = listOf(RunEvent.SkillUsed(41, "telegram-msg", "viewed"))
         val notes = runBlocking {
-            learning(skills, learn = true).learn(after(events(verdict = "fail", extra = used), TaskState.Failed("核查未通过:消息没发出去", FailKind.GaveUp)))
+            learning(skills, learn = true).learn(after(events(verdict = "fail", extra = used), TaskState.Failed("核查未 via :消息没发出去", FailKind.GaveUp)))
         }
         assertEquals(SkillStatus.suspended, skills.get("telegram-msg")!!.status)
         assertEquals(listOf("verifier_rejected"), skills.get("telegram-msg")!!.outcomes)
@@ -154,7 +154,7 @@ class SedimentationWiringTest {
         val keepOn = PersonalSkill("keep-screen-on", md.replace("telegram-msg", "keep-screen-on"), SkillStatus.active, "r0", null, 0, emptyList())
         val drama = PersonalSkill("drama-coins", md.replace("telegram-msg", "drama-coins"), SkillStatus.active, "r0", null, 0, emptyList())
         val browsed = listOf(RunEvent.SkillUsed(41, "keep-screen-on", "viewed"), RunEvent.SkillUsed(42, "drama-coins", "viewed"), RunEvent.SkillUsed(43, "keep-screen-on", "viewed"))
-        val rejected = TaskState.Failed("核查未通过:没办成", FailKind.GaveUp)
+        val rejected = TaskState.Failed("核查未 via :没办成", FailKind.GaveUp)
         // 连着两次也一样(以前两次没办成就会停用)
         val both = MapSkills(keepOn, drama)
         repeat(2) {
@@ -178,7 +178,7 @@ class SedimentationWiringTest {
     // 读过、但没照着做:读完之后在别的 App 里动手,或者读完没再动手,结果都不记到它头上(#569)
     @Test fun skillReadButNotFollowedIsNotBlamed() {
         val skill = PersonalSkill("telegram-msg", draftMd.replace("send-telegram-message", "telegram-msg"), SkillStatus.active, "r0", null, 0, emptyList())
-        val rejected = TaskState.Failed("核查未通过:没办成", FailKind.GaveUp)
+        val rejected = TaskState.Failed("核查未 via :没办成", FailKind.GaveUp)
         val elsewhere = MapSkills(skill)
         val browsedTelegram = listOf(RunEvent.SkillUsed(41, "telegram-msg", "viewed"),
             RunEvent.Observed(50, 1, "只读到微信界面", place = Place.app("com.tencent.mm")))
@@ -226,7 +226,7 @@ class SedimentationWiringTest {
     @Test fun oldInjectedRecordCountsAsUse() {
         val skill = PersonalSkill("telegram-msg", draftMd.replace("send-telegram-message", "telegram-msg"), SkillStatus.active, "r0", null, 0, emptyList())
         val skills = MapSkills(skill)
-        val rejected = TaskState.Failed("核查未通过:没发出去", FailKind.GaveUp)
+        val rejected = TaskState.Failed("核查未 via :没发出去", FailKind.GaveUp)
         val notes = runBlocking { learning(skills, learn = false).learn(after(events(verdict = "fail", extra = listOf(RunEvent.SkillUsed(40, "telegram-msg", "injected"))), rejected)) }
         assertEquals(listOf("verifier_rejected"), skills.get("telegram-msg")!!.outcomes)
         assertEquals(SkillStatus.suspended, skills.get("telegram-msg")!!.status)

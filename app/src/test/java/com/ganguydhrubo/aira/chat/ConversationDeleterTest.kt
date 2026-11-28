@@ -73,7 +73,7 @@ class ConversationDeleterTest {
         assertEquals(listOf("cancel:a"), calls)
         assertTrue("a" in workspaces)
         // 任务收尾:存进停止的那一轮,再从进行中拿掉
-        store.append("a", Turn("查天气", "已停止", "cancelled"))
+        store.append("a", Turn("查天气", "Stopped", "cancelled"))
         active.value = listOf("b")
         job.join()
         assertEquals("workspace:a", calls.last())

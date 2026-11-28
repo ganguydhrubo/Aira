@@ -25,9 +25,9 @@ class LoginProbeTest {
     }
 
     @Test fun signedInNeedsAProminentLogoutOrAccountEntry() {
-        assertEquals(LoginState.SignedIn, state("首页", "退出登录"))
+        assertEquals(LoginState.SignedIn, state("首页", "Sign out"))
         assertEquals(LoginState.SignedIn, state("Log out"))
-        assertEquals(LoginState.SignedIn, state("退出"))
+        assertEquals(LoginState.SignedIn, state("Quit"))
         assertEquals(LoginState.SignedIn, state("个人中心"))
         assertEquals(LoginState.SignedIn, state("Sign out ›"))
     }
@@ -44,17 +44,17 @@ class LoginProbeTest {
     @Test fun avatarsAloneNeverDecide() {
         assertEquals(LoginState.Unknown, state(avatars = 3))
         // 头像只挡住「已退出」
-        assertEquals(LoginState.Unknown, state("登录", avatars = 1))
+        assertEquals(LoginState.Unknown, state("Sign-in", avatars = 1))
     }
 
     @Test fun conflictsAndLoginPagesAreUnknown() {
         assertEquals(LoginState.Unknown, state())
         // 改密码页:密码框和退出链接都在
-        assertEquals(LoginState.Unknown, state("退出登录", pw = true))
-        assertEquals(LoginState.Unknown, state("登录", "个人中心"))
+        assertEquals(LoginState.Unknown, state("Sign out", pw = true))
+        assertEquals(LoginState.Unknown, state("Sign-in", "个人中心"))
         // 单点登录、通行证跳转途中不下结论,哪怕有密码框
         assertEquals(LoginState.Unknown, state(pw = true, url = "https://passport.example.com/login?return=/"))
-        assertEquals(LoginState.Unknown, state("退出登录", url = "https://example.com/sso/callback"))
+        assertEquals(LoginState.Unknown, state("Sign out", url = "https://example.com/sso/callback"))
     }
 
     @Test fun loginUrlMatchesPathSegmentsOnly() {
@@ -71,7 +71,7 @@ class LoginProbeTest {
         val s = LoginProbe.parse(JsonPrimitive(inner).toString())!!
         assertEquals("https://a.example.com/", s.url)
         assertTrue(s.passwordVisible)
-        assertEquals(listOf("登录"), s.account)
+        assertEquals(listOf("Sign-in"), s.account)
         assertEquals(2, s.avatars)
         assertNull(LoginProbe.parse("null"))
         assertNull(LoginProbe.parse(null))

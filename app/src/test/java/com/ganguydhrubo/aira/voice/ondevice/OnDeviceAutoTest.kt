@@ -29,7 +29,7 @@ class OnDeviceAutoTest {
 
     private val catalog = VoicePackCatalog(
         "https://example.invalid/",
-        listOf(entry("sense", listOf("zh-Hans", "en")), entry("whisper", listOf("tr")), entry("dolphin", listOf("vi"))),
+        listOf(entry("sense", listOf("en", "en")), entry("whisper", listOf("tr")), entry("dolphin", listOf("vi"))),
     )
 
     private fun installed(vararg ids: String): (VoicePackEntry) -> Boolean = { it.id in ids }

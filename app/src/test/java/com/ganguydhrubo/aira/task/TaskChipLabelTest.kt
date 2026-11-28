@@ -31,16 +31,16 @@ class TaskChipLabelTest {
         }
         assertEquals("1/3 查票", label(running.copy(progress = RunProgress.Task("private", 5, 8, null))))
         assertEquals("1/3 · 铁路12306 · 查票", chipDetail(running, stage))
-        assertEquals("正在准备", taskChip(RunOrigin.Ui, running.copy(step = 0)))
-        assertEquals("正在执行", taskChip(RunOrigin.Ui, running))
-        assertEquals("正在思考", chipDetail(running))
+        assertEquals("Preparing", taskChip(RunOrigin.Ui, running.copy(step = 0)))
+        assertEquals("Running", taskChip(RunOrigin.Ui, running))
+        assertEquals("Thinking", chipDetail(running))
     }
 
     @Test fun personalDetailsNeverBecomeWaitingLabels() {
         val request = ConfirmationRequest(IrrevAction.order, "private recipient", "private content", null, "app")
-        assertEquals("等你同意", label(TaskState.WaitingConfirmation(request)))
-        assertEquals("等你回答", label(TaskState.WaitingInput("private question")))
-        assertEquals("等你接手", label(TaskState.WaitingTakeover("payment", "private", amount = "999")))
-        assertEquals("等待解锁", label(TaskState.Held(TaskGate.LOCKED)))
+        assertEquals("Waiting for your OK", label(TaskState.WaitingConfirmation(request)))
+        assertEquals("Waiting for your answer", label(TaskState.WaitingInput("private question")))
+        assertEquals("Take over", label(TaskState.WaitingTakeover("payment", "private", amount = "999")))
+        assertEquals("Waiting for unlock", label(TaskState.Held(TaskGate.LOCKED)))
     }
 }

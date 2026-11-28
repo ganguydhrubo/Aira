@@ -20,7 +20,7 @@ import org.junit.Test
 class ResultDeliveryTest {
     @get:Rule val texts = ChineseTexts()
     private val peer = ChannelPeer("telegram", "owner", "thread")
-    private val result = Delivery.Result("result:run", "thread", "完成")
+    private val result = Delivery.Result("result:run", "thread", "Done")
     private fun file(name: String, id: Int) = SharedFile(name, 12L, "Download/Aira/$name", "content://downloads/$id", "a".repeat(64))
 
     private class RecordingChannel(override val supportsImages: Boolean = true, val outcome: (Delivery) -> SendOutcome = { SendOutcome.Delivered }) : Channel {
@@ -46,13 +46,13 @@ class ResultDeliveryTest {
     @Test fun scheduledFailureStreakIsSavedBeforeSending() = runTest {
         val outbox = Outbox()
         val channel = RecordingChannel()
-        val failure = TaskState.Failed("没有打开网页", FailKind.Environment)
+        val failure = TaskState.Failed("没有Open 网页", FailKind.Environment)
         val result = TaskService.resultDelivery("result:plan", peer.threadId, failure, failureStreak = 3)
 
         ResultDelivery.prepare(outbox, channel, peer, result, emptyList())
         val saved = outbox.pendingRecovery().single().delivery as Delivery.Result
-        assertEquals("定时任务已连续失败 3 次", saved.title)
-        assertEquals("没有打开网页\n可以在定时任务页暂停或修改这个计划。", saved.text)
+        assertEquals("Scheduled task failed 3 次", saved.title)
+        assertEquals("没有Open 网页\nYou can pause or change this plan on the Scheduled tasks page.", saved.text)
         assertEquals(DeliveryState.Delivered, ResultDelivery.send(outbox, channel, peer, result))
         assertEquals(listOf(saved), channel.sent)
     }

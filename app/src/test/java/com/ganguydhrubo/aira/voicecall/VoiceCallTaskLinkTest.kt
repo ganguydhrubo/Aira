@@ -9,7 +9,7 @@ import org.junit.Test
 class VoiceCallTaskLinkTest {
     private val saved = listOf(
         ChatTurn("开设置", "开好了", "succeeded", runId = "run-1"),
-        ChatTurn("再看下蓝牙", "看了", "succeeded", runId = "run-2"),
+        ChatTurn("再看下蓝牙", "Viewed ", "succeeded", runId = "run-2"),
         ChatTurn("谢谢", "", "desk"),
     )
 

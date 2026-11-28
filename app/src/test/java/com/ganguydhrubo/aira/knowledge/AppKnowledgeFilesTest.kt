@@ -14,7 +14,7 @@ import java.io.File
 
 class AppKnowledgeFilesTest {
     @get:Rule val tmp = TemporaryFolder()
-    private val facts = "- 首页顶部有搜索入口。\n- 「我的」页里有设置。"
+    private val facts = "- 首页顶部有入口。\n- 「我的」页里有设置。"
     private fun draft(id: String, md: String = facts, lesson: Boolean = false, revises: String? = null) =
         AppKnowledgeDraft(id, "qq", "com.tencent.mobileqq", md, "run-$id", AppKnowledgeStage.Draft, 1, lesson = lesson, revises = revises)
 

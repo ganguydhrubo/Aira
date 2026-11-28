@@ -72,7 +72,7 @@ class ScreenSendTest {
 
     @Test fun screenGoesToTheConversationTheCardShows() {
         val running = run("a", "c1", TaskState.Running(1, ""), CapsuleKind.Running, onScreen = true)
-        val done = run("b", "c2", TaskState.Succeeded("好"), CapsuleKind.Done)
+        val done = run("b", "c2", TaskState.Succeeded("OK"), CapsuleKind.Done)
         assertEquals("c1", CapsuleCards.conversationOf(CapsuleCards.of(listOf(running), null)!!))
         assertEquals("c2", CapsuleCards.conversationOf(CapsuleCards.of(listOf(done), null)!!))
         // 空闲卡片:接着最近的对话;选了新对话时由调用方新开
@@ -88,7 +88,7 @@ class ScreenSendTest {
     @Test fun inputKindDecidesHowTheScreenIsSent() {
         val running = run("a", "c1", TaskState.Running(1, ""), CapsuleKind.Running, onScreen = true)
         assertEquals(CardInputKind.Steer, CapsuleCards.input(CapsuleCards.of(listOf(running), null)!!)!!.kind)
-        val asking = run("b", "c2", TaskState.WaitingInput("记一笔吗?", listOf("记一笔", "不用")), CapsuleKind.NeedAnswer)
+        val asking = run("b", "c2", TaskState.WaitingInput("记一笔吗?", listOf("记一笔", "None")), CapsuleKind.NeedAnswer)
         assertEquals(CardInputKind.Answer, CapsuleCards.input(CapsuleCards.of(listOf(asking), null)!!)!!.kind)
         assertEquals(CardInputKind.Start, CapsuleCards.input(CardView.Chat(null))!!.kind)
     }

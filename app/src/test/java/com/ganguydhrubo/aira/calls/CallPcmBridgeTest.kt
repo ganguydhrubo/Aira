@@ -321,8 +321,8 @@ class CallPcmBridgeTest {
     @Test fun `a silent opener does not mistake absent playback for a dead bridge`() {
         assertFalse(callAudioHasStarted("", downBytes = 0, upBytes = 0))
         assertTrue(callAudioHasStarted("", downBytes = 640, upBytes = 0))
-        assertFalse(callAudioHasStarted("开场白", downBytes = 640, upBytes = 0))
-        assertTrue(callAudioHasStarted("开场白", downBytes = 640, upBytes = 960))
+        assertFalse(callAudioHasStarted("Greeting", downBytes = 640, upBytes = 0))
+        assertTrue(callAudioHasStarted("Greeting", downBytes = 640, upBytes = 960))
     }
 
     private class BlockingCapture : InputStream() {

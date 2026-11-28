@@ -26,7 +26,7 @@ class SelfCheckTextTest {
 
     @Test
     fun nonLatinTextMatchesAsIs() {
-        assertTrue(SelfCheckText.same("点我", "点我"))
+        assertTrue(SelfCheckText.same("Tap me", "Tap me"))
         assertTrue(SelfCheckText.same("НАЖМИ МЕНЯ", "Нажми меня"))
     }
 
@@ -49,9 +49,9 @@ class SelfCheckTextTest {
 
     @Test
     fun numberedTextWithWordsAfterTheNumber() {
-        val taps = SelfCheckText.Numbered("点了 987654321 次", "987654321")
-        assertTrue(taps.matches("点了 3 次"))
-        assertFalse(taps.matches("点了 3"))
+        val taps = SelfCheckText.Numbered("Taps: 987654321 次", "987654321")
+        assertTrue(taps.matches("Taps: 3 次"))
+        assertFalse(taps.matches("Taps: 3"))
     }
 
     @Test

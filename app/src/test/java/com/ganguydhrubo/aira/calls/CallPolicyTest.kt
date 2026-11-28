@@ -108,15 +108,15 @@ class CallPolicyTest {
     }
 
     @Test fun legacyGreetingMigratesOnlyTheExactOldDefault() {
-        val legacyDefault = "您好，我是 Aira 的 AI 电话助手。请问有什么需要我转告？"
-        val customWithOldName = "您好，我是 Aira 的 AI 电话助手。请留下可回拨的时间。"
-        val currentDefault = "您好，我是 Aira AI 电话助手。请问有什么需要我转告？"
+        val legacyDefault = "您好，我是 Aira 的 AI calls助手。请问有什么需要我转告？"
+        val customWithOldName = "您好，我是 Aira 的 AI calls助手。请留下可回拨的时间。"
+        val currentDefault = "您好，我是 Aira AI calls助手。请问有什么需要我转告？"
         assertEquals(currentDefault, CallConfig().greeting)
         assertEquals(currentDefault, CallPolicy.migrateDefaultGreeting(legacyDefault))
         assertEquals(currentDefault, CallPolicy.spokenGreeting(legacyDefault, hasTask = false))
         assertEquals(customWithOldName, CallPolicy.migrateDefaultGreeting(customWithOldName))
         assertEquals(customWithOldName, CallPolicy.spokenGreeting(customWithOldName, hasTask = false))
-        assertEquals("您好，我是 Aira AI 电话助手。请问现在方便通话吗？",
+        assertEquals("您好，我是 Aira AI calls助手。请问现在方便通话吗？",
             CallPolicy.spokenGreeting(currentDefault, hasTask = true))
     }
 
@@ -136,7 +136,7 @@ class CallPolicyTest {
             assertFalse(prompt.contains("Flash phone"))
             assertTrue(prompt.contains("只有对方直接问接话者的身份"))
             assertTrue(prompt.contains("‘喂，能听到吗’，只答‘能听到，您说’"))
-            assertFalse(prompt.contains("你是 AI 电话助手"))
+            assertFalse(prompt.contains("你是 AI calls助手"))
         }
     }
 

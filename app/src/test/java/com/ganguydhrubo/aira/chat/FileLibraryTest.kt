@@ -19,10 +19,10 @@ class FileLibraryTest {
         val path = "/workspace/inbox/report.pdf"
         val message = AttachmentLines.compose("看一下", listOf(path to "2 KB", path to "2 KB"))
         val output = SharedFile("report.pdf", 12, "Download/Aira/report.pdf", "content://files/1", "hash")
-        store.append("a", Turn(message, "完成", "succeeded", runId = "run", atMs = 12,
+        store.append("a", Turn(message, "Done", "succeeded", runId = "run", atMs = 12,
             steers = listOf(AttachmentLines.compose("还有", listOf(path to "2 KB")))), listOf(output))
-        store.append("a", Turn(AttachmentLines.compose("再看", listOf(path to "3 KB")), "完成", "succeeded", atMs = 30))
-        store.append("b", Turn(message, "完成", "succeeded", atMs = 20),
+        store.append("a", Turn(AttachmentLines.compose("再看", listOf(path to "3 KB")), "Done", "succeeded", atMs = 30))
+        store.append("b", Turn(message, "Done", "succeeded", atMs = 20),
             listOf(output.copy(name = "renamed.pdf"), output.copy(uri = "content://files/2")))
 
         val all = FileLibrary(store).list()

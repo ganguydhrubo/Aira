@@ -45,12 +45,12 @@ class RunLearningScreenMapTest {
 
     @Test fun growsGraphFromRunEvents() {
         val store = MemStore()
-        learn(store, listOf(tapEvent(listOf("首页"), listOf("设置"))))
+        learn(store, listOf(tapEvent(listOf("首页"), listOf("Settings"))))
         val g = store.load("p.a")!!
         assertEquals(2, g.nodes.size)
         // 认得出两屏各带骨架锚点
         assertNotNull(g.nodes.values.firstOrNull { it.anchors.containsKey("首页") })
-        assertNotNull(g.nodes.values.firstOrNull { it.anchors.containsKey("设置") })
+        assertNotNull(g.nodes.values.firstOrNull { it.anchors.containsKey("Settings") })
     }
 
     @Test fun emptyEventsNoGraphNoThrow() {
@@ -62,7 +62,7 @@ class RunLearningScreenMapTest {
     @Test fun writeFailureDoesNotThrow() {
         val store = MemStore().apply { failSave = true }
         // 不抛、结局照旧(learn 返回 notes)
-        val notes = learn(store, listOf(tapEvent(listOf("首页"), listOf("设置"))))
+        val notes = learn(store, listOf(tapEvent(listOf("首页"), listOf("Settings"))))
         assertEquals("run-1", notes.runId)
     }
 }

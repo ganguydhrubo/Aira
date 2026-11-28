@@ -735,7 +735,7 @@ class ProviderStoreTest {
         val main = s.configFor(ModelRole.Main)!!
         val vision = s.configFor(ModelRole.Vision)!!
         assertEquals("m1" to "m2", main.model to vision.model)
-        assertTrue("选作主模型就记工具调用", main.capabilities.toolCalls)
+        assertTrue("选作主模型就记Tool calling", main.capabilities.toolCalls)
         assertTrue("选作看图就算能看图", vision.capabilities.vision)
         // 轻量不要求任何能力
         assertTrue(s.use(ModelRole.Light, p.id, "m2", none))
@@ -919,7 +919,7 @@ class ProviderStoreTest {
         s.use(ModelRole.Main, p.id, "m1", none)
         assertEquals(p.id, s.untestedMainProvider()?.id)
         s.markVerified(p.id, "m1")
-        assertNull("试通过了", s.untestedMainProvider())
+        assertNull("试 via 了", s.untestedMainProvider())
         val listed = s.connect("Y", ProviderConfig.Kind.OpenAiCompat, "https://y.test/v1", "k", listOf(ListedModel("m2")))
         s.use(ModelRole.Main, listed.id, "m2", none)
         assertNull("从列表里选的不算", s.untestedMainProvider())
@@ -1462,10 +1462,10 @@ class ProviderStoreTest {
         } catch (_: ModelError.DailyBudgetExceeded) {}
         s.proactiveModel()!!.complete("s", emptyList(), emptyList())
 
-        assertEquals("主动能力的用量不动服务商的「今日已用」", 10_000L, b.ledger.providerTokensToday(p.id))
+        assertEquals("Proactive的用量不动服务商的「今日已用」", 10_000L, b.ledger.providerTokensToday(p.id))
         assertEquals(5L, b.ledger.proactiveTokensToday())
         val proactive = b.ledger.snapshot().rows.single { it.key.purpose == UsagePurpose.Proactive }
-        assertEquals("轻量用主模型时记在主模型那条配置名下", UsageKey(p.id, "m1", UsagePurpose.Proactive), proactive.key)
+        assertEquals("轻量Use main model时记在主模型那条配置名下", UsageKey(p.id, "m1", UsagePurpose.Proactive), proactive.key)
     }
 
     @Test fun exhaustedProactiveBudgetRefusesOnlyProactiveCalls() = runTest {
@@ -1482,7 +1482,7 @@ class ProviderStoreTest {
 
         try {
             s.proactiveModel()!!.complete("s", emptyList(), emptyList())
-            fail("主动能力今天的预算已用完")
+            fail("Proactive今天的预算已用完")
         } catch (e: ModelError.ProactiveBudgetExceeded) {
             assertEquals(10_000L, e.limit)
             assertEquals(10_000L, e.used)
@@ -1495,7 +1495,7 @@ class ProviderStoreTest {
         // 第二天恢复
         b.clock += 24 * UsageLedger.HOUR_MS
         s.proactiveModel()!!.complete("s", emptyList(), emptyList())
-        assertEquals("轻量模型选了 m2 就用 m2", "m2", b.ledger.snapshot().rows.last { it.key.purpose == UsagePurpose.Proactive && it.key.providerId == p.id }.key.model)
+        assertEquals("Light model选了 m2 就用 m2", "m2", b.ledger.snapshot().rows.last { it.key.purpose == UsagePurpose.Proactive && it.key.providerId == p.id }.key.model)
     }
 
     /** 服务商不报用量时 Token 数不涨,靠请求次数的上限停下(默认 20 万 Token 时是 800 次);主模型的调用不受影响。 */
@@ -1514,7 +1514,7 @@ class ProviderStoreTest {
 
         try {
             s.proactiveModel()!!.complete("s", emptyList(), emptyList())
-            fail("主动能力今天的请求次数已到上限")
+            fail("Proactive今天的请求次数已到上限")
         } catch (e: ModelError.ProactiveBudgetExceeded) {
             assertTrue(e.byCalls)
         }

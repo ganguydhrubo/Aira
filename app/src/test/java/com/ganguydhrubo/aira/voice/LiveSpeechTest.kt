@@ -72,7 +72,7 @@ class LiveSpeechTest {
         // 一样的快照不重复发
         socket.incoming.send("""{"sentences": [], "partial": "你好", "is_final": false}""")
         socket.incoming.send("""{"sentences": [{"text": "你好。"}], "partial": "打开", "is_final": false}""")
-        assertEquals(SpeechEvent.Partial("你好。", "打开"), events.receive())
+        assertEquals(SpeechEvent.Partial("你好。", "Open"), events.receive())
         capture.chunks.send(shortArrayOf(1, 2, 3))
         session.release(); session.release()
         assertEquals(SpeechEvent.Converting, events.receive())
@@ -80,10 +80,10 @@ class LiveSpeechTest {
         assertArrayEquals(byteArrayOf(1, 0, 2, 0, 3, 0), socket.audio())
         assertEquals("STOP", socket.text())
         socket.incoming.send("""{"sentences": [{"text": "你好。"}, {"text": "打开微信。"}], "partial": "", "is_final": true}""")
-        assertEquals(SpeechEvent.Partial("你好。打开微信。", ""), events.receive())
+        assertEquals(SpeechEvent.Partial("你好。Open 微信。", ""), events.receive())
         assertTrue(events.tryReceive().isFailure) // 终结果到了还要等 stopped
         socket.incoming.send("""{"event": "stopped"}""")
-        assertEquals(SpeechEvent.Final("你好。打开微信。"), events.receive())
+        assertEquals(SpeechEvent.Final("你好。Open 微信。"), events.receive())
         assertTrue(events.receiveCatching().isClosed)
         yield()
         assertTrue(socket.closed); assertTrue(capture.cancelled)

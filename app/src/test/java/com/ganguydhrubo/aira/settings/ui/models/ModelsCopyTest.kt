@@ -38,7 +38,7 @@ class ModelsCopyTest {
         assertEquals(listOf("deepseek-reasoner", "deepseek-chat", "deepseek-coder"), u.sortedOptions(ds).map { it.id })
         assertEquals(listOf(ModelRole.Main, ModelRole.Vision, ModelRole.Light), u.rolesOf(ds.id, "deepseek-reasoner"))
         assertTrue(u.picked(ModelRole.Main, ds.id, "deepseek-reasoner"))
-        assertFalse("用主模型不算明确选了它", u.picked(ModelRole.Vision, ds.id, "deepseek-reasoner"))
+        assertFalse("Use main model不算明确选了它", u.picked(ModelRole.Vision, ds.id, "deepseek-reasoner"))
     }
 
     @Test fun pickerFixedChoicesPerRole() {
@@ -52,7 +52,7 @@ class ModelsCopyTest {
         val u = ui(RoleChoices(mainGroup = "g"), groups = listOf(g))
         val line = ModelsCopy.roleLine(u, ModelRole.Main)
         assertEquals("主力组", line.title)
-        assertEquals("2 个模型", line.subtitle)
+        assertEquals("2 models", line.subtitle)
     }
 
     @Test fun providerNameAddsNicknameThroughOneFormat() {
@@ -61,6 +61,6 @@ class ModelsCopyTest {
         val cf = Provider("p3", "Cloudflare Workers AI", ProviderConfig.Kind.OpenAiCompat,
             "https://api.cloudflare.com/client/v4/accounts/abcd1234efgh5678/ai/v1")
         assertEquals("Cloudflare Workers AI（abcd…5678）", ModelsCopy.providerName(cf))
-        assertEquals("Cloudflare Workers AI（个人）", ModelsCopy.providerName(cf.copy(nickname = "个人")))
+        assertEquals("Cloudflare Workers AI（个人）", ModelsCopy.providerName(cf.copy(nickname = "Person")))
     }
 }

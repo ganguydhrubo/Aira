@@ -15,7 +15,7 @@ class TaskFailureCopyTest {
     @Test fun rateLimitUsesTheSelectedLanguage() {
         val previous = UiText.source
         try {
-            val failure = TaskState.Failed("中文", FailKind.Model, FailureCode.ModelRateLimited)
+            val failure = TaskState.Failed("Chinese", FailKind.Model, FailureCode.ModelRateLimited)
             UiText.source = ResFileTexts("values-ar", Locale.forLanguageTag("ar"))
             val arabic = localizeTaskFailure(failure) as TaskState.Failed
             assertTrue(arabic.reason.contains("خدمة النموذج"))

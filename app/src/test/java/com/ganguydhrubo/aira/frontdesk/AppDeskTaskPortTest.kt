@@ -60,7 +60,7 @@ class AppDeskTaskPortTest {
 
     @Test fun noteIsCappedAtThisLayer() = runTest {
         val rig = Rig(this)
-        rig.port.dispatch("查天气", "说".repeat(DESK_NOTE_MAX_CHARS + 50), "p")
+        rig.port.dispatch("查天气", "Speak".repeat(DESK_NOTE_MAX_CHARS + 50), "p")
         assertEquals(DESK_NOTE_MAX_CHARS, rig.starts.single().brief!!.length)
     }
 
@@ -93,10 +93,10 @@ class AppDeskTaskPortTest {
         val child = (rig.port.dispatch("查天气", "", "p") as DispatchOutcome.Started).taskId
         val state = rig.port.state(child)!!
         assertEquals(TaskState.Idle, state.value)
-        val run = FakeRun(child, TaskState.Running(1, "打开天气"))
+        val run = FakeRun(child, TaskState.Running(1, "Open 天气"))
         rig.runs.value = listOf(run)
         runCurrent()
-        assertEquals(TaskState.Running(1, "打开天气"), state.value)
+        assertEquals(TaskState.Running(1, "Open 天气"), state.value)
 
         run.flow.value = TaskState.WaitingInput("哪个城市?")
         assertTrue(rig.port.answer(child, "上海"))
@@ -119,7 +119,7 @@ class AppDeskTaskPortTest {
     @Test fun queuePositionFollowsServiceQueue() = runTest {
         val rig = Rig(this, limit = 1)
         val child = (rig.port.dispatch("查天气", "", "p") as DispatchOutcome.Started).taskId
-        val queued = TaskState.Held(GateReason.queued("排队"))
+        val queued = TaskState.Held(GateReason.queued("Queue"))
         rig.runs.value = listOf(FakeRun("a", TaskState.Running(1, "x")), FakeRun("b", queued), FakeRun(child, queued))
         assertEquals(2, rig.port.queuePosition(child))
         assertNull(rig.port.queuePosition("a"))
@@ -178,14 +178,14 @@ class AppDeskTaskPortTest {
         val rig = Rig(this)
         val child = (rig.port.dispatch("查天气", "", "p") as DispatchOutcome.Started).taskId
         assertNull(rig.port.followedTaskOf("k1"))
-        val first = FakeRun(child, TaskState.Running(1, "打开天气"), key = "k1")
+        val first = FakeRun(child, TaskState.Running(1, "Open 天气"), key = "k1")
         rig.runs.value = listOf(first)
         runCurrent()
         assertEquals(child, rig.port.followedTaskOf("k1"))
 
         first.flow.value = TaskState.Succeeded("晴")
         runCurrent()
-        rig.runs.value = listOf(FakeRun(child, TaskState.Running(1, "再查一次"), key = "k2"))
+        rig.runs.value = listOf(FakeRun(child, TaskState.Running(1, "Run again"), key = "k2"))
         runCurrent()
         assertNull(rig.port.followedTaskOf("k2"))
         assertNull(rig.port.followedTaskOf("nope"))

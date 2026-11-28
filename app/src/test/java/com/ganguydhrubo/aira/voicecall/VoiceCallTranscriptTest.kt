@@ -136,7 +136,7 @@ class VoiceCallTranscriptTest {
     fun `重复结束不重复写`() = runTest {
         val h = Harness()
         h.transcript.onUser("第一句")
-        h.transcript.onAssistant("答")
+        h.transcript.onAssistant("A")
         h.transcript.close()
         h.transcript.close()
         assertEquals(1, h.appended.size)
@@ -146,7 +146,7 @@ class VoiceCallTranscriptTest {
     fun `没有发起会话时不写`() = runTest {
         val h = Harness(conversationId = null)
         h.transcript.onUser("第一句")
-        h.transcript.onAssistant("答")
+        h.transcript.onAssistant("A")
         h.transcript.close()
         assertTrue(h.appended.isEmpty())
     }

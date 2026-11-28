@@ -17,7 +17,7 @@ class KnowPagesTest {
     private val today = 20_000L
     private val week = DigestPool.weekOf(today)
     private val month = DigestPool.monthOf(today)
-    private fun note(id: String, day: Long) = DigestNote(id, "com.chat", day, 1, 2, 1, "群", "句 $id")
+    private fun note(id: String, day: Long) = DigestNote(id, "com.chat", day, 1, 2, 1, "Group", "句 $id")
     private val line = DigestLine("一句", notes = listOf("n1"), apps = listOf("com.chat"))
     private fun data(
         canMake: Boolean = false, notes: List<DigestNote> = emptyList(), days: List<DayDigest> = emptyList(),

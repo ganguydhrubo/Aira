@@ -63,7 +63,7 @@ class RunRecoveryTest {
     @Test fun pendingImageSurvivesAnAlreadyDeliveredTextResult() = runTest(UnconfinedTestDispatcher()) {
         val rig = Rig(this, "telegram")
         val peer = ChannelPeer("telegram", "owner", "thread-a")
-        val result = Delivery.Result("result:a", peer.threadId, "截图")
+        val result = Delivery.Result("result:a", peer.threadId, "Screenshot")
         rig.store.save(run("a", RunPhase.Finishing).copy(reply = result.text, deliveryId = result.id, channelPeer = peer))
         ResultDelivery.prepare(rig.outbox, rig.channel, peer, result,
             listOf(SharedFile("screen.png", 3L, "Download/Aira/screen.png", "content://downloads/1")))
@@ -77,7 +77,7 @@ class RunRecoveryTest {
     @Test fun interruptedImageAttemptIsNotSentAgainOrReportedAsFullyDelivered() = runTest(UnconfinedTestDispatcher()) {
         val rig = Rig(this, "telegram")
         val peer = ChannelPeer("telegram", "owner", "thread-a")
-        val result = Delivery.Result("result:a", peer.threadId, "截图")
+        val result = Delivery.Result("result:a", peer.threadId, "Screenshot")
         rig.store.save(run("a", RunPhase.Finishing).copy(reply = result.text, deliveryId = result.id, channelPeer = peer))
         val image = Delivery.Image("result:a:image:0", peer.threadId, "content://downloads/1", "screen.png", 3L)
         rig.outboxStore.saveAll(listOf(DeliveryRecord(peer, result, DeliveryState.Delivered),
@@ -93,7 +93,7 @@ class RunRecoveryTest {
         val rig = Rig(this, "telegram")
         val peer = ChannelPeer("telegram", "owner", "thread-a")
         rig.store.save(run("a").copy(channelPeer = peer))
-        val result = Delivery.Result("result:a", peer.threadId, "截图")
+        val result = Delivery.Result("result:a", peer.threadId, "Screenshot")
         ResultDelivery.prepare(rig.outbox, rig.channel, peer, result,
             listOf(SharedFile("screen.png", 3L, "Download/Aira/screen.png", "content://downloads/1")))
         rig.recovery.recover()
@@ -105,7 +105,7 @@ class RunRecoveryTest {
         val rig = Rig(this)
         val peer = ChannelPeer(LocalChannel.ID, "phone-owner", "thread-a")
         rig.store.save(run("a").copy(triggerWindowKey = "trigger"))
-        val result = Delivery.Result("result:a", peer.threadId, "任务失败")
+        val result = Delivery.Result("result:a", peer.threadId, "Task failed")
         ResultDelivery.prepare(rig.outbox, rig.channel, peer, result, emptyList())
         rig.recovery.recover()
         // A prepared text receipt alone does not say whether a scheduled task succeeded.
@@ -240,7 +240,7 @@ class RunRecoveryTest {
         assertEquals(1, turns.size)
         assertEquals("failed", turns.single().status)
         assertEquals("目标 a", turns.single().userText)
-        assertEquals("任务中断了，可以重新发起。", turns.single().outcome)
+        assertEquals("The task was interrupted. You can start it again.", turns.single().outcome)
     }
 
     @Test fun interruptionIncludesPersistedProgressButNotificationStaysShort() = runTest(UnconfinedTestDispatcher()) {
@@ -259,9 +259,9 @@ class RunRecoveryTest {
         rig.recovery.recover()
 
         val outcome = rig.conversations.turns("thread-a").single().outcome
-        assertTrue(outcome, outcome.startsWith("任务中断了，可以重新发起。"))
-        assertTrue(outcome, "已确认进度:已加日程 · 12/36 · 第 12 条" in outcome)
-        assertEquals("任务中断了，可以重新发起。", rig.conversations.turns("thread-a").single().outcome.lineSequence().first())
+        assertTrue(outcome, outcome.startsWith("The task was interrupted. You can start it again."))
+        assertTrue(outcome, "已确认:已加日程 · 12/36 · Step 12 条" in outcome)
+        assertEquals("The task was interrupted. You can start it again.", rig.conversations.turns("thread-a").single().outcome.lineSequence().first())
         assertTrue((rig.channel.sent.single() as Delivery.Notice).text.length < 100)
     }
 

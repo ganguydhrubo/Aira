@@ -65,11 +65,11 @@ class ConversationSearchTest {
         store.append("c", Turn("查天气", "晴", "succeeded", steers = listOf(quoting)))
         store.append("d", Turn(UserScreenMessage.compose("s1", "屏幕上这个按钮是干嘛的"), "是设置", "succeeded"))
         store.append("e", Turn(AttachmentLines.compose("", listOf("/workspace/inbox/IMG_0001.jpg" to "2 MB")), "收到", "succeeded"))
-        store.setTitle("e", "照片")
+        store.setTitle("e", "Photo")
         // 候选的标题和侧栏一样先去掉附件行、网页说明(ChatDrawer)
         val shown = store.list().map { it.copy(title = ChatCopy.plainTitle(it.title)) }
         fun found(q: String) = hits(store, q, shown).hits.map { it.id }
-        for (q in listOf("workspace", "inbox", "KB", "附件", "done", "browser", "Title", "End of page", "Quoting", "https", "screen", "IMG", "jpg")) {
+        for (q in listOf("workspace", "inbox", "KB", "Attachments", "done", "browser", "Title", "End of page", "Quoting", "https", "screen", "IMG", "jpg")) {
             assertEquals(q, emptyList<String>(), found(q))
         }
         // 显示出来的照样搜得到:话、文件名、网站、选中的字、引的那段
@@ -85,8 +85,8 @@ class ConversationSearchTest {
         val store = ConversationStore(tmp.newFolder())
         store.append("a", Turn(AttachmentLines.compose("", listOf("/workspace/inbox/a.jpg" to "2 MB")), "收到", "succeeded"))
         store.append("a", Turn("照片里这是什么花", "是月季", "succeeded"))
-        store.setTitle("a", "照片")
-        val hit = hits(store, "照片").hits.single()
+        store.setTitle("a", "Photo")
+        val hit = hits(store, "Photo").hits.single()
         assertTrue(hit.inTitle)
         assertEquals("照片里这是什么花", hit.snippet)
 
@@ -101,7 +101,7 @@ class ConversationSearchTest {
         store.append("a", Turn("帮我订票", "验证码一直过不去", "failed"))
         store.append("b", Turn("查天气", "明天晴", "succeeded"))
 
-        val found = hits(store, "验证码")
+        val found = hits(store, "CAPTCHA")
         assertEquals(listOf("a"), found.hits.map { it.id })
         assertFalse(found.hits.single().inTitle)
         assertNotNull(found.hits.single().snippet)
@@ -143,25 +143,25 @@ class ConversationSearchTest {
 
     @Test fun newerWinsWhenScoresTie() {
         val store = ConversationStore(tmp.newFolder())
-        store.append("old", Turn("问", "都提到葡萄", "succeeded"))
-        store.append("new", Turn("问", "都提到葡萄", "succeeded"))
-        val all = listOf(summary("old", "问", updatedAt = 1L), summary("new", "问", updatedAt = 2L))
+        store.append("old", Turn("Q", "都提到葡萄", "succeeded"))
+        store.append("new", Turn("Q", "都提到葡萄", "succeeded"))
+        val all = listOf(summary("old", "Q", updatedAt = 1L), summary("new", "Q", updatedAt = 2L))
         assertEquals(listOf("new", "old"), hits(store, "葡萄", all).hits.map { it.id })
     }
 
     @Test fun pinnedBreaksTies() {
         val store = ConversationStore(tmp.newFolder())
-        store.append("a", Turn("问", "苹果", "succeeded"))
-        store.append("b", Turn("问", "苹果", "succeeded"))
-        val plain = summary("a", "问", updatedAt = 5L)
-        val pinned = summary("b", "问", updatedAt = 5L, pinnedAt = 7L)
+        store.append("a", Turn("Q", "苹果", "succeeded"))
+        store.append("b", Turn("Q", "苹果", "succeeded"))
+        val plain = summary("a", "Q", updatedAt = 5L)
+        val pinned = summary("b", "Q", updatedAt = 5L, pinnedAt = 7L)
         assertEquals(listOf("b", "a"), hits(store, "苹果", listOf(plain, pinned)).hits.map { it.id })
     }
 
     @Test fun snippetKeepsContextAndMarksTruncation() {
         val store = ConversationStore(tmp.newFolder())
-        val text = "开头" + "中".repeat(200) + "目标词" + "后".repeat(200)
-        store.append("a", Turn("问", text, "succeeded"))
+        val text = "开头" + "Medium".repeat(200) + "目标词" + "后".repeat(200)
+        store.append("a", Turn("Q", text, "succeeded"))
         val snippet = hits(store, "目标词").hits.single().snippet.orEmpty()
         assertTrue(snippet.contains("目标词"))
         assertTrue(snippet.startsWith("…"))
@@ -177,7 +177,7 @@ class ConversationSearchTest {
 
     @Test fun snippetDoesNotSplitEmoji() {
         val store = ConversationStore(tmp.newFolder())
-        store.append("a", Turn("问", "😀".repeat(60) + "目标词", "succeeded"))
+        store.append("a", Turn("Q", "😀".repeat(60) + "目标词", "succeeded"))
         val snippet = hits(store, "目标词").hits.single().snippet.orEmpty()
         assertFalse(hasLoneSurrogate(snippet))
     }
@@ -225,7 +225,7 @@ class ConversationSearchTest {
 
     @Test fun emptyQueryMatchesNothing() {
         val store = ConversationStore(tmp.newFolder())
-        store.append("a", Turn("问", "答", "succeeded"))
+        store.append("a", Turn("Q", "A", "succeeded"))
         assertTrue(hits(store, "   ").hits.isEmpty())
         assertTrue(store.search.titleMatches("   ", store.list()).isEmpty())
     }
@@ -240,8 +240,8 @@ class ConversationSearchTest {
 
     @Test fun replyHitsCarryTheSteerReplyTarget() {
         val store = ConversationStore(tmp.newFolder())
-        store.append("a", Turn("买票", "完成", "succeeded", steers = listOf("改成靠窗"), finishedReplies = listOf("正在改")))
-        store.append("b", Turn("退票", "完成", "succeeded", steers = listOf("算了"), interruptedReplies = listOf("被打断的话")))
+        store.append("a", Turn("买票", "Done", "succeeded", steers = listOf("改成靠窗"), finishedReplies = listOf("正在改")))
+        store.append("b", Turn("退票", "Done", "succeeded", steers = listOf("算了"), interruptedReplies = listOf("被打断的话")))
         assertEquals(ChatTarget.Reply(0, 0, interrupted = false), hits(store, "正在改").hits.single().target)
         assertEquals(ChatTarget.Reply(0, 0, interrupted = true), hits(store, "被打断").hits.single().target)
     }
@@ -257,7 +257,7 @@ class ConversationSearchTest {
 
     @Test fun titleOnlyHitsHaveNoTarget() {
         val store = ConversationStore(tmp.newFolder())
-        store.append("a", Turn("正文里没有那个词", "回答", "succeeded"))
+        store.append("a", Turn("正文里没有那个词", "Answer", "succeeded"))
         store.rename("a", "苹果")
         assertNull(hits(store, "苹果").hits.single().target)
         assertNull(store.search.titleMatches("苹果", store.list()).single().target)

@@ -23,7 +23,7 @@ class FileOutboxStoreTest {
             val store = FileOutboxStore(file)
             store.save(previous)
             val disk = file.readText()
-            val result = Delivery.Result("result:1", "thread", "截图")
+            val result = Delivery.Result("result:1", "thread", "Screenshot")
             val image = Delivery.Image("result:1:image:0", "thread", "content://downloads/1", "screen.png", 12L)
             // Make the temporary output unwritable without changing the last committed file.
             assertTrue(dir.resolve("outbox.json.tmp").mkdir())
@@ -48,7 +48,7 @@ class FileOutboxStoreTest {
             val file = dir.resolve("outbox.json")
             val peer = ChannelPeer("telegram", "owner", "thread")
             val records = listOf(
-                DeliveryRecord(peer, Delivery.Result("result:1", "thread", "截图"), DeliveryState.Delivered),
+                DeliveryRecord(peer, Delivery.Result("result:1", "thread", "Screenshot"), DeliveryState.Delivered),
                 DeliveryRecord(peer, Delivery.Image("result:1:image:0", "thread", "content://downloads/1", "screen.png", 12L, "a".repeat(64)), DeliveryState.Attempting),
                 DeliveryRecord(peer, Delivery.Image("result:1:image:1", "thread", "content://downloads/2", "photo.jpg", 24L), DeliveryState.Pending),
             )
@@ -62,7 +62,7 @@ class FileOutboxStoreTest {
         try {
             val file = dir.resolve("outbox.json")
             val peer = ChannelPeer("local", "owner", "thread")
-            val delivery = Delivery.Result("result:1", "thread", "回答", title = "任务完成")
+            val delivery = Delivery.Result("result:1", "thread", "Answer", title = "Task done")
             FileOutboxStore(file).save(DeliveryRecord(peer, delivery, DeliveryState.Attempting))
             val restored = FileOutboxStore(file).get("result:1")
             assertEquals(DeliveryRecord(peer, delivery, DeliveryState.Attempting), restored)

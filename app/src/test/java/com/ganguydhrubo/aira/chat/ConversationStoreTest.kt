@@ -52,7 +52,7 @@ class ConversationStoreTest {
     @Test fun deskChildrenHiddenFromList() {
         val dir = tmp.newFolder()
         val store = ConversationStore(dir)
-        store.append("p", Turn("帮我订票", "在办", "succeeded"))
+        store.append("p", Turn("帮我订票", "On it", "succeeded"))
         store.append("c1", Turn("订明早的票", "订好了", "succeeded"))
         assertNull(store.deskParent("c1"))
         store.setDeskParent("c1", "p")
@@ -72,7 +72,7 @@ class ConversationStoreTest {
         // 前台对话这一轮还没存下来,但这个进程里刚派过活:照样藏着
         store.setDeskParent("c1", "p")
         assertEquals(emptyList<String>(), store.list().map { it.id })
-        store.append("p", Turn("帮我订票", "在办", "desk"))
+        store.append("p", Turn("帮我订票", "On it", "desk"))
         assertEquals(listOf("p"), ConversationStore(dir).list().map { it.id })
         store.delete("p")
         assertEquals(listOf("c1"), store.list().map { it.id })
@@ -211,7 +211,7 @@ class ConversationStoreTest {
         val dir = tmp.newFolder("c")
         val a = ConversationStore(dir)
         val id = a.newConversation()
-        a.append(id, Turn("打开设置", "好了", "succeeded", groups = listOf("phone", "web")))
+        a.append(id, Turn("Open 设置", "好了", "succeeded", groups = listOf("phone", "web")))
         a.append(id, Turn("谢谢", "不客气", "succeeded"))
         assertEquals(listOf(listOf("phone", "web"), emptyList()), ConversationStore(dir).turns(id).map { it.groups })
         assertFalse("groups" in java.io.File(dir, "$id.json").readText().substringAfter("谢谢"))
@@ -223,7 +223,7 @@ class ConversationStoreTest {
         val a = ConversationStore(dir)
         val id = a.newConversation()
         a.append(id, Turn("查天气", "明天多云", "succeeded", steers = listOf("改成查明天", "顺便看看后天"), interruptedReplies = listOf("今天晴", "")))
-        a.append(id, Turn("谢谢", "不客气", "succeeded", steers = listOf("好")))
+        a.append(id, Turn("谢谢", "不客气", "succeeded", steers = listOf("OK")))
         val read = ConversationStore(dir).turns(id)
         assertEquals(listOf(listOf("今天晴", ""), emptyList()), read.map { it.interruptedReplies })
         assertEquals(listOf("改成查明天", "顺便看看后天"), read.first().steers)
@@ -235,8 +235,8 @@ class ConversationStoreTest {
         val dir = tmp.newFolder("c")
         val a = ConversationStore(dir)
         val id = a.newConversation()
-        a.append(id, Turn("查资料", "已取消", "cancelled", runId = "r1", outcomeSystemType = "task_cancelled"))
-        a.append(id, Turn("谢谢", "已取消", "succeeded", runId = "r2"))
+        a.append(id, Turn("查资料", "Cancelled", "cancelled", runId = "r1", outcomeSystemType = "task_cancelled"))
+        a.append(id, Turn("谢谢", "Cancelled", "succeeded", runId = "r2"))
         assertEquals(listOf("task_cancelled", null), ConversationStore(dir).turns(id).map { it.outcomeSystemType })
         assertFalse("outcomeSystemType" in java.io.File(dir, "$id.json").readText().substringAfter("谢谢"))
         a.updateTurn(id, "r1") { it.copy(outcome = "找到两篇", outcomeSystemType = null) }
@@ -249,7 +249,7 @@ class ConversationStoreTest {
         val a = ConversationStore(dir)
         val id = a.newConversation()
         a.append(id, Turn("查天气", "明天多云", "succeeded", steers = listOf("改成查明天"), finishedReplies = listOf("今天晴,最高 25 度。")))
-        a.append(id, Turn("谢谢", "不客气", "succeeded", steers = listOf("好")))
+        a.append(id, Turn("谢谢", "不客气", "succeeded", steers = listOf("OK")))
         assertEquals(listOf(listOf("今天晴,最高 25 度。"), emptyList()), ConversationStore(dir).turns(id).map { it.finishedReplies })
         assertFalse("finishedReplies" in java.io.File(dir, "$id.json").readText().substringAfter("谢谢"))
     }
@@ -310,8 +310,8 @@ class ConversationStoreTest {
     @Test fun pinPersistsAndShowsInTheList() {
         val dir = tmp.newFolder("c")
         val store = ConversationStore(dir)
-        store.append("a", Turn("一", "好", "succeeded"))
-        store.append("b", Turn("二", "好", "succeeded"))
+        store.append("a", Turn("一", "OK", "succeeded"))
+        store.append("b", Turn("二", "OK", "succeeded"))
         assertTrue(store.setPinned("a", true, at = 123L))
         val again = ConversationStore(dir)
         assertEquals(123L, again.pinnedAt("a"))
@@ -336,7 +336,7 @@ class ConversationStoreTest {
         store.updateTurn(id, "r1") { it.copy(outcome = "补上的") }
         assertTrue(dir.list()!!.isEmpty())
 
-        store.append(id, Turn("再来", "好", "succeeded"))
+        store.append(id, Turn("再来", "OK", "succeeded"))
         assertTrue(store.setTitle(id, "再来"))
         assertEquals(listOf("再来"), store.list().map { it.title })
     }
@@ -387,7 +387,7 @@ class ConversationStoreTest {
         val s = ConversationStore(dir)
         val id = s.newConversation()
         s.append(id, Turn("查天气", "晴", "succeeded", runId = "20261023-120000-abc123"))
-        s.append(id, Turn("旧的", "好", "succeeded"))
+        s.append(id, Turn("旧的", "OK", "succeeded"))
         assertEquals(listOf("20261023-120000-abc123", null), ConversationStore(dir).turns(id).map { it.runId })
     }
 
@@ -416,7 +416,7 @@ class ConversationStoreTest {
         val id = a.newConversation()
         val f = SharedFile("图.png", 1234, "Download/Aira/图.png", "content://media/external/downloads/7")
         a.append(id, Turn("画图", "好了", "succeeded"), listOf(f))
-        a.append(id, Turn("再来", "好", "succeeded"))
+        a.append(id, Turn("再来", "OK", "succeeded"))
         val b = ConversationStore(dir)
         assertEquals(listOf(listOf(f), emptyList()), b.records(id).map { it.second })
         assertEquals(2, b.turns(id).size)
@@ -427,7 +427,7 @@ class ConversationStoreTest {
         val dir = tmp.newFolder("d")
         val store = ConversationStore(dir)
         val f = SharedFile("表.csv", 10, "Download/Aira/表.csv", "content://media/external/downloads/8")
-        store.append("c1", Turn("导出", "好了", "succeeded", runId = "r1"), listOf(f))
+        store.append("c1", Turn("Export", "好了", "succeeded", runId = "r1"), listOf(f))
         val note = com.ganguydhrubo.aira.core.learn.memory.MemoryNote(com.ganguydhrubo.aira.core.learn.memory.NoteKind.added, "m1", "t1", null)
         store.updateTurn("c1", "r1") { it.copy(memoryNotes = listOf(note)) }
         store.stripMemory(null)
@@ -460,10 +460,10 @@ class ConversationStoreTest {
         val plain = a.newConversation()
         a.append(plain, Turn("查天气", "晴", "succeeded"))
         val paged = a.newConversation()
-        assertTrue(a.setPageOrigin(paged, PageOrigin("https://shop.example.com/s?k=1", "shop.example.com", "搜索")))
-        a.append(paged, Turn("挑一个", "好", "succeeded"))
+        assertTrue(a.setPageOrigin(paged, PageOrigin("https://shop.example.com/s?k=1", "shop.example.com", "Search")))
+        a.append(paged, Turn("挑一个", "OK", "succeeded"))
         val b = ConversationStore(dir)
-        assertEquals(PageOrigin("https://shop.example.com/s?k=1", "shop.example.com", "搜索"), b.pageOrigin(paged))
+        assertEquals(PageOrigin("https://shop.example.com/s?k=1", "shop.example.com", "Search"), b.pageOrigin(paged))
         assertEquals(null, b.pageOrigin(plain))
         val listed = b.list().associateBy { it.id }
         assertEquals("shop.example.com", listed.getValue(paged).page?.host)
@@ -537,9 +537,9 @@ class ConversationStoreTest {
         store.setPageOrigin(source, page)
         val target = store.newConversation()
         val origin = BranchOrigin(source, 0, afterTurn = true, at = 123L)
-        assertTrue(store.branch(source, target, 0, title = "原对话 · 分支", origin = origin))
+        assertTrue(store.branch(source, target, 0, title = "原对话 · branch", origin = origin))
         val again = ConversationStore(dir)
-        assertEquals("原对话 · 分支", again.title(target))
+        assertEquals("原对话 · branch", again.title(target))
         assertEquals(page, again.pageOrigin(target))
         assertEquals(origin, again.branchOrigin(target))
         assertEquals(null, again.pinnedAt(target))
@@ -565,7 +565,7 @@ class ConversationStoreTest {
         assertFalse(java.io.File(dir, "$target.json").exists())
         assertFalse(java.io.File(dir, "$target.branch").exists())
 
-        store.append(target, Turn("已有", "好", "succeeded"))
+        store.append(target, Turn("已有", "OK", "succeeded"))
         assertFalse(store.branch(source, target, 0))
         assertEquals(listOf("已有"), store.turns(target).map { it.userText })
     }
@@ -629,7 +629,7 @@ class ConversationStoreTest {
         val target = store.newConversation()
         val origin = BranchOrigin(source, 1, afterTurn = false, at = 2L)
 
-        assertTrue(store.branchBefore(source, target, beforeTurn = 1, title = "原对话 · 分支", origin = origin))
+        assertTrue(store.branchBefore(source, target, beforeTurn = 1, title = "原对话 · branch", origin = origin))
 
         assertEquals(listOf("一"), ConversationStore(dir).turns(target).map { it.userText })
         assertEquals(origin, store.branchOrigin(target))
@@ -646,12 +646,12 @@ class ConversationStoreTest {
         val target = store.newConversation()
         val origin = BranchOrigin(source, 0, afterTurn = false, at = 3L)
 
-        assertTrue(store.branchBefore(source, target, beforeTurn = 0, title = "一 · 分支", origin = origin))
+        assertTrue(store.branchBefore(source, target, beforeTurn = 0, title = "一 · branch", origin = origin))
 
         assertEquals(emptyList<Turn>(), store.turns(target))
         assertTrue(java.io.File(dir, "$target.json").isFile)
         assertTrue(store.list().none { it.id == target })
-        assertEquals("一 · 分支", store.title(target))
+        assertEquals("一 · branch", store.title(target))
         assertEquals(origin, store.branchOrigin(target))
         store.append(target, Turn("换个问法", "另一个答", "succeeded"))
         assertEquals(listOf("换个问法"), store.turns(target).map { it.userText })
@@ -809,7 +809,7 @@ class ConversationStoreTest {
             GeneratedAudio("/workspace/out/audio/line.wav", 1_200L, "你好", 42L),
             GeneratedAudio("/workspace/out/audio/two.mp3", null, null, null),
         )
-        store.append("a", Turn("说一段", "好", "succeeded", audios = audios))
+        store.append("a", Turn("说一段", "OK", "succeeded", audios = audios))
         assertEquals(audios, ConversationStore(dir).turns("a").single().audios)
     }
 
@@ -871,7 +871,7 @@ class ConversationStoreTest {
             com.ganguydhrubo.aira.core.chat.GeneratedVideo("/workspace/out/video/take.mp4", 5_000L, 1280, 720, "海边日落", 42L),
             com.ganguydhrubo.aira.core.chat.GeneratedVideo("/workspace/out/video/raw.mp4"),
         )
-        store.append("a", Turn("生成一段", "好", "succeeded", videos = videos))
+        store.append("a", Turn("生成一段", "OK", "succeeded", videos = videos))
         assertEquals(videos, ConversationStore(dir).turns("a").single().videos)
     }
 
@@ -897,7 +897,7 @@ class ConversationStoreTest {
         observer.cancel()
 
         // 父对话存盘并跨实例重开后继续转发；分支不继承子任务用量
-        store.append("p", Turn("帮我查", "好", "desk"))
+        store.append("p", Turn("帮我查", "OK", "desk"))
         val reopened = ConversationStore(dir)
         reopened.meter("c1").record(Usage(30, 5, 10, cacheReported = true), 1)
         val expected2 = ConversationUsage(input = 150, output = 23, cached = 90, cacheReportedInput = 150, latest = comp)

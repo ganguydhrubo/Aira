@@ -26,8 +26,8 @@ class StepRowLanguageTest {
 
     @Test
     fun testShouldHideChineseReasonInNonChineseLocale() {
-        assertTrue(StepRow.shouldHideRawReason("点击搜索按钮查找联系人 Ved", isChineseLocale = false))
-        assertTrue(StepRow.shouldHideRawReason("在搜索框输入“ved”", isChineseLocale = false))
+        assertTrue(StepRow.shouldHideRawReason("点击按钮查找Contacts Ved", isChineseLocale = false))
+        assertTrue(StepRow.shouldHideRawReason("在框输入“ved”", isChineseLocale = false))
     }
 
     @Test
@@ -39,7 +39,7 @@ class StepRowLanguageTest {
 
     @Test
     fun testShouldKeepChineseReasonInChineseLocale() {
-        assertFalse(StepRow.shouldHideRawReason("点击搜索按钮查找联系人 Ved", isChineseLocale = true))
+        assertFalse(StepRow.shouldHideRawReason("点击按钮查找Contacts Ved", isChineseLocale = true))
     }
 
     @Test
