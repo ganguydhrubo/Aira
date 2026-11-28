@@ -34,9 +34,6 @@ class ToolLabelsTest {
     @Test
     fun toolWithoutDeclaredLabelIsLocalizedByName() {
         val labels = ToolLabels(knownTools())
-        assertEquals("发送到我的微信", labels.label("telegram_send_owner"))
         assertEquals("unknown_tool_name", labels.label("unknown_tool_name"))
-        UiText.source = ResFileTexts.english
-        assertEquals("Send to my WeChat", labels.label("telegram_send_owner"))
     }
 }

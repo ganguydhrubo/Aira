@@ -26,8 +26,6 @@
     <string name="about_save_qr">Salvar QR code</string>
     <string name="about_qr_saved">QR code salvo em Fotos</string>
     <string name="about_qr_save_failed">Não foi possível salvar. Tire uma captura de tela.</string>
-    <string name="about_follow">Seguir o autor</string>
-    <string name="about_follow_sub">X %1$s, para saber das novidades primeiro</string>
     <string name="about_repo">Código-fonte</string>
     <string name="about_repo_sub">%1$s · estrelas são bem-vindas</string>
     <string name="about_guide">Guia e como contribuir</string>
@@ -105,4 +103,7 @@
     <string name="about_mirrors_testing">A testar…</string>
     <string name="about_mirrors_test_ok">Funciona para verificar atualizações.</string>
     <string name="about_mirrors_test_fail">Este espelho não serve para verificar atualizações. O download ainda pode funcionar.</string>
+    <string name="about_founder_label">FUNDADOR</string>
+    <string name="about_founder_talk">Fale com o fundador</string>
+    <string name="about_founder_quote">Construindo o Aira para que seu celular faça trabalho de verdade por você, no seu idioma.</string>
 </resources>

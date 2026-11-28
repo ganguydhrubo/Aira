@@ -26,8 +26,6 @@
     <string name="about_save_qr">Lưu mã QR</string>
     <string name="about_qr_saved">Đã lưu mã QR vào Ảnh</string>
     <string name="about_qr_save_failed">Không lưu được. Hãy chụp ảnh màn hình thay thế.</string>
-    <string name="about_follow">Theo dõi tác giả</string>
-    <string name="about_follow_sub">X %1$s, là người đầu tiên biết về tính năng mới</string>
     <string name="about_repo">Mã nguồn</string>
     <string name="about_repo_sub">%1$s · hoan nghênh tặng sao</string>
     <string name="about_guide">Hướng dẫn &amp; cách đóng góp</string>
@@ -105,4 +103,7 @@
     <string name="about_mirrors_testing">Đang kiểm tra…</string>
     <string name="about_mirrors_test_ok">Hoạt động cho kiểm tra cập nhật.</string>
     <string name="about_mirrors_test_fail">Kiểm tra cập nhật không dùng được mirror này. Tải xuống có thể vẫn hoạt động.</string>
+    <string name="about_founder_label">NHÀ SÁNG LẬP</string>
+    <string name="about_founder_talk">Liên hệ nhà sáng lập</string>
+    <string name="about_founder_quote">Tôi xây dựng Aira để điện thoại làm việc thật cho bạn, bằng chính ngôn ngữ của bạn.</string>
 </resources>

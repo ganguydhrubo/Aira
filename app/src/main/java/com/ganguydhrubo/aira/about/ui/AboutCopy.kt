@@ -39,8 +39,6 @@ object AboutCopy {
     val QR_SAVED: String get() = tr(R.string.about_qr_saved)
     val QR_SAVE_FAILED: String get() = tr(R.string.about_qr_save_failed)
 
-    val FOLLOW: String get() = tr(R.string.about_follow)
-    val FOLLOW_SUB: String get() = tr(R.string.about_follow_sub, AiraLinks.X_HANDLE)
 
     val DIAGNOSTICS: String get() = tr(R.string.diagnostics_copy)
     val DIAGNOSTICS_SUB: String get() = tr(R.string.diagnostics_copy_sub)

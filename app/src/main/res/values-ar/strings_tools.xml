@@ -80,5 +80,4 @@
     <string name="tool_aira_login_site">تسجيل الدخول إلى موقع</string>
     <string name="tool_aira_confirm_login">تأكيد تسجيل الدخول</string>
     <string name="tool_aira_favorites">المواقع المتكررة</string>
-    <string name="tool_telegram_owner">إرسال إلى WeChat الخاص بي</string>
 </resources>

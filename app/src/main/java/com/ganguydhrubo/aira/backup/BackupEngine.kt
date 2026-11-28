@@ -93,7 +93,6 @@ class BackupEngine(
         "proactive/digest.bin" to "aira-proactive-digest",
         "proactive/journal.bin" to "aira-proactive-journal",
         "call-history-v2.enc" to "aira-call-history",
-        "telegram/account.enc" to "aira-telegram-account",
         "workflows-v1.bin" to "aira-workflows",
         "saved-checklists-v1.bin" to "aira-saved-checklists",
         "sms-login-consent.txt" to "aira-sms-login-profiles",

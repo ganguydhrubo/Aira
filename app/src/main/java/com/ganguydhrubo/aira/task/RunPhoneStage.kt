@@ -242,12 +242,9 @@ internal suspend fun TaskRun.assembleGate(ph: RunPhone): TaskGate {
     val shellUp = ph.shellUp
     val states = ph.states
     val app = service.application as AiraApp
-    // 微信只使用当前绑定会话的独立授权；仍保留 Channel 来源及原有确认/接管规则。
     // 界面任务跟着本机开关走(判定每次重查);定时任务远程/本机两个开关任一即可。
     val unlockAuthorized = taskUnlockAuthorization(provenance.origin, channelPeer,
-        localUnlockEnabled = { app.deviceAccess.settings.localEnabled }) { peer ->
-        app.telegram.store.canUnlock(peer)
-    }
+        localUnlockEnabled = { app.deviceAccess.settings.localEnabled })
     // 本机任务(界面/定时)在本机开关开着时走本机分流;远程来源永远走远程分流
     fun useLocalUnlock() = (provenance.origin == RunOrigin.Ui || provenance.origin == RunOrigin.Trigger) &&
         app.deviceAccess.settings.localEnabled
@@ -291,7 +288,6 @@ internal suspend fun TaskRun.assembleGate(ph: RunPhone): TaskGate {
         onRecoveryFailure = { status -> service.notifyUnlockRecoveryNeeded(conversationId, status) },
         unlockFailureMessage = {
             tr(when {
-                provenance.origin == RunOrigin.Channel -> R.string.telegram_unlock_failed
                 // 界面任务只有本机分流;定时任务按这次实际走的分流给指引
                 provenance.origin == RunOrigin.Ui || unlockWasLocal -> R.string.device_local_unlock_failed
                 else -> R.string.trigger_unlock_failed

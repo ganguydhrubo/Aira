@@ -11,8 +11,11 @@ object AiraLinks {
     const val README = "$REPO#readme"
     const val RELEASES = "$REPO/releases"
     const val NEW_ISSUE = "$REPO/issues/new"
-    const val X = "https://x.com/ganguydhrubo"
-    const val X_HANDLE = "@ganguydhrubo"
+    const val LINKEDIN = "https://www.linkedin.com/in/dhrubojyoti-gangopadhyay/"
+    const val TELEGRAM = "https://t.me/druboG"
+    const val TELEGRAM_HANDLE = "@druboG"
+    const val EMAIL = "gangulydhrubo@gmail.com"
+    const val MAILTO = "mailto:$EMAIL"
     /** 检查更新只问 GitHub 发布页(不登录,每小时有次数限制)。 */
     const val LATEST_RELEASE_API = "https://api.github.com/repos/ganguydhrubo/Aira/releases/latest"
 

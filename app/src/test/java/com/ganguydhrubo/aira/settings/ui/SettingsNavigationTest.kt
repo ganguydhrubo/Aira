@@ -15,7 +15,7 @@ class SettingsNavigationTest {
 
         for (page in listOf(
             SettingsPage.Advanced, SettingsPage.AppAccess, SettingsPage.SmsLogin, SettingsPage.PhoneOps,
-            SettingsPage.Calls, SettingsPage.Telegram, SettingsPage.DuringWork, SettingsPage.Capsule,
+            SettingsPage.Calls, SettingsPage.DuringWork, SettingsPage.Capsule,
             SettingsPage.Language, SettingsPage.Notifications, SettingsPage.Recommendations,
             SettingsPage.Proactive, SettingsPage.Backup, SettingsPage.Pause,
         )) assertEquals("$page 应返回设置首页", SettingsPage.Home, page.parent())

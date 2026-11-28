@@ -83,7 +83,7 @@ class AboutScreenTest {
         compose.onNodeWithText("版本 0.1.0").assertIsDisplayed()
         compose.onNodeWithText("Beta").assertIsDisplayed()
         compose.onNodeWithText("· 构建 abc1234").assertIsDisplayed()
-        for (t in listOf("检查更新", "更新记录", "联系作者", "关注作者", "反馈问题", "开源仓库", "使用说明与参与方式", AboutCopy.DATA_NOTE, AboutCopy.AUTHOR)) {
+        for (t in listOf("检查更新", "更新记录", "联系作者", "反馈问题", "开源仓库", "使用说明与参与方式", AboutCopy.DATA_NOTE, AboutCopy.AUTHOR)) {
             scrollTo(t)
             compose.onNodeWithText(t).assertIsDisplayed()
         }
@@ -94,11 +94,11 @@ class AboutScreenTest {
     @Test
     fun externalRowsOpenLinks() {
         val calls = about()
-        for (t in listOf("关注作者", "开源仓库", "使用说明与参与方式")) {
+        for (t in listOf("开源仓库", "使用说明与参与方式")) {
             scrollTo(t)
             compose.onNodeWithText(t).performClick()
         }
-        assertEquals(listOf(AiraLinks.X, AiraLinks.REPO, AiraLinks.README), calls.urls)
+        assertEquals(listOf(AiraLinks.REPO, AiraLinks.README), calls.urls)
     }
 
     @Test
@@ -147,7 +147,7 @@ class AboutScreenTest {
         scrollTo("联系作者")
         compose.onNodeWithText("联系作者").performClick()
         compose.awaitOne(AboutCopy.GROUP_SHEET_SUB).assertIsDisplayed()
-        compose.onNodeWithTag("telegram-qr").assertExists()
+        compose.onNodeWithTag("repo-qr").assertExists()
         compose.onNodeWithText(AboutCopy.GROUP_HINT).assertExists()
         compose.onNodeWithText(AboutCopy.SAVE_QR).performClick()
         compose.waitForIdle()

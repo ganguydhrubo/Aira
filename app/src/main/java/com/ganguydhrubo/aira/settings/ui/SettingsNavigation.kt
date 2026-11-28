@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings.ui
 
 /** 设置里能进入的子页面;[Home] 是设置首页,[Advanced] 集中放置连接、维护和工程能力。 */
-internal enum class SettingsPage { Home, Advanced, AppAccess, SmsLogin, PhoneOps, Calls, Telegram, DuringWork, AppPace, Capsule, Language, Notifications, Recommendations, Checklists, Workflows, Sandbox, Plugins, EnvVars, Recovery, SelfCheck, ComputerAccess, McpServers, Root, Developer, DeviceDirectories, RunStats, Proactive, Backup, Pause }
+internal enum class SettingsPage { Home, Advanced, AppAccess, SmsLogin, PhoneOps, Calls, DuringWork, AppPace, Capsule, Language, Notifications, Recommendations, Checklists, Workflows, Sandbox, Plugins, EnvVars, Recovery, SelfCheck, ComputerAccess, McpServers, Root, Developer, DeviceDirectories, RunStats, Proactive, Backup, Pause }
 
 /**
  * 子页的上一层。顶栏返回按钮和系统返回键都按这张表走,不要在各子页各记一遍——
@@ -10,7 +10,7 @@ internal enum class SettingsPage { Home, Advanced, AppAccess, SmsLogin, PhoneOps
 internal fun SettingsPage.parent(): SettingsPage = when (this) {
     SettingsPage.Home -> SettingsPage.Home
     SettingsPage.Advanced, SettingsPage.AppAccess, SettingsPage.SmsLogin, SettingsPage.PhoneOps,
-    SettingsPage.Calls, SettingsPage.Telegram, SettingsPage.DuringWork, SettingsPage.Capsule,
+    SettingsPage.Calls, SettingsPage.DuringWork, SettingsPage.Capsule,
     SettingsPage.Language, SettingsPage.Notifications, SettingsPage.Recommendations,
     SettingsPage.Proactive, SettingsPage.Backup, SettingsPage.Pause -> SettingsPage.Home
     SettingsPage.AppPace -> SettingsPage.DuringWork

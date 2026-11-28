@@ -26,8 +26,6 @@
     <string name="about_save_qr">QR 코드 저장</string>
     <string name="about_qr_saved">QR 코드를 사진에 저장했어요</string>
     <string name="about_qr_save_failed">저장하지 못했어요. 대신 스크린샷을 찍으세요.</string>
-    <string name="about_follow">개발자 팔로우</string>
-    <string name="about_follow_sub">X %1$s, 새 기능을 가장 먼저 만나 보세요</string>
     <string name="about_repo">소스 코드</string>
     <string name="about_repo_sub">%1$s · 별은 언제나 환영이에요</string>
     <string name="about_guide">가이드 및 기여 방법</string>
@@ -105,4 +103,7 @@
     <string name="about_mirrors_testing">테스트 중…</string>
     <string name="about_mirrors_test_ok">업데이트 확인에 사용할 수 있습니다.</string>
     <string name="about_mirrors_test_fail">이 미러로는 업데이트 확인을 할 수 없습니다. 다운로드는 될 수 있습니다.</string>
+    <string name="about_founder_label">창업자</string>
+    <string name="about_founder_talk">창업자에게 연락하기</string>
+    <string name="about_founder_quote">휴대폰이 당신의 언어로 실제 일을 해낼 수 있도록 Aira를 만들고 있습니다.</string>
 </resources>

@@ -16,7 +16,6 @@ import com.ganguydhrubo.aira.settings.ChatGptSignInService
 import com.ganguydhrubo.aira.settings.FeatureFlags
 import com.ganguydhrubo.aira.task.TaskService
 import com.ganguydhrubo.aira.task.TriggerRuntime
-import com.ganguydhrubo.aira.telegram.TelegramService
 
 /**
  * 完全退出 Aira:用户滑掉界面、或进程被系统回收时,无障碍服务还开着,悬浮胶囊和后台任务会一直在。
@@ -44,14 +43,12 @@ object AiraQuit {
         // 来电待命的周期检查一并撤掉;重新打开 Aira 时按原授权再排上
         CallStandbyRecoveryJob.reconcile(app, authorized = false)
         runCatching { RuntimePreparer.stop(app) }
-        runCatching { app.telegram.stop() }
         // 主动能力开着时不再读通知:请系统解绑监听,免得系统为了它把进程又拉起来
         runCatching { if (FeatureFlags.get(app).proactive()) app.proactive.pause() }
         runCatching { app.mcp.stopServer() }
         runCatching { app.chatGptSignIn.cancel() }
         runCatching { app.stopService(Intent(app, TaskService::class.java)) }
         runCatching { app.stopService(Intent(app, McpService::class.java)) }
-        runCatching { app.stopService(Intent(app, TelegramService::class.java)) }
         runCatching { app.stopService(Intent(app, SandboxService::class.java)) }
         runCatching { app.stopService(Intent(app, ChatGptSignInService::class.java)) }
         (context as? Activity)?.finishAndRemoveTask()

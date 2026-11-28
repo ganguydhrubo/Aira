@@ -80,5 +80,4 @@
     <string name="tool_aira_login_site">Iniciar sesión en un sitio</string>
     <string name="tool_aira_confirm_login">Confirmar inicio de sesión</string>
     <string name="tool_aira_favorites">Sitios frecuentes</string>
-    <string name="tool_telegram_owner">Enviar a mi WeChat</string>
 </resources>

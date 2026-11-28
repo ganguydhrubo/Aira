@@ -26,8 +26,6 @@
     <string name="about_save_qr">QR kodunu kaydet</string>
     <string name="about_qr_saved">QR kodu Fotoğraflar\'a kaydedildi</string>
     <string name="about_qr_save_failed">Kaydedilemedi. Bunun yerine ekran görüntüsü alın.</string>
-    <string name="about_follow">Yazarı takip et</string>
-    <string name="about_follow_sub">X %1$s, yeni özelliklerden ilk haberdar olun</string>
     <string name="about_repo">Kaynak kod</string>
     <string name="about_repo_sub">%1$s · yıldızlar makbule geçer</string>
     <string name="about_guide">Kılavuz ve nasıl katkıda bulunulur</string>
@@ -105,4 +103,7 @@
     <string name="about_mirrors_testing">Test ediliyor…</string>
     <string name="about_mirrors_test_ok">Güncelleme denetimleri için çalışıyor.</string>
     <string name="about_mirrors_test_fail">Güncelleme denetimleri bu yansıyı kullanamıyor. İndirmeler yine de çalışabilir.</string>
+    <string name="about_founder_label">KURUCU</string>
+    <string name="about_founder_talk">Kurucuyla iletişime geç</string>
+    <string name="about_founder_quote">Aira'yı telefonunuz sizin için gerçek işler yapsın diye, kendi dilinizde geliştiriyorum.</string>
 </resources>

@@ -80,5 +80,4 @@
     <string name="tool_aira_login_site">Войти на сайт</string>
     <string name="tool_aira_confirm_login">Подтвердить вход</string>
     <string name="tool_aira_favorites">Частые сайты</string>
-    <string name="tool_telegram_owner">Отправить в мой WeChat</string>
 </resources>

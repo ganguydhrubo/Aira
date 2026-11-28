@@ -126,6 +126,7 @@ fun AboutScreen(
     }
     PageScaffold(AboutCopy.TITLE, onBack) {
         Hero(versionName, build, beta)
+        FounderCard(onOpenUrl)
 
         GroupCard {
             val v = AboutCopy.checkValue(update)
@@ -168,7 +169,6 @@ fun AboutScreen(
         }
         GroupCard {
             ListRow(AiraIcons.Chats, AboutCopy.GROUP, first = true, onClick = { sheet = AboutSheet.Group }) { RowChevron() }
-            ListRow(AiraIcons.XMark, AboutCopy.FOLLOW, onClick = { onOpenUrl(AiraLinks.X) }) { RowChevron() }
             ListRow(AiraIcons.Bug, AboutCopy.FEEDBACK, onClick = { sheet = AboutSheet.Feedback }) { RowChevron() }
         }
         GroupCard {
@@ -360,7 +360,7 @@ internal fun GroupSheet(onSave: () -> Unit, onDismiss: () -> Unit) {
                 .height(qrHeight).aspectRatio(qr.intrinsicSize.width / qr.intrinsicSize.height)
                 .clip(AiraShapes.Chip)
                 .pointerInput(Unit) { detectTapGestures(onLongPress = { onSave() }) }
-                .testTag("telegram-qr"),
+                .testTag("repo-qr"),
         )
         Text(AboutCopy.GROUP_HINT, Modifier.fillMaxWidth(), style = AiraType.Hint, color = c.ink3, textAlign = TextAlign.Center)
         AiraButton(AboutCopy.SAVE_QR, onSave, Modifier.fillMaxWidth().padding(top = 14.dp), kind = ButtonKind.Tonal)

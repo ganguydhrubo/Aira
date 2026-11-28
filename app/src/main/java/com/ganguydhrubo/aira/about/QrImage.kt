@@ -6,10 +6,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import com.ganguydhrubo.aira.R
 
-/** 作者的微信二维码(随 App 打包,换码只换 res/drawable-nodpi/telegram_qr.jpg)。 */
+/** QR code for the Aira GitHub project (bundled; replace res/drawable-nodpi/aira_repo_qr.jpg to change it). */
 object QrImage {
-    val RES = R.drawable.telegram_qr
-    private const val FILE_NAME = "Aira-author-telegram.jpg"
+    val RES = R.drawable.aira_repo_qr
+    private const val FILE_NAME = "Aira-github-qr.jpg"
 
     /**
      * 存进相册的 Pictures/Aira。经 MediaStore 写自己新建的图片不要存储权限(安卓 10 起如此,Aira 最低支持安卓 11)。
