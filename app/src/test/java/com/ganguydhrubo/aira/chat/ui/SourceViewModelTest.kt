@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.chat.ui
 import com.ganguydhrubo.aira.core.run.record.RunEvent
 import com.ganguydhrubo.aira.core.safety.verify.AnswerSource
 import com.ganguydhrubo.aira.record.RunStore
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

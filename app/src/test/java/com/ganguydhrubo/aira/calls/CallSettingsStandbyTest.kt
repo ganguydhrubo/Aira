@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.calls
 
 import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CallSettingsStandbyTest {

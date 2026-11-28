@@ -4,10 +4,6 @@ import com.ganguydhrubo.aira.core.agent.FailKind
 import com.ganguydhrubo.aira.core.agent.GateReason
 import com.ganguydhrubo.aira.core.agent.TaskState
 import org.junit.Assert.*
-import softassert.assertEquals // SOFTSTAR
-import softassert.assertTrue // SOFTSTAR
-import softassert.assertFalse // SOFTSTAR
-import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class LockTriggerPolicyTest {

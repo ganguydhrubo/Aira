@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.ui
 import com.ganguydhrubo.aira.R
 import com.ganguydhrubo.aira.i18n.UiText
 import com.ganguydhrubo.aira.i18n.UiTexts
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import com.ganguydhrubo.aira.chat.ui.StepRow

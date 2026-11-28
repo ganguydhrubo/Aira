@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.voice.model
 
 import com.ganguydhrubo.aira.calls.OpenAiCallProtocol
 import com.ganguydhrubo.aira.calls.VolcRealtimeConfig
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VoiceVoicesTest {
@@ -31,14 +31,14 @@ class VoiceVoicesTest {
             tts = TtsBinding(TtsProtocol.VolcSpeech, region = resource, voice = "zh_female_vv_uranus_bigtts"))
         val two = VoiceVoices.tts(model("seed-tts-2.0"))
         val one = VoiceVoices.tts(model("seed-tts-1.0"))
-        softassert.assertTrue(two.size > 400 && "zh_female_vv_uranus_bigtts" in two)
-        softassert.assertTrue(one.size > 100 && "zh_female_cancan_mars_bigtts" in one)
-        softassert.assertEquals("Vivi 2.0", VoiceVoices.label("zh_female_vv_uranus_bigtts"))
+        org.junit.Assert.assertTrue(two.size > 400 && "zh_female_vv_uranus_bigtts" in two)
+        org.junit.Assert.assertTrue(one.size > 100 && "zh_female_cancan_mars_bigtts" in one)
+        org.junit.Assert.assertEquals("Vivi 2.0", VoiceVoices.label("zh_female_vv_uranus_bigtts"))
     }
 
     @Test fun `a fetched voice name wins over the id`() {
         val model = VoiceModel("el", "m", "m", tts = TtsBinding(TtsProtocol.ElevenLabsSpeech, voices = listOf("abc"), voiceNames = mapOf("abc" to "Rachel")))
-        softassert.assertEquals("Rachel", VoiceVoices.label(model, "abc"))
-        softassert.assertEquals("zzz", VoiceVoices.label(model, "zzz"))
+        org.junit.Assert.assertEquals("Rachel", VoiceVoices.label(model, "abc"))
+        org.junit.Assert.assertEquals("zzz", VoiceVoices.label(model, "zzz"))
     }
 }

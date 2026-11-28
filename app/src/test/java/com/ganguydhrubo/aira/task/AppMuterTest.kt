@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.task
 
 import com.ganguydhrubo.aira.cap.phone.shell.AppAudioKey
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 静音规则:启动前静、中途冒出的新 App 静一次、另一份单独静、收尾全还原、没静成照实记下。 */

@@ -4,7 +4,7 @@ import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import com.ganguydhrubo.aira.voice.model.VoiceCredentialBackend
 import com.ganguydhrubo.aira.voice.model.VoiceCredentialStore
 import com.ganguydhrubo.aira.voice.model.VoiceCredentials
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Rule
 import org.junit.Test

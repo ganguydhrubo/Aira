@@ -10,7 +10,7 @@ import com.ganguydhrubo.aira.settings.TtsProtocol
 import com.ganguydhrubo.aira.settings.VoiceChoice
 import com.ganguydhrubo.aira.settings.VoiceSettings
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ReadAloudTest {

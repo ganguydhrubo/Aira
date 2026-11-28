@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.task
 
 import com.ganguydhrubo.aira.core.agent.FailKind
 import com.ganguydhrubo.aira.core.agent.TaskState
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**

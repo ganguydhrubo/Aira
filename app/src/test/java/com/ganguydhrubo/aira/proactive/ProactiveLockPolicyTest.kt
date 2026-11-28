@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.proactive
 
 import com.ganguydhrubo.aira.proactive.ProactiveLockPolicy.Action
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ProactiveLockPolicyTest {

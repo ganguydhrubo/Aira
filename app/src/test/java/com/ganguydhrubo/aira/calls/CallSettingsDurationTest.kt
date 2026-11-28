@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.calls
 
 import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class CallSettingsDurationTest {

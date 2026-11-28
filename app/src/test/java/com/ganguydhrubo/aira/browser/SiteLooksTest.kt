@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.browser
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

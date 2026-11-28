@@ -12,8 +12,8 @@ import com.ganguydhrubo.aira.core.proactive.ObservedContact
 import com.ganguydhrubo.aira.core.proactive.ObservedTopic
 import com.ganguydhrubo.aira.core.proactive.SpanDigest
 import com.ganguydhrubo.aira.core.proactive.TopicKind
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 「清空来自它的」列哪些 App:只在归纳里出现过的 App 也要列出来(只看话题和联系人的话,那样的 App 没有入口)。 */

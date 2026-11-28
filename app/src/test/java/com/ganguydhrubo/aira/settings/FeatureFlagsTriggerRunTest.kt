@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings
 
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** 定时任务最长运行时间:默认不限制,只认那几档,别的值按不限制算。 */

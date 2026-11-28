@@ -3,10 +3,10 @@ package com.ganguydhrubo.aira.chat.ui
 import org.junit.Rule
 import com.ganguydhrubo.aira.core.agent.AttachmentLines
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AttachmentMessageTest {

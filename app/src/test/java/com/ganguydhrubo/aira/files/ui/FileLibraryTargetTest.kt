@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.files.ui
 
 import com.ganguydhrubo.aira.chat.FileSource
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import com.ganguydhrubo.aira.chat.ui.ChatTarget
 

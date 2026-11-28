@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.capsule
 
 import androidx.compose.ui.unit.dp
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class CapsuleCardScaleTest {

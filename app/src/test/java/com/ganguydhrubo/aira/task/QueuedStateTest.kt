@@ -12,8 +12,8 @@ import com.ganguydhrubo.aira.chat.ui.ChatCopy
 import com.ganguydhrubo.aira.chat.ui.ChatViewModel
 import com.ganguydhrubo.aira.chat.ui.Exchange
 import com.ganguydhrubo.aira.chat.ui.ExchangeStatus
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 

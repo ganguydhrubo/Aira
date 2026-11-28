@@ -13,9 +13,9 @@ import com.ganguydhrubo.aira.chat.ui.Exchange
 import com.ganguydhrubo.aira.chat.ui.ExchangeStatus
 import com.ganguydhrubo.aira.chat.ui.StepRow
 import com.ganguydhrubo.aira.chat.ui.StepState
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CapsuleCardModelTest {

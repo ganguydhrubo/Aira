@@ -6,7 +6,7 @@ import com.ganguydhrubo.aira.core.model.TtsModel
 import com.ganguydhrubo.aira.core.model.TtsRequest
 import com.ganguydhrubo.aira.core.model.TtsResponse
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class AndroidAudioPortTest {

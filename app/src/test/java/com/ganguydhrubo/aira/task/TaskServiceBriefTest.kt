@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.task
 
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 /** 前台派活时附的补充说明随开始任务的请求交给服务;不附就不带这一项。 */

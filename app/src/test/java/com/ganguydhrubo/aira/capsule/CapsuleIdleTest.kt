@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.capsule
 
 import com.ganguydhrubo.aira.chat.CurrentChat
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

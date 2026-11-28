@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.voice
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 解码窗口往后挪时怎么把一份份中间结果接起来;带「真实」字样的样例是真实服务回应里出现过的形态。 */

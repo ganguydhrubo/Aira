@@ -17,9 +17,9 @@ import com.ganguydhrubo.aira.knowledge.AppKnowledgeFiles
 import com.ganguydhrubo.aira.settings.MemorySwitches
 import com.ganguydhrubo.aira.memory.ui.SkillsUi
 import kotlinx.coroutines.runBlocking
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -58,7 +58,7 @@ class AppKnowledgeWiringTest {
         val learning = learning(files, TextModel(facts))
         val notes = learning.learn(aftermath(runEvents()))
         assertEquals(AppKnowledgeStage.Draft, files.all().single().stage)
-        assertEquals("Aira 记下了几条关于Reddit的知识，等你确认", notes.skillNotes.single().text)
+        assertEquals("Aira noted a few facts about Reddit for you to review", notes.skillNotes.single().text)
         assertTrue(files.notes().isEmpty())
         files.approve(files.all().single().id)
         assertTrue(files.notes().getValue("reddit").trial)
@@ -76,7 +76,7 @@ class AppKnowledgeWiringTest {
         files.approve(first.id)
         // 再来一次:对在用的那份起草修订
         val notes = learning(files, TextModel(more)).learn(aftermath(runEvents()))
-        assertEquals("Aira 修订了Reddit的知识，等你确认", notes.skillNotes.single().text)
+        assertEquals("Aira revised its notes on Reddit for you to review", notes.skillNotes.single().text)
         val ui = SkillsUi.of(MapSkills(), files).appKnowledge.single { it.stage == AppKnowledgeStage.Draft }
         assertTrue(ui.revision)
         assertEquals(listOf("+ - 「我的」页里的「我发布的」列出自己挂出的商品。"), ui.changedLines)

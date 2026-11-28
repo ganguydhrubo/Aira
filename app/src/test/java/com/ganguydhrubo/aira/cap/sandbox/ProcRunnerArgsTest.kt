@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.cap.sandbox
 
 import com.ganguydhrubo.aira.core.workspace.SandboxTree
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThrows
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 import java.util.TimeZone

@@ -5,8 +5,8 @@ import com.ganguydhrubo.aira.core.proactive.DigestNote
 import com.ganguydhrubo.aira.settings.AesGcmKeyCipher
 import java.io.File
 import javax.crypto.KeyGenerator
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

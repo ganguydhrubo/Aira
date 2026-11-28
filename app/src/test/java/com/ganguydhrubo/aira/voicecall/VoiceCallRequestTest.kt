@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.voicecall
 
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 执行安全闸:5 条规则各有正反例,另含跨轮重放、同轮多次 offer、回声按整句判定、回声窗环形边界。 */

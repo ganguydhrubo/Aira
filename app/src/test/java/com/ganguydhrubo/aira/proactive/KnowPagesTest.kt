@@ -7,9 +7,9 @@ import com.ganguydhrubo.aira.core.proactive.DigestNote
 import com.ganguydhrubo.aira.core.proactive.DigestPool
 import com.ganguydhrubo.aira.core.proactive.SpanDigest
 import com.ganguydhrubo.aira.core.proactive.SpanKind
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 「Aira 知道了什么」分级页面的纯逻辑:索引上列哪些,某一页指的东西还在不在。 */

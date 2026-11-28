@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.settings
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 单文件与工作区两道存储限额:默认与历史写死值一致,只认档位内的值。 */

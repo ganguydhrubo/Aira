@@ -6,13 +6,13 @@ import com.ganguydhrubo.aira.voice.model.adapters.installTestPack
 import com.ganguydhrubo.aira.voice.model.adapters.testOnDeviceAdapter
 import com.ganguydhrubo.aira.voice.model.adapters.testPackEntry
 import com.ganguydhrubo.aira.voice.ondevice.OnDeviceCatalog
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
-import softassert.assertNull
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertThrows
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VoiceCatalogStoreTest {

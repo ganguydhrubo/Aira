@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.task
 
 import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class ParallelCapabilityTest {

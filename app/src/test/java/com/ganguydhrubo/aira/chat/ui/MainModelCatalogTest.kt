@@ -23,10 +23,10 @@ import com.ganguydhrubo.aira.settings.deleteGroup
 import com.ganguydhrubo.aira.settings.ensureConfig
 import com.ganguydhrubo.aira.settings.removeProvider
 import com.ganguydhrubo.aira.settings.saveGroup
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

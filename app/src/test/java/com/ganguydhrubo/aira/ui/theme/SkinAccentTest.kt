@@ -2,10 +2,10 @@ package com.ganguydhrubo.aira.ui.theme
 
 import androidx.compose.ui.graphics.Color
 import com.ganguydhrubo.aira.settings.SkinSpec
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 背景图片:取色认得出主色、认得出灰图;取出的强调色和遮罩下的文字都看得清。 */

@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.voice.ondevice
 
 import java.io.File
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
 

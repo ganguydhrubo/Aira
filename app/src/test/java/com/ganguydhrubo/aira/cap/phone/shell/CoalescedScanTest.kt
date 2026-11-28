@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.cap.phone.shell
 
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CoalescedScanTest {

@@ -9,9 +9,9 @@ import com.ganguydhrubo.aira.core.device.shell.PairingChannelHealth
 import com.ganguydhrubo.aira.core.device.shell.PairingDiscovery
 import com.ganguydhrubo.aira.core.device.shell.PairingScreen
 import com.ganguydhrubo.aira.core.device.shell.PairingScreenReading
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PairingNoticeTest {

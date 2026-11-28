@@ -2,11 +2,11 @@ package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.model.chatgpt.ChatGptAuth
 import com.ganguydhrubo.aira.core.model.usage.AllowanceSource
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AllowanceRouteTest {

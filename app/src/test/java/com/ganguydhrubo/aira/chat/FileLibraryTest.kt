@@ -2,10 +2,10 @@ package com.ganguydhrubo.aira.chat
 
 import com.ganguydhrubo.aira.core.agent.AttachmentLines
 import com.ganguydhrubo.aira.core.agent.Turn
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

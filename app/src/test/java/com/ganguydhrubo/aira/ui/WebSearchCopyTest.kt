@@ -6,8 +6,8 @@ import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.i18n.UiText
 import com.ganguydhrubo.aira.settings.GroundingStatus
 import com.ganguydhrubo.aira.settings.WebSearchConfig
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import com.ganguydhrubo.aira.settings.ui.WebSearchCopy

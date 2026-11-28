@@ -8,10 +8,6 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.junit.Assert.*
-import softassert.assertEquals // SOFTSTAR
-import softassert.assertTrue // SOFTSTAR
-import softassert.assertFalse // SOFTSTAR
-import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class CallHistoryTest {

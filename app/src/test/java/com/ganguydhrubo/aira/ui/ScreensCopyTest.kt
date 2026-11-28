@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.core.agent.FailKind
 import com.ganguydhrubo.aira.core.agent.GateReason
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import com.ganguydhrubo.aira.chat.ui.ScreenRow

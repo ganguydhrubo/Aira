@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.plugin
 
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

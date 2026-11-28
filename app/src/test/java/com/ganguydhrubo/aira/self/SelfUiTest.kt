@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.self
 
 import com.ganguydhrubo.aira.core.self.SelfScreen
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** 进程内自身请求:只留最新一条,处理完只清同一条。 */

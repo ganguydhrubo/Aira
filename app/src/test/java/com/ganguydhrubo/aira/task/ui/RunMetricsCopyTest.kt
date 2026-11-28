@@ -3,8 +3,8 @@ package com.ganguydhrubo.aira.task.ui
 import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.run.record.RunMetrics
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RunMetricsCopyTest {

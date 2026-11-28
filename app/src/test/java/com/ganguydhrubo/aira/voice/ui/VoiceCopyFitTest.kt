@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.voice.ui
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 按着说话时字太多:去掉前面说完的整句,最新的字一直看得见。这里按字数量「放不放得下」,界面上按真实排版量行数。 */

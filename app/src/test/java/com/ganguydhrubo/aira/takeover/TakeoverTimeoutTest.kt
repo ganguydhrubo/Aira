@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.core.tool.HandBackOutcome
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TakeoverTimeoutTest {

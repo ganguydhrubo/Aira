@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings.ui
 
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 设置搜索的匹配、排序与高亮:只看已经换成当前语言的标题、所在位置和同义词,与界面无关。 */

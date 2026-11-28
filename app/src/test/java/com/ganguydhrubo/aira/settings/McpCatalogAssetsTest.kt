@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.cap.mcp.McpCatalog
 import com.ganguydhrubo.aira.core.cap.mcp.McpCatalogParser
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 

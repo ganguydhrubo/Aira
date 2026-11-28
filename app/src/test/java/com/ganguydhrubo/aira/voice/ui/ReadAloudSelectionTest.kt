@@ -12,7 +12,7 @@ import com.ganguydhrubo.aira.voice.model.VoiceModel
 import com.ganguydhrubo.aira.voice.model.VoiceModelRef
 import com.ganguydhrubo.aira.voice.model.VoiceService
 import com.ganguydhrubo.aira.voice.model.voiceTestEnvironment
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 换朗读模型时音色回到新模型自己的默认([selectReadAloud]);重选同一个不动。 */
@@ -77,7 +77,7 @@ class ReadAloudSelectionTest {
 
         val error = runCatching { selectReadAloud(env, settings, b) }.exceptionOrNull()
 
-        softassert.assertTrue(error is IllegalStateException)
+        org.junit.Assert.assertTrue(error is IllegalStateException)
         assertEquals(a, store.state.value.selections.tts)
         assertEquals("alloy", settings.state.value.voice)
     }

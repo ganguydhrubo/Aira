@@ -29,10 +29,6 @@ import okhttp3.WebSocketListener
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.Assert.*
-import softassert.assertEquals // SOFTSTAR
-import softassert.assertTrue // SOFTSTAR
-import softassert.assertFalse // SOFTSTAR
-import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 /** Local real WebSocket tests for front desk tool registration; no credentials, provider calls or carrier calls. */

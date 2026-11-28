@@ -3,11 +3,11 @@ package com.ganguydhrubo.aira.task
 import com.ganguydhrubo.aira.core.run.RunId
 import com.ganguydhrubo.aira.core.run.ChannelPeer
 import com.ganguydhrubo.aira.core.run.RunPhase
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class TaskRegistryTest {

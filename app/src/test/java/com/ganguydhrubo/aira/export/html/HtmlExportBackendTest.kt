@@ -18,8 +18,8 @@ import com.ganguydhrubo.aira.core.export.QuotedText
 import com.ganguydhrubo.aira.core.export.QuoteSource
 import com.ganguydhrubo.aira.core.export.ToolStep
 import kotlinx.coroutines.runBlocking
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.ByteArrayInputStream
 import java.io.File

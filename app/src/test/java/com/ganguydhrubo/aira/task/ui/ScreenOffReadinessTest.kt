@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.task.ui
 
 import com.ganguydhrubo.aira.core.device.CredentialKind
 import com.ganguydhrubo.aira.settings.DeviceAccessConfig
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ScreenOffReadinessTest {

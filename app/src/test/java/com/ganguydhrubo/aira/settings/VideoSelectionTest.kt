@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.core.model.ArkSeedance
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VideoSelectionTest {

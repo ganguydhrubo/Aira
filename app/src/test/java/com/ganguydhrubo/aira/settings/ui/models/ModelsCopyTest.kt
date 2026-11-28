@@ -12,9 +12,9 @@ import com.ganguydhrubo.aira.settings.ProviderConfig
 import com.ganguydhrubo.aira.settings.ProviderPresets
 import com.ganguydhrubo.aira.settings.RoleChoice
 import com.ganguydhrubo.aira.settings.RoleChoices
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 模型页的文字:用途卡、服务商一行、删除提示,以及列表排序。 */

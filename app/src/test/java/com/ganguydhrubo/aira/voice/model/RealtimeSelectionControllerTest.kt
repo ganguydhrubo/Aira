@@ -3,11 +3,11 @@ package com.ganguydhrubo.aira.voice.model
 import com.ganguydhrubo.aira.calls.CallAudioMode
 import com.ganguydhrubo.aira.calls.CallVoiceProfile
 import com.ganguydhrubo.aira.calls.VolcRealtimeCredentials
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RealtimeSelectionControllerTest {

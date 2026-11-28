@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.settings.ui
 
 import com.ganguydhrubo.aira.i18n.ResFileTexts
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Locale
 

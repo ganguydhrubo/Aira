@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.cap.phone.setup.PhoneSetupPrompt
 import com.ganguydhrubo.aira.chat.SharedFile
 import com.ganguydhrubo.aira.task.SteerNote
 import com.ganguydhrubo.aira.task.SteerState
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class ChatRowsTest {

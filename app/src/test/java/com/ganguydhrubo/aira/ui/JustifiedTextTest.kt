@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.ui
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 中文两端对齐只在字与字之间摊间距,决定「哪里能摊」的是 [cjkGapRanges]。 */

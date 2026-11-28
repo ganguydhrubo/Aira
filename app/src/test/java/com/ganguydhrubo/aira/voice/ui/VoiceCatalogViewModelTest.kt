@@ -33,9 +33,9 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
 

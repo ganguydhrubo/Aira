@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.cap.phone.a11y
 
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class AppSwitchTest {

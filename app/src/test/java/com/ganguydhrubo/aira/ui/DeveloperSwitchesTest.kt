@@ -3,9 +3,9 @@ package com.ganguydhrubo.aira.ui
 import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.agent.SpeedFlags
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.ganguydhrubo.aira.settings.ui.DeveloperSwitches
 

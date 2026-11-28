@@ -9,9 +9,9 @@ import com.ganguydhrubo.aira.core.screen.map.ScreenMapStore
 import com.ganguydhrubo.aira.settings.MemorySwitches
 import com.ganguydhrubo.aira.core.assembly.knownTools
 import kotlinx.coroutines.runBlocking
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** 内存里的屏图仓库,可配置 save 抛错。 */

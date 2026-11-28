@@ -12,10 +12,6 @@ import okhttp3.mockwebserver.MockWebServer
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import org.junit.Assert.*
-import softassert.assertEquals // SOFTSTAR
-import softassert.assertTrue // SOFTSTAR
-import softassert.assertFalse // SOFTSTAR
-import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class DoubaoTransportTest {

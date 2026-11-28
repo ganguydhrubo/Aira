@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.ui
 
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.File
 import com.ganguydhrubo.aira.about.ui.Licenses

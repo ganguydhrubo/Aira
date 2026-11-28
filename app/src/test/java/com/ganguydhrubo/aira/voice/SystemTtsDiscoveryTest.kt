@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.voice
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Locale
 

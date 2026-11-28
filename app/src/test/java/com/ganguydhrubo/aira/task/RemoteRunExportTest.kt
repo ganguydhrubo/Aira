@@ -9,9 +9,9 @@ import com.ganguydhrubo.aira.core.remote.RunRecordExport
 import com.ganguydhrubo.aira.record.RunStore
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonPrimitive
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

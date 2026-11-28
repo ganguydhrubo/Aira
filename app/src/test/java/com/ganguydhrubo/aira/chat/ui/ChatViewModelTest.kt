@@ -48,11 +48,11 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -877,8 +877,8 @@ class ChatViewModelTest {
         assertEquals(
             listOf(
                 // 用工具的界面说法,不带工具名
-                StepAction("点击", "聊天", "changed", false),
-                StepAction("输入文字", "com.other", "unknown_code", true),
+                StepAction("Tap", "聊天", "changed", false),
+                StepAction("Type text", "com.other", "unknown_code", true),
             ),
             ex.stepActions.getValue(1),
         )
@@ -886,8 +886,8 @@ class ChatViewModelTest {
         assertEquals(setOf(1), ex.stepActions.keys)
         // 点开后每件事一行:做了什么 · 对什么 · 结果;错误码不给人看,说「没成功」
         val lines = ex.stepActions.getValue(1).map(ChatCopy::actionLine)
-        assertEquals("点击 · 聊天 · ${tr(R.string.result_effective)}", lines[0])
-        assertEquals("输入文字 · com.other · ${tr(R.string.step_failed)}", lines[1])
+        assertEquals("Tap · 聊天 · ${tr(R.string.result_effective)}", lines[0])
+        assertEquals("Type text · com.other · ${tr(R.string.step_failed)}", lines[1])
         lines.forEach { assertFalse(it, it.contains("phone_") || it.contains("unknown_code")) }
     }
 

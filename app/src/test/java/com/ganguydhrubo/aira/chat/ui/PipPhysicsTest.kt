@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.chat.ui
 
 import com.ganguydhrubo.aira.chat.ui.PipPhysics.Corner
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class PipPhysicsTest {

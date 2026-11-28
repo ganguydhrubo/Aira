@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.task
 
 import android.app.NotificationManager
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 

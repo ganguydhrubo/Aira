@@ -3,10 +3,10 @@ package com.ganguydhrubo.aira.knowledge
 import com.ganguydhrubo.aira.core.learn.knowledge.AppKnowledgeDraft
 import com.ganguydhrubo.aira.core.learn.knowledge.AppKnowledgeStage
 import com.ganguydhrubo.aira.core.learn.knowledge.LearnedNote
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

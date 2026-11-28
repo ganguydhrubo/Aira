@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.cap.phone.shell
 
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 主屏占用、Aira 别的屏占用、冷启动看的任务:装了两份的 App 按「包名 + 用户」分开算,只装一份的照旧。 */

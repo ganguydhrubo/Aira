@@ -11,8 +11,8 @@ import com.ganguydhrubo.aira.task.SteerNote
 import com.ganguydhrubo.aira.task.SteerState
 import com.ganguydhrubo.aira.chat.ui.Exchange
 import com.ganguydhrubo.aira.chat.ui.ExchangeStatus
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CapsuleThreadTest {
@@ -51,9 +51,9 @@ class CapsuleThreadTest {
             PastTurn(turn("发消息", "已取消", status = "cancelled"), places = listOf("聊天")),
         )
         assertEquals(listOf(
-            "你:买牙膏", "注:✓ 购物 · 办好了", "答:下单了，共 ¥19.9",
-            "你:查车票", "注:12306、浏览器 等 · 没办成", "答:没有余票",
-            "你:发消息", "注:聊天 · 已停止",
+            "你:买牙膏", "注:✓ 购物 · Done", "答:下单了，共 ¥19.9",
+            "你:查车票", "注:12306, 浏览器 and more · Didn’t work out", "答:没有余票",
+            "你:发消息", "注:聊天 · Stopped",
         ), texts(CapsuleThreads.build(past, 10, emptyList())))
     }
 
@@ -89,8 +89,8 @@ class CapsuleThreadTest {
             PastTurn(turn("写首诗", "已取消", status = "cancelled", runId = "r2")),
         )
         assertEquals(listOf(
-            "你:看设置", "注:设置 · 已停止", "答:停止前看完了网络、蓝牙;显示、声音还没看。",
-            "你:写首诗", "注:已停止", "注:正在整理已做的事…",
+            "你:看设置", "注:设置 · Stopped", "答:停止前看完了网络、蓝牙;显示、声音还没看。",
+            "你:写首诗", "注:Stopped", "注:Wrapping up what was done…",
         ), texts(CapsuleThreads.build(past, 10, emptyList(), summarizing = setOf("r2"))))
         // 写不成:只留那一行
         assertEquals(listOf("你:写首诗", "注:Stopped"), texts(CapsuleThreads.build(past.drop(1), 10, emptyList())))

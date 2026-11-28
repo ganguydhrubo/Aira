@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.files.ui
 
 import com.ganguydhrubo.aira.chat.FileSource
 import com.ganguydhrubo.aira.chat.SharedFile
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 

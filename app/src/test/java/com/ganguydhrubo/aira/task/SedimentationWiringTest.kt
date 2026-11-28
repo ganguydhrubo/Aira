@@ -16,9 +16,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.ganguydhrubo.aira.core.assembly.knownTools
 
@@ -88,7 +88,7 @@ class SedimentationWiringTest {
         val on = MapSkills()
         val notes = runBlocking { learning(on, learn = true).learn(after(events())) }
         assertEquals(listOf("draft-1"), on.drafts.keys.toList())
-        assertEquals("Aira 学会了一项技能:给指定联系人发一条微信消息", notes.skillNotes.single().text)
+        assertEquals("Aira learned a skill: 给指定联系人发一条微信消息", notes.skillNotes.single().text)
         assertEquals("draft-1", notes.skillNotes.single().draftId)
     }
 

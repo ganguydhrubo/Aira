@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.i18n.UiText
 import com.ganguydhrubo.aira.i18n.UiTexts
 import org.junit.After
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 

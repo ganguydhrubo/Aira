@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.chat.ui
 
 import com.ganguydhrubo.aira.core.agent.AttachedPage
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.ganguydhrubo.aira.settings.ui.models.Page
 

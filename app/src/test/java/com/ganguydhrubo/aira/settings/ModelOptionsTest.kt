@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.model.ListedModel
 import com.ganguydhrubo.aira.core.model.ModelEndpoint
 import com.ganguydhrubo.aira.core.model.ModelProtocol
 import com.ganguydhrubo.aira.core.model.PromptCaching
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ModelOptionsTest {

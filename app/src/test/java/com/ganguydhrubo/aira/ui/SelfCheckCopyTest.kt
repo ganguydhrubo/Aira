@@ -9,8 +9,8 @@ import com.ganguydhrubo.aira.core.selfcheck.SelfCheck
 import com.ganguydhrubo.aira.core.selfcheck.SelfCheckReport
 import com.ganguydhrubo.aira.core.selfcheck.SelfCheckState
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 

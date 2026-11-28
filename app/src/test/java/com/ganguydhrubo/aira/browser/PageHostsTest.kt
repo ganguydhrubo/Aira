@@ -1,9 +1,9 @@
 package com.ganguydhrubo.aira.browser
 
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class PageHostsTest {

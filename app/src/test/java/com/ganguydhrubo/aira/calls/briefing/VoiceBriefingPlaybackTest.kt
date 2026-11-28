@@ -3,10 +3,6 @@ package com.ganguydhrubo.aira.calls.briefing
 import com.ganguydhrubo.aira.calls.CallPlaybackQueue
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
-import softassert.assertEquals // SOFTSTAR
-import softassert.assertTrue // SOFTSTAR
-import softassert.assertFalse // SOFTSTAR
-import softassert.assertNull // SOFTSTAR
 import org.junit.Test
 
 class VoiceBriefingPlaybackTest {

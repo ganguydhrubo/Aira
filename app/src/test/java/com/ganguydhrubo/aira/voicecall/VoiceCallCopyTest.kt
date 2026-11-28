@@ -6,8 +6,8 @@ import com.ganguydhrubo.aira.core.frontdesk.DeskReport
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 

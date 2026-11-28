@@ -10,10 +10,10 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import okio.ByteString
 import okio.ByteString.Companion.encodeUtf8
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** WebSocket 连接:请求头只带给它的那些,文字和二进制回应都按文字读,握手被拒不带出服务端原话。只连本机的 MockWebServer。 */

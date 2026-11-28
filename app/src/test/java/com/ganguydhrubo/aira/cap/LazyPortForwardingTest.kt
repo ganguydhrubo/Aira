@@ -4,7 +4,7 @@ import com.ganguydhrubo.aira.cap.phone.a11y.LazyPhoneScreen
 import com.ganguydhrubo.aira.cap.web.LazyWebPort
 import com.ganguydhrubo.aira.core.cap.web.WebPort
 import com.ganguydhrubo.aira.core.screen.uistate.ScreenPort
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.lang.reflect.Method
 

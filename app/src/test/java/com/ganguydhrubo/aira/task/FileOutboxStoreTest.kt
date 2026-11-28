@@ -6,8 +6,8 @@ import com.ganguydhrubo.aira.core.run.DeliveryRecord
 import com.ganguydhrubo.aira.core.run.DeliveryState
 import com.ganguydhrubo.aira.core.run.Outbox
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.Test
 import java.io.IOException

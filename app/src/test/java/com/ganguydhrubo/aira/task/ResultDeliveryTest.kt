@@ -12,8 +12,8 @@ import com.ganguydhrubo.aira.core.run.Outbox
 import com.ganguydhrubo.aira.core.run.SendOutcome
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 

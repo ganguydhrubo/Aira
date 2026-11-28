@@ -2,10 +2,10 @@ package com.ganguydhrubo.aira.settings
 
 import com.ganguydhrubo.aira.capsule.CapsuleMode
 import com.ganguydhrubo.aira.core.cap.phone.OperatingPace
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** settings_list / settings_set 的白名单:只给能随手改回去的偏好;模型、Key、删数据一律不在其中。 */

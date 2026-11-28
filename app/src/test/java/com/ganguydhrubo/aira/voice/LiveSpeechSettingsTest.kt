@@ -7,11 +7,11 @@ import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
 import com.ganguydhrubo.aira.settings.KeyCipher
 import java.io.IOException
 import javax.crypto.KeyGenerator
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -157,7 +157,7 @@ class LiveSpeechSettingsTest {
         assertEquals(SpeechOptions.Summary("Qwen (self-hosted)", "192.168.1.10:10095", false), SpeechOptions.summary(SpeechChoice.FunAsr("ws://192.168.1.10:10095"), none, emptyList()))
         assertEquals(SpeechOptions.Summary("fun-asr-realtime", "Alibaba Cloud Bailian · Beijing", false), SpeechOptions.summary(SpeechChoice.Bailian(), none, emptyList()))
         assertEquals(
-            SpeechOptions.Summary("paraformer-realtime-v2", "阿里云百炼 · 新加坡", false),
+            SpeechOptions.Summary("paraformer-realtime-v2", "Alibaba Cloud Bailian · Singapore", false),
             SpeechOptions.summary(SpeechChoice.Bailian("paraformer-realtime-v2", BailianRegion.Singapore), none, emptyList()),
         )
     }

@@ -4,9 +4,9 @@ import com.ganguydhrubo.aira.core.device.shell.BuiltinShellStatus
 import com.ganguydhrubo.aira.task.PauseState
 import com.ganguydhrubo.aira.task.ResumeStep
 import com.ganguydhrubo.aira.task.planResumeSteps
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**

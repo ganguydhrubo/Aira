@@ -15,10 +15,10 @@ import com.ganguydhrubo.aira.voice.model.VoiceModelRef
 import com.ganguydhrubo.aira.voice.model.VoiceService
 import com.ganguydhrubo.aira.voice.model.VoiceVerification
 import com.ganguydhrubo.aira.voice.model.VoiceVerificationRecord
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VoiceOptionsTest {

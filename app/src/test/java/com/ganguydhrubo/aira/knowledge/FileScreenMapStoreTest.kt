@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.knowledge
 
 import com.ganguydhrubo.aira.core.screen.map.ScreenGraph
 import com.ganguydhrubo.aira.core.screen.map.ScreenNode
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

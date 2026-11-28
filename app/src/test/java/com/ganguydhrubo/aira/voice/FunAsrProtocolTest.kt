@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.voice
 
-import softassert.assertEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 自建 Fun-ASR 实时服务的消息;样例取自真实服务的回应(说的是一句中文)。 */

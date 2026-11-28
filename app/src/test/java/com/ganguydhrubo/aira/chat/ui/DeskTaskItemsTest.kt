@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.core.agent.DeskTurn
 import com.ganguydhrubo.aira.core.agent.Turn
 import com.ganguydhrubo.aira.core.frontdesk.DeskTaskPhase
 import com.ganguydhrubo.aira.core.frontdesk.DeskTaskView
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** 「这个对话里的事」:前台派过的每件,新派的在上;汇报那一轮被汇报的那件不重复算。 */

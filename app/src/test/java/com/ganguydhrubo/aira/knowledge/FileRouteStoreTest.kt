@@ -5,8 +5,8 @@ import com.ganguydhrubo.aira.core.learn.replay.MAX_ROUTE_STEPS
 import com.ganguydhrubo.aira.core.learn.replay.Route
 import com.ganguydhrubo.aira.core.learn.replay.RouteStep
 import org.junit.Assert.assertThrows
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

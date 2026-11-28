@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.cap.phone.shell
 
 import com.ganguydhrubo.aira.cap.phone.shell.MainScreenLog.Task
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MainScreenLogTest {

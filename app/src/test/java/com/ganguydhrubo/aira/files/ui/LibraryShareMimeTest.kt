@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.files.ui
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class LibraryShareMimeTest {

@@ -12,9 +12,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.coroutines.yield
 import org.junit.Assert.assertArrayEquals
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 边说边转的会话:按住时上传、收结果,松开后收尾,只在服务端说结束时给 Final。用自建 Fun-ASR 的协议跑。 */

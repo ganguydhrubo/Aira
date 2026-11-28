@@ -4,8 +4,8 @@ import com.ganguydhrubo.aira.core.run.RunId
 import com.ganguydhrubo.aira.core.run.ChannelPeer
 import com.ganguydhrubo.aira.core.run.RunPhase
 import com.ganguydhrubo.aira.core.run.StoredRun
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 import java.nio.file.Files
 

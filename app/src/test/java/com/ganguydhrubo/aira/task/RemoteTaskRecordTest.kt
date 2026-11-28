@@ -3,7 +3,7 @@ package com.ganguydhrubo.aira.task
 import com.ganguydhrubo.aira.core.agent.FailKind
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.core.remote.RemoteSteer
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class RemoteTaskRecordTest {

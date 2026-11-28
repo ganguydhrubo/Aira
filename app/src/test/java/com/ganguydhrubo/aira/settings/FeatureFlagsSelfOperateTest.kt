@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.settings
 
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 「允许 Aira 操作自己的界面」默认关,只能用户改;它不在模型能改的设置白名单里。 */

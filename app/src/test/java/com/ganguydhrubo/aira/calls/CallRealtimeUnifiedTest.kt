@@ -16,8 +16,8 @@ import com.ganguydhrubo.aira.voice.model.adapters.VolcDuplexRealtimeAdapter
 import com.ganguydhrubo.aira.voice.model.voiceTestEnvironment
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** Records what a delegate provider received so the unified provider mapping can be pinned. */

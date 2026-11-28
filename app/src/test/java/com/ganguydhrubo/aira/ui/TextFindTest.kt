@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.ui
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class TextFindTest {

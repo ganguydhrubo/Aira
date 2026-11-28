@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.voice.vendors
 
 import com.ganguydhrubo.aira.voice.model.VoiceCapability
 import kotlinx.serialization.json.Json
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Locale
 

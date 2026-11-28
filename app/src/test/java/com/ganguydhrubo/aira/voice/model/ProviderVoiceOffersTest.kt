@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.voice.model
 
 import com.ganguydhrubo.aira.settings.Provider
 import com.ganguydhrubo.aira.settings.ProviderConfig
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ProviderVoiceOffersTest {

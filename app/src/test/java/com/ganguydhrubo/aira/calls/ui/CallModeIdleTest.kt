@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.calls.ui
 
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class CallModeIdleTest {

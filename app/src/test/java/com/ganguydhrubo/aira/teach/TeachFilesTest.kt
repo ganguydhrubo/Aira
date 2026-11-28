@@ -15,11 +15,11 @@ import com.ganguydhrubo.aira.core.learn.teach.TeachTrace
 import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.skills.PersonalSkillFiles
 import kotlinx.coroutines.runBlocking
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

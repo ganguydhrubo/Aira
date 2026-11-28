@@ -7,9 +7,9 @@ import com.ganguydhrubo.aira.core.frontdesk.DeskEvent
 import com.ganguydhrubo.aira.core.frontdesk.DeskReport
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import kotlinx.coroutines.runBlocking
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

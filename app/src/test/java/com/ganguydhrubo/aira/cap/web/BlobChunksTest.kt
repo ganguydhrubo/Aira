@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.cap.web
 
 import org.junit.Assert.assertArrayEquals
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 import java.util.Base64
 

@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.export
 
 import com.ganguydhrubo.aira.core.run.record.RunEvent
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class RunEventToolStepsTest {

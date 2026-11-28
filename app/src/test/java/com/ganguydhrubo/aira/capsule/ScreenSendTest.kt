@@ -4,10 +4,10 @@ import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.chat.ui.ScreenCopy
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 双击还是单击、截屏预览发进哪个对话、带屏幕的话在列表里怎么称呼。 */

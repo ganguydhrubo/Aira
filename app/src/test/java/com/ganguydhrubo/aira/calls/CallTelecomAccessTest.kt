@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.calls
 
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class CallTelecomAccessTest {

@@ -34,11 +34,11 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.WebSocket
 import okio.ByteString
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertArrayEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)

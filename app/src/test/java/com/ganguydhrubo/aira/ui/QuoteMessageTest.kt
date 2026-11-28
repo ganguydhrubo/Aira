@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.ui
 
 import com.ganguydhrubo.aira.core.agent.QuoteMessage
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import com.ganguydhrubo.aira.chat.ui.AttachmentMessage

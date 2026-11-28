@@ -3,7 +3,7 @@ package com.ganguydhrubo.aira.cap.phone.shell
 import com.ganguydhrubo.aira.cap.phone.shell.ShellClip.Now
 import com.ganguydhrubo.aira.cap.phone.shell.ShellClip.Read
 import com.ganguydhrubo.aira.cap.phone.shell.ShellClip.Restore
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 粘贴输入换剪贴板、再还原:读不到绝不当成空的,剪贴板不是 Aira 的就不动。 */

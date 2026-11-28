@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.voice.ondevice
 
 import com.ganguydhrubo.aira.i18n.AppLanguage
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

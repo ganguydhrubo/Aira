@@ -3,11 +3,11 @@ package com.ganguydhrubo.aira.voice.model
 import com.ganguydhrubo.aira.settings.KeyCipher
 import com.ganguydhrubo.aira.voice.DoubaoProtocol
 import com.ganguydhrubo.aira.voice.SpeechChoice
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
 

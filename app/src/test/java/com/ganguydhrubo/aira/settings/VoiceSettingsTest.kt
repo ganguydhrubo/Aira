@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.SharedPreferences
 import com.ganguydhrubo.aira.settings.FeatureFlagsCapsuleTest.MemoryPrefs
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

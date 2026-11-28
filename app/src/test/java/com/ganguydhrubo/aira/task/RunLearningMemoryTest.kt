@@ -7,8 +7,8 @@ import com.ganguydhrubo.aira.core.learn.memory.MemoryKind
 import com.ganguydhrubo.aira.core.learn.memory.MemorySource
 import com.ganguydhrubo.aira.settings.MemorySwitches
 import kotlinx.coroutines.runBlocking
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import com.ganguydhrubo.aira.core.assembly.knownTools
 

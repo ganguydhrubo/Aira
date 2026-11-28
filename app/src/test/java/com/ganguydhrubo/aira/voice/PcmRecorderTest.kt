@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.voice
 
 import android.media.MediaRecorder
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class PcmRecorderTest {

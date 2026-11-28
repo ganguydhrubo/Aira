@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.capsule
 
 import com.ganguydhrubo.aira.cap.phone.a11y.OverlayArea
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class CapsuleDockTest {

@@ -20,8 +20,8 @@ import com.ganguydhrubo.aira.voice.model.VoiceModelRef
 import com.ganguydhrubo.aira.voice.model.VoiceService
 import com.ganguydhrubo.aira.voice.model.voiceTestEnvironment
 import kotlinx.coroutines.test.runTest
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ReadAloudUnifiedTest {

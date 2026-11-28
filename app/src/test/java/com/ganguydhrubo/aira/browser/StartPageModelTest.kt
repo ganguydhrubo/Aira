@@ -2,8 +2,8 @@ package com.ganguydhrubo.aira.browser
 
 import org.junit.Rule
 import com.ganguydhrubo.aira.i18n.ChineseTexts
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.LocalDateTime
 import java.time.ZoneId

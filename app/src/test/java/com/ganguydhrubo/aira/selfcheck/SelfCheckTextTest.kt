@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.selfcheck
 
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 自检认页面文字:读屏给的大小写、空白和页面上写的不一样时照样认得出,别的文字不认错。 */

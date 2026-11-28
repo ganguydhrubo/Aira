@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.task
 
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 任务解锁了手机之后留下的回锁义务:系统确认已锁之前一直挂着。 */

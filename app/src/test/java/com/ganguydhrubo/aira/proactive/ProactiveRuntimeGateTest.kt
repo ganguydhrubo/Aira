@@ -1,7 +1,7 @@
 package com.ganguydhrubo.aira.proactive
 
 import com.ganguydhrubo.aira.core.proactive.LearnLevel
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class ProactiveRuntimeGateTest {

@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.core.agent.FailureCode
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.i18n.ResFileTexts
 import com.ganguydhrubo.aira.i18n.UiText
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
-import softassert.assertTrue
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.Locale
 

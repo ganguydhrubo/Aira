@@ -1,8 +1,8 @@
 package com.ganguydhrubo.aira.cap.phone.shell
 
 import android.content.pm.ActivityInfo
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class DisplayOrientationTest {

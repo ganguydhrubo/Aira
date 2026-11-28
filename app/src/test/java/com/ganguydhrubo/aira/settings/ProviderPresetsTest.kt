@@ -3,11 +3,11 @@ package com.ganguydhrubo.aira.settings
 import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.i18n.tr
 import com.ganguydhrubo.aira.settings.ui.models.AddForm
-import softassert.assertEquals
-import softassert.assertFalse
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 

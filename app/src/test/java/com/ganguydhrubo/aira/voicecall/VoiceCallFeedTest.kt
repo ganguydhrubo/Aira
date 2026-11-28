@@ -6,9 +6,9 @@ import com.ganguydhrubo.aira.voicecall.VoiceCallFeedItem.Task
 import com.ganguydhrubo.aira.core.frontdesk.DeskStep
 import com.ganguydhrubo.aira.core.frontdesk.DeskTaskPhase
 import com.ganguydhrubo.aira.core.frontdesk.DeskTaskView
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class VoiceCallFeedTest {

@@ -8,10 +8,6 @@ import com.ganguydhrubo.aira.core.agent.Turn
 import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import org.junit.Assert.*
-import softassert.assertEquals // SOFTSTAR
-import softassert.assertTrue // SOFTSTAR
-import softassert.assertFalse // SOFTSTAR
-import softassert.assertNull // SOFTSTAR
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder

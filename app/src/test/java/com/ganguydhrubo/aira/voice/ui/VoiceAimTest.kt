@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.voice.ui
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class VoiceAimTest {

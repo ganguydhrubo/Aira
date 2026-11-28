@@ -12,9 +12,9 @@ import com.ganguydhrubo.aira.core.device.shell.SetupStep
 import com.ganguydhrubo.aira.settings.AccessibilityState
 import com.ganguydhrubo.aira.settings.ChatGptSignInFailureRecord
 import com.ganguydhrubo.aira.settings.SystemStatus
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class DiagnosticsTest {

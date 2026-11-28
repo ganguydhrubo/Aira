@@ -2,9 +2,9 @@ package com.ganguydhrubo.aira.capsule
 
 import com.ganguydhrubo.aira.core.screen.user.CapturedScreen
 import com.ganguydhrubo.aira.core.screen.user.UserScreen
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
 

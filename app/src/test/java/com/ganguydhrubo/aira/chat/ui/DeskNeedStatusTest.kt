@@ -3,8 +3,8 @@ package com.ganguydhrubo.aira.chat.ui
 import com.ganguydhrubo.aira.core.agent.GateReason
 import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.task.TaskGate
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 /** 主聊天的问题卡按正在办的那件事此刻的状态画按钮:接管、要你先办好一件事画出来,排队、锁屏、在跑不画。 */

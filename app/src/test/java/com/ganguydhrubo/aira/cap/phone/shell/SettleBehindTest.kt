@@ -2,7 +2,7 @@ package com.ganguydhrubo.aira.cap.phone.shell
 
 import com.ganguydhrubo.aira.cap.phone.shell.SettleBehind.Plan
 import com.ganguydhrubo.aira.cap.phone.shell.SettleBehind.Seen
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class SettleBehindTest {

@@ -1,6 +1,6 @@
 package com.ganguydhrubo.aira.settings
 
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /** 每任务沙箱命令累计时长:默认 30 分钟,只认那几档,别的值按默认算。 */

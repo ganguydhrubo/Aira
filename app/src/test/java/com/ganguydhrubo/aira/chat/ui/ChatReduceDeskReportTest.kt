@@ -3,8 +3,8 @@ package com.ganguydhrubo.aira.chat.ui
 import com.ganguydhrubo.aira.core.agent.DeskTurn
 import com.ganguydhrubo.aira.core.agent.Turn
 import com.ganguydhrubo.aira.frontdesk.DeskNotifier
-import softassert.assertEquals
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /** 前台写进会话的轮次重读出来:前台的一问一答带着它派出的任务,汇报是一句正常的回话,不是失败。 */

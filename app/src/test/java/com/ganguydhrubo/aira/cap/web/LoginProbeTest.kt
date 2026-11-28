@@ -1,10 +1,10 @@
 package com.ganguydhrubo.aira.cap.web
 
 import kotlinx.serialization.json.JsonPrimitive
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LoginProbeTest {

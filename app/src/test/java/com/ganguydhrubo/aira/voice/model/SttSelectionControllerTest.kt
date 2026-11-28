@@ -9,8 +9,8 @@ import com.ganguydhrubo.aira.voice.model.adapters.DoubaoSttAdapter
 import com.ganguydhrubo.aira.voice.model.adapters.FunAsrSttAdapter
 import com.ganguydhrubo.aira.voice.model.adapters.SttHooks
 import com.ganguydhrubo.aira.voice.model.adapters.ProviderSttAdapter
-import softassert.assertEquals
-import softassert.assertNull
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Test
 

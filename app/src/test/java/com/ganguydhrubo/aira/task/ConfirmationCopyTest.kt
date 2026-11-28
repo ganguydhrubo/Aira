@@ -5,9 +5,9 @@ import com.ganguydhrubo.aira.i18n.ChineseTexts
 import com.ganguydhrubo.aira.core.cap.root.ROOT_CONFIRM_APP
 import com.ganguydhrubo.aira.core.safety.gate.ConfirmationRequest
 import com.ganguydhrubo.aira.core.safety.gate.IrrevAction
-import softassert.assertEquals
-import softassert.assertFalse
-import softassert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class ConfirmationCopyTest {

@@ -10,10 +10,10 @@ import com.ganguydhrubo.aira.core.agent.TaskState
 import com.ganguydhrubo.aira.core.safety.gate.ConfirmationRequest
 import com.ganguydhrubo.aira.core.safety.gate.IrrevAction
 import com.ganguydhrubo.aira.takeover.Takeover
-import softassert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
-import softassert.assertNull
-import softassert.assertTrue
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CapsuleModelTest {
