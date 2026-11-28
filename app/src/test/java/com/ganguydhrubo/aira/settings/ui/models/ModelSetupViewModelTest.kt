@@ -103,8 +103,9 @@ class ModelSetupViewModelTest {
         }
     }
 
+    // These cases were written against DeepSeek; the preset list now starts with OpenAI, so pick DeepSeek explicitly.
     private fun TestScope.vm(s: ProviderStore = store()) =
-        ModelSetupViewModel(s, backgroundScope, io = StandardTestDispatcher(testScheduler))
+        ModelSetupViewModel(s, backgroundScope, io = StandardTestDispatcher(testScheduler)).also { it.selectPreset("DeepSeek") }
 
     private val deepseekUrl = "https://api.deepseek.com"
     private val qwenUrl = "https://dashscope.aliyuncs.com/compatible-mode/v1"
@@ -902,7 +903,7 @@ class ModelSetupViewModelTest {
         assertEquals(emptySet<String>(), p.typedModels)
         assertEquals("deepseek-reasoner", store.configFor(ModelRole.Main)?.model)
         // 收起「手动填写」就不用填的那个
-        vm.openForm(); vm.setApiKey("sk"); vm.setManual(true); vm.setModel("x"); vm.setManual(false)
+        vm.openForm(); vm.selectPreset("DeepSeek"); vm.setApiKey("sk"); vm.setManual(true); vm.setModel("x"); vm.setManual(false)
         assertEquals("", vm.state.value.form.typedModel)
     }
 
@@ -1019,7 +1020,7 @@ class ModelSetupViewModelTest {
         val p = store.providers.value.single()
         store.markVerified(p.id, "deepseek-chat")
         assertFalse(p.savedUntested)
-        vm.openForm(); vm.setApiKey("sk-2"); vm.saveWithoutTest(); runCurrent()
+        vm.openForm(); vm.selectPreset("DeepSeek"); vm.setApiKey("sk-2"); vm.saveWithoutTest(); runCurrent()
         assertEquals("不重复添加", 1, store.providers.value.size)
         val after = store.provider(p.id)!!
         assertEquals("sk-2", store.providerKey(p.id))

@@ -64,6 +64,24 @@ object ProviderPresets {
     }
 
     val all: List<ProviderPreset> = listOf(
+        // 官方 API 走 Responses:新的主力模型调用工具必须用 Responses,Chat Completions 带工具会被拒。列模型同样是 GET /models
+        ProviderPreset("OpenAI", ProviderConfig.Kind.OpenAiResponses, "https://api.openai.com/v1", caps(vision = true, context = 400_000), familyTokens = listOf("gpt")),
+        ProviderPreset("Anthropic", ProviderConfig.Kind.Anthropic, "https://api.anthropic.com", caps(vision = true, context = 200_000), familyTokens = listOf("claude")),
+        ProviderPreset("Gemini", ProviderConfig.Kind.Gemini, "https://generativelanguage.googleapis.com", caps(vision = true, context = 128_000), familyTokens = listOf("gemini")),
+        ProviderPreset("xAI", ProviderConfig.Kind.OpenAiCompat, "https://api.x.ai/v1", caps(vision = true, context = 256_000), familyTokens = listOf("grok")),
+        ProviderPreset("Groq", ProviderConfig.Kind.OpenAiCompat, "https://api.groq.com/openai/v1", caps(context = 128_000)),
+        // 列模型接口写明每个模型能不能调用工具、看图和上下文长度
+        ProviderPreset("Mistral", ProviderConfig.Kind.OpenAiCompat, "https://api.mistral.ai/v1", caps(vision = true, context = 128_000), familyTokens = listOf("mistral")),
+        ProviderPreset("OpenRouter", ProviderConfig.Kind.OpenAiCompat, "https://openrouter.ai/api/v1", caps()),
+        // Cloudflare Workers AI: OpenAI 兼容端点,地址中的 {account_id} 需替换为用户的 Cloudflare 账户 ID
+        ProviderPreset("Cloudflare Workers AI", ProviderConfig.Kind.OpenAiCompat, "https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/v1", caps(vision = true, context = 128_000), familyTokens = listOf("llama-3.3", "gpt-oss", "llama-4", "llama", "gemma", "mistral"), urlEditable = true),
+        // 订阅制,一个 Key 用多家模型;各模型走哪种协议、哪个地址由模型列表逐个写明,这里的接口类型只是没写明时的退路。
+        // 每个请求都要带对话的会话号,不带就拒绝(HTTP 400)
+        ProviderPreset("OpenCode Go", ProviderConfig.Kind.OpenAiCompat, "https://opencode.ai/zen/go/v1", caps(), sessionHeader = "x-opencode-session"),
+        ProviderPreset("OpenDesign Go", ProviderConfig.Kind.OpenAiCompat, "https://amr-link.open-design.ai/v1", caps()),
+        // 自己机器上跑的:地址是本机的默认端口,跑在电脑上时改成电脑的局域网地址;不要 Key
+        ProviderPreset("Ollama", ProviderConfig.Kind.OpenAiCompat, "http://127.0.0.1:11434/v1", caps(), selfHosted = true),
+        ProviderPreset("LM Studio", ProviderConfig.Kind.OpenAiCompat, "http://127.0.0.1:1234/v1", caps(), selfHosted = true),
         // V4 起两个模型(deepseek-flash / deepseek-v4-pro)上下文都是 1M:窗口还按旧默认 64k 时,
         // 压缩会频繁改写请求前缀,服务商的前缀缓存整段失效,同一任务的花费能差好几倍
         // 思考档位按官方文档(create-chat-completion):reasoning_effort 可能的值是 none/low/high/max,
@@ -76,35 +94,17 @@ object ProviderPresets {
         ProviderPreset("Zhipu GLM", ProviderConfig.Kind.OpenAiCompat, "https://open.bigmodel.cn/api/paas/v4", caps(), familyTokens = listOf("glm")),
         // Coding Plan 的 Key 和标准 API 分开；OpenAI Chat Completion 专用地址见智谱的 Coding Plan 接入指南。
         ProviderPreset("Zhipu GLM Coding Plan", ProviderConfig.Kind.OpenAiCompat, "https://open.bigmodel.cn/api/coding/paas/v4", caps(), familyTokens = listOf("glm")),
-        // 托管多家开源模型,能不能看图按模型定
-        ProviderPreset("SiliconFlow", ProviderConfig.Kind.OpenAiCompat, "https://api.siliconflow.cn/v1", caps()),
-        // 豆包:模型名填模型 ID 或推理接入点 ID(ep-…);这家不一定提供列模型接口,列不出时手填
-        ProviderPreset("Volcengine Ark", ProviderConfig.Kind.OpenAiCompat, "https://ark.cn-beijing.volces.com/api/v3", caps(vision = true, context = 128_000), familyTokens = listOf("doubao")),
         // 国内站;思考默认写在回复正文的 <think> 里,原样留在历史中
         ProviderPreset("MiniMax", ProviderConfig.Kind.OpenAiCompat, "https://api.minimax.cn/v1", caps(vision = true, context = 200_000), familyTokens = listOf("minimax")),
+        // 豆包:模型名填模型 ID 或推理接入点 ID(ep-…);这家不一定提供列模型接口,列不出时手填
+        ProviderPreset("Volcengine Ark", ProviderConfig.Kind.OpenAiCompat, "https://ark.cn-beijing.volces.com/api/v3", caps(vision = true, context = 128_000), familyTokens = listOf("doubao")),
+        // 托管多家开源模型,能不能看图按模型定
+        ProviderPreset("SiliconFlow", ProviderConfig.Kind.OpenAiCompat, "https://api.siliconflow.cn/v1", caps()),
         ProviderPreset("StepFun", ProviderConfig.Kind.OpenAiCompat, "https://api.stepfun.com/v1", caps(), familyTokens = listOf("step")),
         // 混元的新模型在 TokenHub 上(旧的 api.hunyuan.cloud.tencent.com 不再上新模型)
         ProviderPreset("Tencent Hunyuan", ProviderConfig.Kind.OpenAiCompat, "https://tokenhub.tencentmaas.com/v1", caps(context = 256_000), familyTokens = listOf("hunyuan")),
         // Key 是控制台生成的 bce-v3/… 那一串,照 Bearer 发
         ProviderPreset("Baidu Qianfan", ProviderConfig.Kind.OpenAiCompat, "https://qianfan.baidubce.com/v2", caps(), familyTokens = listOf("ernie")),
-        ProviderPreset("OpenRouter", ProviderConfig.Kind.OpenAiCompat, "https://openrouter.ai/api/v1", caps()),
-        ProviderPreset("OpenDesign Go", ProviderConfig.Kind.OpenAiCompat, "https://amr-link.open-design.ai/v1", caps()),
-        // 订阅制,一个 Key 用多家模型;各模型走哪种协议、哪个地址由模型列表逐个写明,这里的接口类型只是没写明时的退路。
-        // 每个请求都要带对话的会话号,不带就拒绝(HTTP 400)
-        ProviderPreset("OpenCode Go", ProviderConfig.Kind.OpenAiCompat, "https://opencode.ai/zen/go/v1", caps(), sessionHeader = "x-opencode-session"),
-        ProviderPreset("Anthropic", ProviderConfig.Kind.Anthropic, "https://api.anthropic.com", caps(vision = true, context = 200_000), familyTokens = listOf("claude")),
-        ProviderPreset("Gemini", ProviderConfig.Kind.Gemini, "https://generativelanguage.googleapis.com", caps(vision = true, context = 128_000), familyTokens = listOf("gemini")),
-        // 官方 API 走 Responses:新的主力模型调用工具必须用 Responses,Chat Completions 带工具会被拒。列模型同样是 GET /models
-        ProviderPreset("OpenAI", ProviderConfig.Kind.OpenAiResponses, "https://api.openai.com/v1", caps(vision = true, context = 400_000), familyTokens = listOf("gpt")),
-        ProviderPreset("xAI", ProviderConfig.Kind.OpenAiCompat, "https://api.x.ai/v1", caps(vision = true, context = 256_000), familyTokens = listOf("grok")),
-        // 列模型接口写明每个模型能不能调用工具、看图和上下文长度
-        ProviderPreset("Mistral", ProviderConfig.Kind.OpenAiCompat, "https://api.mistral.ai/v1", caps(vision = true, context = 128_000), familyTokens = listOf("mistral")),
-        ProviderPreset("Groq", ProviderConfig.Kind.OpenAiCompat, "https://api.groq.com/openai/v1", caps(context = 128_000)),
-        // Cloudflare Workers AI: OpenAI 兼容端点,地址中的 {account_id} 需替换为用户的 Cloudflare 账户 ID
-        ProviderPreset("Cloudflare Workers AI", ProviderConfig.Kind.OpenAiCompat, "https://api.cloudflare.com/client/v4/accounts/{account_id}/ai/v1", caps(vision = true, context = 128_000), familyTokens = listOf("llama-3.3", "gpt-oss", "llama-4", "llama", "gemma", "mistral"), urlEditable = true),
-        // 自己机器上跑的:地址是本机的默认端口,跑在电脑上时改成电脑的局域网地址;不要 Key
-        ProviderPreset("Ollama", ProviderConfig.Kind.OpenAiCompat, "http://127.0.0.1:11434/v1", caps(), selfHosted = true),
-        ProviderPreset("LM Studio", ProviderConfig.Kind.OpenAiCompat, "http://127.0.0.1:1234/v1", caps(), selfHosted = true),
         ProviderPreset("Custom", ProviderConfig.Kind.OpenAiCompat, "", caps()),
     )
 
